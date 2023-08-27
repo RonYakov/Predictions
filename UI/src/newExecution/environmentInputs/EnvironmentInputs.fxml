@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="590.0" stylesheets="@EnvironmentInputsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.environmentInputs.EnvironmentInputsController">
+   <top>
+      <Label prefHeight="50.0" prefWidth="293.0" styleClass="titleLabel" text="Simulation Environment Inputs" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <ScrollPane prefHeight="384.0" prefWidth="559.0" BorderPane.alignment="CENTER">
+         <content>
+            <VBox fx:id="environmetsVbox" prefHeight="375.0" prefWidth="545.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="20.0" left="15.0" right="15.0" />
+   </padding>
+</BorderPane>

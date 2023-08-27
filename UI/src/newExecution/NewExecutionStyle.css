@@ -1,0 +1,10 @@
+.menuButtons {
+    -fx-font-size: 18px;
+    -fx-pref-width: 80px;
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-text-fill: white; /* White text color */
+}
+
+.menuButtons:hover {
+    -fx-background-color: #158A19;
+}

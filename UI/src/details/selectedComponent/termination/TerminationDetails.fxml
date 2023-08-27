@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="690.0" stylesheets="@TerminationDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.selectedComponent.termination.TerminationDetailsController">
+   <children>
+      <HBox prefHeight="132.0" prefWidth="690.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Simulation Terminations:" />
+         </children>
+         <padding>
+            <Insets left="15.0" top="15.0" />
+         </padding>
+      </HBox>
+      <HBox prefHeight="155.0" prefWidth="0.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Ticks:" />
+            <Label fx:id="ticks" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="15.0" top="15.0" />
+         </padding>
+      </HBox>
+      <HBox prefHeight="155.0" prefWidth="0.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Seconds:" />
+            <Label fx:id="seconds" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="15.0" top="15.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

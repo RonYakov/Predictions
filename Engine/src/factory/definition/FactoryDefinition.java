@@ -1,0 +1,277 @@
+package factory.definition;
+
+import entity.definition.EntityDefinition;
+import exception.DuplicateNameException;
+import exception.NumberNotInRangeException;
+import exception.PropertyTypeException;
+import factory.action.ActionCreator;
+import factory.expression.ExpressionCreator;
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+import property.definition.PropertyDefinition;
+import property.definition.range.Range;
+import property.definition.value.PropertyDefinitionValue;
+import rule.Rule;
+import rule.action.api.Action;
+import rule.activation.Activation;
+import schema.generated.*;
+import simulation.definition.SimulationDefinition;
+import termination.Termination;
+
+import java.util.*;
+
+import static factory.action.ActionCreator.createAction;
+
+public abstract class FactoryDefinition {
+
+    public static SimulationDefinition createSimulationDefinition(PRDWorld prdWorld) {
+        Map<String, EntityDefinition> entityDefinitionMap = createEntitiesDefinition(prdWorld.getPRDEntities());
+        Map<String, PropertyDefinition> environmentsMap = createEnvironments(prdWorld.getPRDEvironment());
+        List<Rule> ruleList = createRules(prdWorld.getPRDRules());
+        Termination termination = createTermination(prdWorld.getPRDTermination());
+
+        return new SimulationDefinition(entityDefinitionMap, environmentsMap, ruleList, termination);
+    }
+
+    private static PropertyDefinition createPropertyDefinition(PRDProperty prdProperty) {
+        PropertyDefinitionValue value = new PropertyDefinitionValue(prdProperty.getPRDValue().isRandomInitialize(),prdProperty.getPRDValue().getInit());
+        String type = new String(prdProperty.getType());
+        String name = new String(prdProperty.getPRDName());
+
+        Range range = null;
+        if(type.equals("decimal") || type.equals("float")) {
+            range = new Range(prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo());
+        }
+
+        if(!type.equals("decimal") && !type.equals("boolean") && !type.equals("float") && !type.equals("string")) {
+            throw new PropertyTypeException("PropertyTypeException: " + prdProperty.getPRDName() + " type is not valid!" + " Problem occurred in class FactoryDefinition");
+        }
+        if(!value.isRandomInitialize()) {
+            switch(type) {
+                case "decimal":
+                    try {
+                        if(!isInRange(Integer.parseInt(value.getInit()), range)) {
+                            throw new NumberNotInRangeException("NumberNotInRangeException: When trying to create property '" + prdProperty.getPRDName() + "'.\n" +
+                                    ".       Please enter decimal number between " + range.getFrom() + " - " + range.getTo() + ". Problem occurred in class FactoryDefinition");
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        throw new NumberFormatException("NumberFormatException: When trying to create property '" + prdProperty.getPRDName() + "'" +
+                                ". Please enter decimal number in init. Problem occurred in class FactoryDefinition");
+                    }
+                    break;
+
+                case "float":
+                    try {
+                        if(!isInRange(Float.parseFloat(value.getInit()), range)) {
+                            throw new NumberNotInRangeException("NumberNotInRangeException: When trying to create property '" + prdProperty.getPRDName() + "'.\n" +
+                                    "       Please enter float number between " + range.getFrom() + " - " + range.getTo() + ". Problem occurred in class FactoryDefinition");
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        throw new NumberFormatException( "NumberFormatException: When trying to create property '" + prdProperty.getPRDName() + "'" +
+                                ". Please enter float number in init. Problem occurred in class FactoryDefinition");
+                    }
+                    break;
+
+                case "boolean":
+                        if(!value.getInit().equals("true") || !value.getInit().equals("false")) {
+                            throw new IllegalArgumentException( "IllegalArgumentException: When trying to create property '" + prdProperty.getPRDName() + "'" +
+                                    ". Please enter 'true' / 'false' in init. Problem occurred in class FactoryDefinition");
+                        }
+                    break;
+
+                //case String - everything goes
+            }
+        }
+
+        return new PropertyDefinition(name, type,value,range);
+    }
+
+    private static EntityDefinition createEntityDefinition(PRDEntity PRDEntity) {
+        String name = new String(PRDEntity.getName());
+        List<PRDProperty> PRDProperties = PRDEntity.getPRDProperties().getPRDProperty();
+        Map<String, PropertyDefinition> properties = new HashMap<>();
+        String duplicateName = FindDuplicateNamesForProp(PRDProperties);
+        int population = PRDEntity.getPRDPopulation();
+
+        if(duplicateName != null) {
+            throw new DuplicateNameException("DuplicateNameException: the property name '" + duplicateName + "' in entity '" + name + "' show more then once.\n" +
+                    "       Note that every property in a single entity must have a unique name! Problem occurred in class FactoryDefinition");
+        }
+
+        PRDProperties.forEach(prdProperty -> properties.put(prdProperty.getPRDName(),createPropertyDefinition(prdProperty)));
+
+        return new EntityDefinition(name, population ,properties);
+    }
+
+    private static Map<String, EntityDefinition> createEntitiesDefinition(PRDEntities prdEntities) {
+        Map<String, EntityDefinition> res = new HashMap<>();
+        List<PRDEntity> prdEntityList = prdEntities.getPRDEntity();
+        String duplicateName = FindDuplicateNamesForEnt(prdEntityList);
+
+        if(duplicateName != null) {
+            throw new DuplicateNameException("DuplicateNameException: the entity name '" + duplicateName + "' show more then once.\n" +
+                    "       Note that every entity must have a unique name! Problem occurred in class FactoryDefinition");
+        }
+        prdEntityList.forEach(prdEntity -> res.put(prdEntity.getName(), createEntityDefinition(prdEntity)));
+
+        ActionCreator.setEntityDefinitionMap(res);
+        ExpressionCreator.setPropertiesOfEntities(createPropOfEntitiesMap(res));
+        return res;
+    }
+
+    private static PropertyDefinition createEnvironmentPropDefinition(PRDEnvProperty prdEnvProperty) {
+        String type = new String(prdEnvProperty.getType());
+        String name = new String(prdEnvProperty.getPRDName());
+
+        Range range = null;
+        if(type.equals("decimal") || type.equals("float")) {
+            range = new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo());
+        }
+
+        if(!type.equals("decimal") && !type.equals("boolean") && !type.equals("float") && !type.equals("string")) {
+            throw new PropertyTypeException("PropertyTypeException: " + name + " type is not valid!\n" +
+                    "       Note that environment type must be: 'decimal', 'boolean', 'float' or 'string'. Problem occurred in class FactoryDefinition");
+        }
+
+        return new PropertyDefinition(name, type, null, range);
+    }
+
+    private static Map<String, PropertyDefinition> createEnvironments(PRDEvironment prdEnvironment) {
+        Map<String, PropertyDefinition> res = new HashMap<>();
+        List<PRDEnvProperty> prdEnvironmentList = prdEnvironment.getPRDEnvProperty();
+        String duplicateName = FindDuplicateNamesForEnvironment(prdEnvironmentList);
+
+        if(duplicateName != null) {
+            throw new DuplicateNameException("DuplicateNameException: the environment name '" + duplicateName + "' show more then once.\n" +
+                    "       Note that every environment must have a unique name! Problem occurred in class FactoryDefinition");
+        }
+        prdEnvironmentList.forEach(prdEnvProperty -> res.put(prdEnvProperty.getPRDName(),createEnvironmentPropDefinition(prdEnvProperty)));
+
+        ExpressionCreator.setEnvironmentsDefinition(res);
+        return res;
+    }
+
+    private static List<Action> createActions(PRDActions prdActions) {
+        List<Action> res = new ArrayList<>();
+        List<PRDAction> actionList = prdActions.getPRDAction();
+
+        for (PRDAction prdAction : actionList) {
+            res.add(createAction(prdAction));
+        }
+        return res;
+    }
+
+    private static Activation createActivation(PRDActivation prdActivation) {
+        if(prdActivation != null) {
+            Integer ticks = prdActivation.getTicks();
+            Double probability = prdActivation.getProbability();
+            return new Activation(ticks, probability);
+        }
+        else {
+            return new Activation();
+        }
+
+    }
+
+    private static Rule createRule(PRDRule prdRule) {
+        Activation activation = createActivation(prdRule.getPRDActivation());
+        List<Action> actionList = createActions(prdRule.getPRDActions());
+
+        return new Rule(prdRule.getName(), activation, actionList);
+    }
+
+    private static List<Rule> createRules(PRDRules prdRules) {
+        List<Rule> res = new ArrayList<>();
+        List<PRDRule> rulesList = prdRules.getPRDRule();
+
+        for (PRDRule prdRule : rulesList) {
+            res.add(createRule(prdRule));
+        }
+        return res;
+    }
+
+    private static Termination createTermination(PRDTermination prdTermination){
+        int seconds = 0, ticks = 0;
+
+        if(prdTermination.getPRDByTicksOrPRDBySecond().size() == 1) {
+            if(prdTermination.getPRDByTicksOrPRDBySecond().get(0) instanceof PRDBySecond){
+                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+            } else {
+                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+            }
+        }
+        else {
+            if(prdTermination.getPRDByTicksOrPRDBySecond().get(0) instanceof PRDBySecond) {
+                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(1)).getCount();
+            }
+            else {
+                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(1)).getCount();
+            }
+        }
+        return new Termination(ticks,seconds);
+    }
+
+    private static boolean isInRange(double numberToCheck, Range range) {
+        if(range == null) {
+            return true;
+        }
+        if(numberToCheck >= range.getFrom() && numberToCheck <= range.getTo()) {
+            return true;
+        }
+        return false;
+    }
+
+    private static String FindDuplicateNamesForProp(List<PRDProperty> prdPropertyList) {
+        Set<String> seenNames = new HashSet<>();
+
+        for (PRDProperty prdProperty : prdPropertyList) {
+            String name = prdProperty.getPRDName();
+            if (seenNames.contains(name)) {
+                return name;
+            }
+            seenNames.add(name);
+        }
+
+        return null;
+    }
+
+    private static String FindDuplicateNamesForEnt(List<PRDEntity> prdEntityList) {
+        Set<String> seenNames = new HashSet<>();
+
+        for (PRDEntity prdProperty : prdEntityList) {
+            String name = prdProperty.getName();
+            if (seenNames.contains(name)) {
+                return name;
+            }
+            seenNames.add(name);
+        }
+
+        return null;
+    }
+
+    private static String FindDuplicateNamesForEnvironment(List<PRDEnvProperty> prdEnvPropertyList) {
+        Set<String> seenNames = new HashSet<>();
+
+        for (PRDEnvProperty prdEnvProperty : prdEnvPropertyList) {
+            String name = prdEnvProperty.getPRDName();
+            if (seenNames.contains(name)) {
+                return name;
+            }
+            seenNames.add(name);
+        }
+
+        return null;
+    }
+
+    private static Map<String, PropertyDefinition> createPropOfEntitiesMap(Map<String, EntityDefinition> entityDefinitionMap) {
+        Map<String, PropertyDefinition> res = new HashMap<>();
+
+        for (Map.Entry<String, EntityDefinition> entry : entityDefinitionMap.entrySet()) {
+            entry.getValue().getProperties().forEach((s, propertyDefinition) -> res.put(s,propertyDefinition));
+        }
+        return res;
+    }
+}

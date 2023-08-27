@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="510.0" stylesheets="@EnvTypeNumberStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.environmentInputs.typeNumber.EnvTypeNumberController">
+   <padding>
+      <Insets right="15.0" />
+   </padding>
+   <center>
+      <VBox BorderPane.alignment="CENTER_LEFT">
+         <BorderPane.margin>
+            <Insets left="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <HBox prefHeight="24.0" prefWidth="406.0" spacing="12.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="44.0" styleClass="valueLabels" text="Name:" />
+                  <Label fx:id="nameLabel" prefHeight="17.0" prefWidth="343.0" styleClass="valueLabels" />
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="28.0" prefWidth="452.0" spacing="12.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="45.0" styleClass="valueLabels" text="Range:" />
+                  <Label fx:id="rangeLabel" prefHeight="17.0" prefWidth="319.0" styleClass="valueLabels" />
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <right>
+      <Spinner prefHeight="25.0" prefWidth="69.0" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>

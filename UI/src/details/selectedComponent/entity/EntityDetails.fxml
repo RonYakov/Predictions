@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="690.0" stylesheets="@EntityDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.selectedComponent.entity.EntityDetailsController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="690.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Name:" />
+            <Label fx:id="entityName" styleClass="labels" />
+         </children>
+         <padding>
+            <Insets left="15.0" />
+         </padding>
+      </HBox>
+      <HBox prefHeight="390.0" prefWidth="690.0" spacing="10.0">
+         <children>
+            <Label styleClass="labels" text="Properties: " />
+            <ScrollPane prefHeight="340.0" prefWidth="551.0">
+               <content>
+                  <VBox fx:id="propertiesVbox" prefHeight="373.0" prefWidth="549.0" />
+               </content>
+            </ScrollPane>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="15.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

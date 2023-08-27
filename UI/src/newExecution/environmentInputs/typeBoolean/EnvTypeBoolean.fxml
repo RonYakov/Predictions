@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="510.0" stylesheets="@EnvTypeBooleanStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.environmentInputs.typeBoolean.EnvTypeBooleanController">
+   <padding>
+      <Insets right="15.0" />
+   </padding>
+   <center>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="392.0" spacing="12.0" BorderPane.alignment="CENTER_LEFT">
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <Label prefHeight="17.0" prefWidth="44.0" styleClass="valueLabels" text="Name:" />
+            <Label fx:id="nameLabel" prefHeight="17.0" prefWidth="339.0" styleClass="valueLabels" />
+         </children>
+      </HBox>
+   </center>
+   <right>
+      <ComboBox fx:id="userChoice" prefHeight="25.0" prefWidth="80.0" promptText="choose" BorderPane.alignment="CENTER">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="True" />
+               <String fx:value="False" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+   </right>
+</BorderPane>

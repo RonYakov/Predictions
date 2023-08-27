@@ -1,0 +1,39 @@
+
+/* Styling for labels */
+.RootLabels {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Styling for choice boxes */
+#choiceBoxEnvironment, #choiceBoxEntities, #choiceBoxRules {
+    -fx-font-size: 14px;
+    -fx-pref-width: 150px;
+}
+
+/* Styling for buttons */
+#showEnvironment, #showEntites, #showRules, #showGrid, #showTermination {
+    -fx-font-size: 14px;
+    -fx-pref-width: 80px;
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-text-fill: white; /* White text color */
+}
+#showEnvironment:hover, #showEntites:hover, #showRules:hover, #showGrid:hover, #showTermination:hover {
+    -fx-background-color: #158A19;
+}
+
+/* Styling for SplitPane */
+.split-pane {
+    -fx-divider-position: 0.35; /* Divider position */
+    -fx-padding: 10px; /* Padding around SplitPane */
+}
+
+/* Styling for VBox and HBox */
+.vbox, .hbox {
+    -fx-spacing: 10px; /* Spacing between children */
+}
+
+/* Styling for AnchorPane */
+.anchor-pane {
+    -fx-background-color: #f4f4f4; /* Light gray background */
+}
