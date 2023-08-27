@@ -6,17 +6,24 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.SplitPane;
+import option2.EntityDefinitionDTO;
+import option2.RulesDTO;
+import option2.SimulationDefinitionDTO;
+import option2.TerminationDTO;
+
+import java.util.List;
+import java.util.Optional;
 
 public class SimulationBreakdownController {
 
     @FXML
-    private ChoiceBox<?> choiceBoxEntities;
+    private ChoiceBox<String> choiceBoxEntities;
 
     @FXML
-    private ChoiceBox<?> choiceBoxEnvironment;
+    private ChoiceBox<String> choiceBoxEnvironment;
 
     @FXML
-    private ChoiceBox<?> choiceBoxRules;
+    private ChoiceBox<String> choiceBoxRules = new ChoiceBox<>();
 
     @FXML
     private Button showEntites;
@@ -34,7 +41,7 @@ public class SimulationBreakdownController {
     private Button showTermination;
     @FXML
     private SplitPane root;
-
+    private SimulationDefinitionDTO simulationDefinitionDTO;
     private DetailsScreenController detailsScreenController;
     private double originalDividerPosition;
 
@@ -58,16 +65,47 @@ public class SimulationBreakdownController {
     }
 
     @FXML
-    void EntitiesButtonClicked(ActionEvent event) {
-        detailsScreenController.entitiesShowButtonClicked();
+    private void EntitiesButtonClicked(ActionEvent event) {
+        String newValue = choiceBoxEntities.getSelectionModel().getSelectedItem();
+            if (newValue != null) {
+                Optional<EntityDefinitionDTO> entityDefinitionDTO = simulationDefinitionDTO.getEntityDefinitionDTOList().stream()
+                        .filter(myObject -> myObject.getName().equals(newValue))
+                        .findFirst();
+                detailsScreenController.entitiesShowButtonClicked(entityDefinitionDTO.get());
+            }
     }
     @FXML
-    void RulesButtonClicked(ActionEvent event) {
-        detailsScreenController.rulesShowButtonClicked();
+    private void RulesButtonClicked(ActionEvent event) {
+        String newValue = choiceBoxRules.getSelectionModel().getSelectedItem();
+        if(newValue != null) {
+            Optional<RulesDTO> rulesDTO = simulationDefinitionDTO.getRulesDTOList().stream()
+                    .filter(myObject -> myObject.getName().equals(newValue))
+                    .findFirst();
+                    detailsScreenController.rulesShowButtonClicked(rulesDTO.get());
+        }
+
     }
     @FXML
-    void TerminationButtonClicked(ActionEvent event) {
-        detailsScreenController.terminationShowButtonClicked();
+    private void TerminationButtonClicked(ActionEvent event) {
+        detailsScreenController.terminationShowButtonClicked(simulationDefinitionDTO.getTerminationDTO());
+    }
+
+    public void initializeDetailsData(SimulationDefinitionDTO simulationDefinitionDTO) {
+        this.simulationDefinitionDTO = simulationDefinitionDTO;
+        initializeEntities(simulationDefinitionDTO.getEntityDefinitionDTOList());
+        initializeRules(simulationDefinitionDTO.getRulesDTOList());
+    }
+
+    private void initializeRules(List<RulesDTO> rulesDTOList) {
+        for(RulesDTO rulesDTO : rulesDTOList) {
+            choiceBoxRules.getItems().add(rulesDTO.getName());
+        }
+    }
+
+    private void initializeEntities(List<EntityDefinitionDTO> entityDefinitionDTOList) {
+        for(EntityDefinitionDTO entityDefinitionDTO : entityDefinitionDTOList) {
+            choiceBoxEntities.getItems().add(entityDefinitionDTO.getName());
+        }
     }
 
 }

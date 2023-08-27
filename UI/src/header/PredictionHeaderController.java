@@ -44,12 +44,16 @@ public class PredictionHeaderController {
 
     private Parent root;
 
-    private PredictionManager predictionManager = new PredictionManager();
+    private PredictionManager predictionManager;
     private BooleanProperty buttonsDisabled = new SimpleBooleanProperty(true);
 
     public void initialize() {
         detailsButton.disableProperty().bind(buttonsDisabledProperty());
         newExecutionButton.disableProperty().bind(buttonsDisabledProperty());
+    }
+
+    public void setPredictionManager(PredictionManager predictionManager) {
+        this.predictionManager = predictionManager;
     }
 
     public void setRoot(Parent root) {

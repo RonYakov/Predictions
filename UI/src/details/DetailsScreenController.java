@@ -9,6 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import managerFX.MainScreenController;
+import option2.EntityDefinitionDTO;
+import option2.RulesDTO;
+import option2.SimulationDefinitionDTO;
+import option2.TerminationDTO;
 
 import java.io.IOException;
 
@@ -44,43 +48,47 @@ public class DetailsScreenController {
         this.mainScreenController = mainScreenController;
     }
 
-    public void entitiesShowButtonClicked() {
+    public void entitiesShowButtonClicked(EntityDefinitionDTO EntityData) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/entity/EntityDetails.fxml"));
             Parent entityContent = loader.load();
             EntityDetailsController entityDetailsController = loader.getController();
             root.getItems().set(1, entityContent);
 
-            entityDetailsController.setAllDataMembers();
+            entityDetailsController.setAllDataMembers(EntityData);
 
         } catch (IOException e) {
         }
     }
 
-    public void rulesShowButtonClicked() {
+    public void rulesShowButtonClicked(RulesDTO rulesDTO) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/rule/RulesDetails.fxml"));
             Parent ruleContent = loader.load();
             RulesDetailsController rulesDetailsController = loader.getController();
             root.getItems().set(1, ruleContent);
 
-            rulesDetailsController.setAllDataMembers();
+            rulesDetailsController.setAllDataMembers(rulesDTO);
 
         } catch (IOException e) {
         }
     }
 
-    public void terminationShowButtonClicked() {
+    public void terminationShowButtonClicked(TerminationDTO terminationDTO) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/termination/TerminationDetails.fxml"));
             Parent terminationContent = loader.load();
             TerminationDetailsController terminationDetailsController = loader.getController();
             root.getItems().set(1, terminationContent);
 
-            terminationDetailsController.setAllDataMembers();
+            terminationDetailsController.setAllDataMembers(terminationDTO);
 
         } catch (IOException e) {
         }
+    }
+
+    public void initializeDetailsData(SimulationDefinitionDTO simulationDefinitionDTO) {
+        simulationBreakdownController.initializeDetailsData(simulationDefinitionDTO);
     }
 
 }

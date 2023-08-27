@@ -7,11 +7,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import manager.PredictionManager;
 import newExecution.NewExecutionController;
+import option2.SimulationDefinitionDTO;
 
 import java.io.IOException;
 
 public class MainScreenController {
+    private PredictionManager predictionManager = new PredictionManager();
     @FXML
     private GridPane header;
     @FXML
@@ -27,6 +30,7 @@ public class MainScreenController {
     @FXML
     public void initialize() {
        headerController.setMainScreenController(this);
+       headerController.setPredictionManager(predictionManager);
     }
 
     public void setDetailsSet(Boolean detailsSet) {
@@ -34,6 +38,7 @@ public class MainScreenController {
     }
 
     public void loadDetailsScreen() {
+        SimulationDefinitionDTO simulationDefinitionDTO = predictionManager.showCurrentSimulationData();
         try {
             if(!isDetailsSet) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/detailsScreen.fxml"));
@@ -41,7 +46,7 @@ public class MainScreenController {
                 detailsController = loader.getController();
 
                 detailsController.setMainScreenController(this);
-
+                detailsController.initializeDetailsData(simulationDefinitionDTO);
                 mainBorderPane.setCenter(detailsContent);
                 isDetailsSet = true;
             }
