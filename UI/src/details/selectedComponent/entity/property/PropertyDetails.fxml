@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="520.0" stylesheets="@PropertyDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.selectedComponent.entity.property.PropertyDetailsController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label prefHeight="19.0" prefWidth="48.0" styleClass="AllLabels" text="Name: " />
+            <Label fx:id="nameLabel" prefHeight="17.0" prefWidth="456.0" styleClass="AllLabels" text="Label" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label styleClass="AllLabels" text="Type: " />
+            <Label fx:id="typeLabel" styleClass="AllLabels" text="Label" />
+            <Label styleClass="AllLabels" text="Is Randomize: ">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <Label fx:id="isRandomizeLabel" styleClass="AllLabels" text="Label" />
+            <Label styleClass="AllLabels" text="Range: ">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </Label>
+            <Label fx:id="rangeLabel" styleClass="AllLabels" text="Label" />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets right="10.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

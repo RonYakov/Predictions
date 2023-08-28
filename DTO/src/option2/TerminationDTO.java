@@ -9,7 +9,7 @@ public class TerminationDTO {
         this.seconds = seconds;
     }
 
-    //todo - need to remember in the UI that they could be a null!!
+
     public Integer getTicks() {
         return ticks;
     }

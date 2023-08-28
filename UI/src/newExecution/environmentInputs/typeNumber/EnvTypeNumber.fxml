@@ -23,7 +23,7 @@
                   <Label fx:id="nameLabel" prefHeight="17.0" prefWidth="343.0" styleClass="valueLabels" />
                </children>
                <VBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
             <HBox prefHeight="28.0" prefWidth="452.0" spacing="12.0">
@@ -32,13 +32,13 @@
                   <Label fx:id="rangeLabel" prefHeight="17.0" prefWidth="319.0" styleClass="valueLabels" />
                </children>
                <VBox.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
          </children>
       </VBox>
    </center>
    <right>
-      <Spinner prefHeight="25.0" prefWidth="69.0" BorderPane.alignment="CENTER" />
+      <Spinner fx:id="userChoice" prefHeight="25.0" prefWidth="69.0" BorderPane.alignment="CENTER" />
    </right>
 </BorderPane>

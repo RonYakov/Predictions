@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import manager.PredictionManager;
 import newExecution.NewExecutionController;
 import option2.SimulationDefinitionDTO;
+import option3.EnvironmentDefinitionListDTO;
 
 import java.io.IOException;
 
@@ -64,6 +65,9 @@ public class MainScreenController {
 
             mainBorderPane.setCenter(newExecutionContent);
             isDetailsSet = false;
+
+            EnvironmentDefinitionListDTO environmentDefinitionListDTO = predictionManager.runSimulationStep1();
+            newExecutionController.setEnvironmentData(environmentDefinitionListDTO);
 
         } catch (IOException e) {
         }

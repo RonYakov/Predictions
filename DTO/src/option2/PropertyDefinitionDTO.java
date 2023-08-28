@@ -23,7 +23,6 @@ public class PropertyDefinitionDTO {
         return type;
     }
 
-    //todo - need to remember in the UI that the from and to could be a null!!
     public Double getRangeFrom() {
         return rangeFrom;
     }

@@ -22,7 +22,7 @@
             <Label styleClass="labels" text="Properties: " />
             <ScrollPane prefHeight="340.0" prefWidth="551.0">
                <content>
-                  <VBox fx:id="propertiesVbox" prefHeight="373.0" prefWidth="549.0" />
+                  <VBox fx:id="propertiesVbox" prefHeight="387.0" prefWidth="549.0" />
                </content>
             </ScrollPane>
          </children>

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.StackPane?>
 <SplitPane fx:id="root" dividerPositions="0.3956043956043956" prefHeight="418.0" prefWidth="475.0" stylesheets="@SimulationBreakdown.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.simulationBreakdown.SimulationBreakdownController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="244.0">
@@ -48,19 +49,19 @@
          <children>
             <HBox layoutX="7.0" layoutY="32.0" prefHeight="18.0" prefWidth="248.0" spacing="10.0">
                <children>
-                  <ChoiceBox fx:id="choiceBoxEnvironment" prefHeight="25.0" prefWidth="165.0" />
+                     <ChoiceBox fx:id="choiceBoxEnvironment" prefHeight="25.0" prefWidth="165.0" />
                   <Button fx:id="showEnvironment" mnemonicParsing="false" text="Show" />
                </children>
             </HBox>
             <HBox layoutX="7.0" layoutY="108.0" prefHeight="25.0" prefWidth="248.0" spacing="10.0">
                <children>
-                  <ChoiceBox fx:id="choiceBoxEntities" prefWidth="165.0" />
+                     <ChoiceBox fx:id="choiceBoxEntities" prefWidth="165.0" />
                   <Button fx:id="showEntites" mnemonicParsing="false" onAction="#EntitiesButtonClicked" text="Show" />
                </children>
             </HBox>
             <HBox layoutX="7.0" layoutY="187.0" prefHeight="25.0" prefWidth="248.0" spacing="10.0">
                <children>
-                  <ChoiceBox fx:id="choiceBoxRules" prefWidth="165.0" />
+                     <ChoiceBox fx:id="choiceBoxRules" prefWidth="165.0" />
                   <Button fx:id="showRules" mnemonicParsing="false" onAction="#RulesButtonClicked" text="Show" />
                </children>
             </HBox>
