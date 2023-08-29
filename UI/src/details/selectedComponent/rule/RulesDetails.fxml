@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <HBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.selectedComponent.rule.RulesDetailsController">
    <children>
@@ -49,12 +50,12 @@
                   <Insets left="15.0" />
                </padding>
             </HBox>
-            <HBox prefHeight="281.0" prefWidth="327.0" spacing="10.0">
+            <HBox prefHeight="227.0" prefWidth="327.0" spacing="10.0">
                <children>
                   <Label styleClass="labels" text="Action types:" />
-                  <ScrollPane prefHeight="255.0" prefWidth="189.0">
+                  <ScrollPane prefHeight="230.0" prefWidth="189.0">
                      <content>
-                        <TreeView fx:id="actionTreeView" prefHeight="259.0" prefWidth="187.0" />
+                        <TreeView fx:id="actionTreeView" prefHeight="205.0" prefWidth="187.0" />
                      </content>
                   </ScrollPane>
                </children>
@@ -68,6 +69,14 @@
                   <Insets />
                </VBox.margin>
             </HBox>
+            <AnchorPane prefHeight="39.0" prefWidth="327.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <children>
+                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#SelectActionClicked" prefHeight="39.0" prefWidth="88.0" text="Select Action" AnchorPane.rightAnchor="15.0" />
+               </children>
+            </AnchorPane>
          </children>
       </VBox>
       <Pane fx:id="actionDetails" prefHeight="475.0" prefWidth="363.0" />
