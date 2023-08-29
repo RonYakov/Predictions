@@ -11,8 +11,8 @@ import static utills.string.StringConvertor.convertStringToFloat;
 import static utills.string.StringConvertor.convertStringToInt;
 
 public class Divide extends AbstractCalculation {
-    public Divide(EntityDefinition primaryEntityDefinition, String resultProp, Expression firstArgument, Expression secondArgument) {
-        super(primaryEntityDefinition, ActionType.DIVIDE, resultProp, firstArgument, secondArgument);
+    public Divide(EntityDefinition primaryEntityDefinition,EntityDefinition secondaryEntityDefinition, String resultProp, Expression firstArgument, Expression secondArgument) {
+        super(primaryEntityDefinition,secondaryEntityDefinition ,ActionType.DIVIDE, resultProp, firstArgument, secondArgument);
     }
 
     @Override

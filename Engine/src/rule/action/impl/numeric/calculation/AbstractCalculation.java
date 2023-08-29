@@ -10,8 +10,8 @@ public abstract class AbstractCalculation extends AbstractNumericAction {
     private Expression firstArgument;
     private Expression secondArgument;
 
-    public AbstractCalculation(EntityDefinition primaryEntityDefinition, ActionType type, String resultProp, Expression firstArgument, Expression secondArgument) {
-        super(primaryEntityDefinition, type, resultProp);
+    public AbstractCalculation(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type, String resultProp, Expression firstArgument, Expression secondArgument) {
+        super(primaryEntityDefinition, secondaryEntityDefinition,type, resultProp);
         this.firstArgument = firstArgument;
         this.secondArgument = secondArgument;
     }

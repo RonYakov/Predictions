@@ -14,8 +14,8 @@ public class Set extends AbstractAction {
     private final String property;
     private final Expression value;
 
-    public Set(EntityDefinition primaryEntityDefinition, String property, Expression value) {
-        super(primaryEntityDefinition, ActionType.SET);
+    public Set(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String property, Expression value) {
+        super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.SET);
         this.property = property;
         this.value = value;
     }

@@ -22,8 +22,8 @@ public class SingleCondition extends AbstractCondition {
     private Expression value;
     private OperatorType operator;
 
-    public SingleCondition(EntityDefinition primaryEntityDefinition, List<Action> then, List<Action> elsE, String property, Expression value, OperatorType operator) {
-        super(primaryEntityDefinition, ActionType.SINGLE_CONDITION, then, elsE);
+    public SingleCondition(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition ,List<Action> then, List<Action> elsE, String property, Expression value, OperatorType operator) {
+        super(primaryEntityDefinition,secondaryEntityDefinition ,ActionType.SINGLE_CONDITION, then, elsE);
         this.property = property;
         this.value = value;
         this.operator = operator;

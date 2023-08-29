@@ -6,8 +6,8 @@ import rule.action.context.api.ActionContext;
 import rule.action.impl.AbstractAction;
 
 public class Kill extends AbstractAction {
-    public Kill(EntityDefinition primaryEntityDefinition) {
-        super(primaryEntityDefinition, ActionType.KILL);
+    public Kill(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition) {
+        super(primaryEntityDefinition, secondaryEntityDefinition ,ActionType.KILL);
     }
 
     @Override

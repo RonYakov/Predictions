@@ -16,8 +16,8 @@ public class Decrease extends AbstractNumericAction {
 
     private final Expression by;
 
-    public Decrease(EntityDefinition primaryEntityDefinition, String resultProp, Expression by) {
-        super(primaryEntityDefinition,ActionType.DECREASE, resultProp);
+    public Decrease(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression by) {
+        super(primaryEntityDefinition,secondaryEntityDefinition,ActionType.DECREASE, resultProp);
         this.by = by;
     }
 

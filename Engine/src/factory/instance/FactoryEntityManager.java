@@ -39,6 +39,6 @@ public abstract class FactoryEntityManager {
             res.put(entry.getKey(), createPropertyInstance(entry.getValue()));
         }
 
-        return new EntityInstance(res);
+        return new EntityInstance(res , value.getName());
     }
 }

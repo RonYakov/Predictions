@@ -14,8 +14,8 @@ import static utills.helperFunction.Helper.isDecimal;
 public abstract class AbstractNumericAction extends AbstractAction {
     private final String resultProp;
 
-    public AbstractNumericAction(EntityDefinition primaryEntityDefinition, ActionType type, String resultProp) {
-        super(primaryEntityDefinition, type);
+    public AbstractNumericAction(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type, String resultProp) {
+        super(primaryEntityDefinition, secondaryEntityDefinition ,type);
         this.resultProp = resultProp;
     }
 

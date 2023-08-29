@@ -5,9 +5,11 @@ import entity.instance.EntityInstanceManager;
 import property.instance.AbstractPropertyInstance;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface ActionContext {
     EntityInstance getPrimaryEntityInstance();
+    void setSecondaryEntities(List<EntityInstance> secondaryEntities);
     void setEntityManager(EntityInstanceManager entityManager);
     void setPrimaryEntityInstance(EntityInstance entity);
     void removeEntity(EntityInstance entity);

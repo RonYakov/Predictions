@@ -14,8 +14,8 @@ public class MultipleCondition extends AbstractCondition {
     private final List<AbstractCondition> conditions;
     private final LogicType logic;
 
-    public MultipleCondition(EntityDefinition primaryEntityDefinition, List<Action> then, List<Action> elsE, List<AbstractCondition> conditions, LogicType logic) {
-        super(primaryEntityDefinition, ActionType.MULTIPLE_CONDITION, then, elsE);
+    public MultipleCondition(EntityDefinition primaryEntityDefinition,EntityDefinition secondaryEntityDefinition ,List<Action> then, List<Action> elsE, List<AbstractCondition> conditions, LogicType logic) {
+        super(primaryEntityDefinition,secondaryEntityDefinition ,ActionType.MULTIPLE_CONDITION, then, elsE);
         this.conditions = conditions;
         this.logic = logic;
     }

@@ -10,10 +10,12 @@ import java.io.Serializable;
 
 public abstract class AbstractAction implements Action, Serializable {
     private EntityDefinition primaryEntityDefinition;
+    private EntityDefinition secondaryEntityDefinition;
     private ActionType type;
 
-    public AbstractAction(EntityDefinition primaryEntityDefinition, ActionType type) {
+    public AbstractAction(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type) {
         this.primaryEntityDefinition = primaryEntityDefinition;
+        this.secondaryEntityDefinition = secondaryEntityDefinition;
         this.type = type;
     }
 

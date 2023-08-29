@@ -13,8 +13,8 @@ public abstract class AbstractCondition extends AbstractAction {
     private List<Action> Then;
     private List<Action> Else;
 
-    public AbstractCondition(EntityDefinition primaryEntityDefinition, ActionType type, List<Action> Then, List<Action> Else) {
-        super(primaryEntityDefinition, type);
+    public AbstractCondition(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type, List<Action> Then, List<Action> Else) {
+        super(primaryEntityDefinition, secondaryEntityDefinition ,type);
         this.Then = Then;
         this.Else = Else;
     }

@@ -9,11 +9,12 @@ import java.util.Objects;
 
 public class EntityInstance implements Serializable {
     private final Map<String, AbstractPropertyInstance> properties;
-
+    private final String entType;
     private Boolean toKill;
 
-    public EntityInstance(Map<String, AbstractPropertyInstance> properties) {
+    public EntityInstance(Map<String, AbstractPropertyInstance> properties, String type) {
         this.properties = properties;
+        entType = type;
         toKill = false;
     }
 

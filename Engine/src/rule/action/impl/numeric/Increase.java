@@ -15,8 +15,8 @@ import static utills.helperFunction.Helper.isFloat;
 public class Increase extends AbstractNumericAction {
     private final Expression by;
 
-    public Increase(EntityDefinition primaryEntityDefinition, String resultProp, Expression by) {
-        super(primaryEntityDefinition, ActionType.INCREASE, resultProp);
+    public Increase(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression by) {
+        super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.INCREASE, resultProp);
         this.by = by;
     }
 

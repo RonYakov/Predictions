@@ -62,7 +62,9 @@ public abstract class ActionCreator {
         Expression expression = createExpression(prdAction.getBy());
         checkIfNumberExpression(expression,"increase");
 
-        return new Increase(entityDef, prdAction.getProperty(), expression);
+        return new Increase(entityDef, null,prdAction.getProperty(), expression);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
 
     private static Action createDecrease(PRDAction prdAction) {
@@ -76,7 +78,9 @@ public abstract class ActionCreator {
         Expression expression = createExpression(prdAction.getBy());
         checkIfNumberExpression(expression,"decrease");
 
-        return new Decrease(entityDef, prdAction.getProperty(), expression);
+        return new Decrease(entityDef, null,prdAction.getProperty(), expression);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
 
     private static Action createCalculation(PRDAction prdAction) {
@@ -102,7 +106,9 @@ public abstract class ActionCreator {
         Expression argument2 = createExpression(prdMultiply.getArg2());
         checkIfNumberExpression(argument2,"multiply");
 
-        return new Multiply(entityDef, propertyName, argument1, argument2);
+        return new Multiply(entityDef, null,propertyName, argument1, argument2);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
     private static Action createDivide(EntityDefinition entityDef, String propertyName, PRDDivide prdDivide) {
         Expression argument1 = createExpression(prdDivide.getArg1());
@@ -111,7 +117,9 @@ public abstract class ActionCreator {
         Expression argument2 = createExpression(prdDivide.getArg2());
         checkIfNumberExpression(argument2,"divide");
 
-        return new Divide(entityDef, propertyName, argument1, argument2);
+        return new Divide(entityDef, null,propertyName, argument1, argument2);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
 
     private static Action createCondition(PRDAction prdAction) {
@@ -153,7 +161,8 @@ public abstract class ActionCreator {
             }
         }
 
-        return new SingleCondition(entityDef, Then, Else, propertyDef.getName(), value, operatorType);
+        return new SingleCondition(entityDef, null ,Then, Else, propertyDef.getName(), value, operatorType);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
     }
     private static AbstractCondition createMultipleCondition(PRDAction prdAction, EntityDefinition entityDef, PRDCondition prdCondition) {
         LogicType logicType = getLogicalFromString(prdCondition.getLogical());
@@ -172,7 +181,9 @@ public abstract class ActionCreator {
             }
         }
 
-        return new MultipleCondition(entityDef, Then, Else, conditionList, logicType);
+        return new MultipleCondition(entityDef, null,Then, Else, conditionList, logicType);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
 
     private static Action createSet(PRDAction prdAction) {
@@ -184,14 +195,16 @@ public abstract class ActionCreator {
 
         Expression value = createExpression(prdAction.getValue());
 
-        return new Set(entityDef, propertyDef.getName(), value);
+        return new Set(entityDef, null,propertyDef.getName(), value);
+        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+
     }
 
     private static Action createKill(PRDAction prdAction) {
         EntityDefinition entityDef = entityDefinitionMap.get(prdAction.getEntity());
         checkIfEntityExist(entityDef, "kill", prdAction.getEntity());
 
-        return new Kill(entityDef);
+        return new Kill(entityDef , null); //todo - change it after we load the new scheme cause now we dont yet have secondary entity
     }
 
     public static void setEntityDefinitionMap(Map<String, EntityDefinition> entityDefinitionMap) {

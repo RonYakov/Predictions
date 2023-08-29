@@ -11,8 +11,8 @@ import static utills.string.StringConvertor.convertStringToFloat;
 import static utills.string.StringConvertor.convertStringToInt;
 
 public class Multiply extends AbstractCalculation {
-    public Multiply(EntityDefinition primaryEntityDefinition, String resultProp, Expression firstArgument, Expression secondArgument) {
-        super(primaryEntityDefinition, ActionType.MULTIPLY, resultProp, firstArgument, secondArgument);
+    public Multiply(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression firstArgument, Expression secondArgument) {
+        super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.MULTIPLY, resultProp, firstArgument, secondArgument);
     }
 
     @Override
