@@ -3,9 +3,7 @@ package details.simulationBreakdown;
 import details.DetailsScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import option2.EntityDefinitionDTO;
 import option2.RulesDTO;
 import option2.SimulationDefinitionDTO;
@@ -107,5 +105,4 @@ public class SimulationBreakdownController {
             choiceBoxEntities.getItems().add(entityDefinitionDTO.getName());
         }
     }
-
 }

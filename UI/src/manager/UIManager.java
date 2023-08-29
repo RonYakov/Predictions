@@ -170,12 +170,12 @@ public class UIManager {
             System.out.println("     4) Number of actions: --- " + rulesDTO.getActionCounter());
             System.out.print("     5) Action types: -------- ");
 
-            for (String str : rulesDTO.getActionTypes()) {
-                System.out.print(str + "  ");
-            }
-            System.out.println();
-            System.out.println();
-            counter++;
+//            for (String str : rulesDTO.getActionTypes()) {
+//                System.out.print(str + "  ");
+//            }
+//            System.out.println();
+//            System.out.println();
+//            counter++;
         }
     }
     private void printTermination(TerminationDTO terminationDTO) {

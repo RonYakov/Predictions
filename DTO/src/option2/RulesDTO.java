@@ -1,5 +1,7 @@
 package option2;
 
+import option2.ActionDTO.ActionDTO;
+
 import java.util.List;
 
 public class RulesDTO {
@@ -7,9 +9,9 @@ public class RulesDTO {
     private Integer ticks;
     private Double probability;
     private Integer actionCounter;
-    private List<String> actionTypes;
+    private List<ActionDTO> actionTypes;
 
-    public RulesDTO(String name, Integer ticks, Double probability, Integer actionCounter, List<String> actionTypes) {
+    public RulesDTO(String name, Integer ticks, Double probability, Integer actionCounter, List<ActionDTO> actionTypes) {
         this.name = name;
         this.ticks = ticks;
         this.probability = probability;
@@ -33,7 +35,7 @@ public class RulesDTO {
         return actionCounter;
     }
 
-    public List<String> getActionTypes() {
+    public List<ActionDTO> getActionTypes() {
         return actionTypes;
     }
 }

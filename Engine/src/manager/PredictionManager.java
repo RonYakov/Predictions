@@ -123,7 +123,8 @@ public class PredictionManager {
             for(Action action: rule.getActions()){
                 actionType.add(action.getClass().getSimpleName());
             }
-            rulesDTOList.add(new RulesDTO(rule.getName(), rule.getActivation().getTicks(), rule.getActivation().getProbability(), actionCount, actionType ));
+            rulesDTOList.add(new RulesDTO(rule.getName(), rule.getActivation().getTicks(), rule.getActivation().getProbability(), actionCount, null ));
+            //todo - replace null with List<ActionDTO>
         }
         return rulesDTOList;
     }

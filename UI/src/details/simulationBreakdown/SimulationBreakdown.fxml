@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.StackPane?>
 <SplitPane fx:id="root" dividerPositions="0.3956043956043956" prefHeight="418.0" prefWidth="475.0" stylesheets="@SimulationBreakdown.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.simulationBreakdown.SimulationBreakdownController">
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="244.0">
