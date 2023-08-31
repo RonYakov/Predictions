@@ -25,7 +25,7 @@ public abstract class FactoryDefinition {
 
     public static SimulationDefinition createSimulationDefinition(PRDWorld prdWorld) {
         Map<String, EntityDefinition> entityDefinitionMap = createEntitiesDefinition(prdWorld.getPRDEntities());
-        Map<String, PropertyDefinition> environmentsMap = createEnvironments(prdWorld.getPRDEvironment());
+        Map<String, PropertyDefinition> environmentsMap = createEnvironments(prdWorld.getPRDEnvironment());
         List<Rule> ruleList = createRules(prdWorld.getPRDRules());
         Termination termination = createTermination(prdWorld.getPRDTermination());
 
@@ -92,7 +92,6 @@ public abstract class FactoryDefinition {
         List<PRDProperty> PRDProperties = PRDEntity.getPRDProperties().getPRDProperty();
         Map<String, PropertyDefinition> properties = new HashMap<>();
         String duplicateName = FindDuplicateNamesForProp(PRDProperties);
-        int population = PRDEntity.getPRDPopulation();
 
         if(duplicateName != null) {
             throw new DuplicateNameException("DuplicateNameException: the property name '" + duplicateName + "' in entity '" + name + "' show more then once.\n" +
@@ -101,7 +100,7 @@ public abstract class FactoryDefinition {
 
         PRDProperties.forEach(prdProperty -> properties.put(prdProperty.getPRDName(),createPropertyDefinition(prdProperty)));
 
-        return new EntityDefinition(name, population ,properties);
+        return new EntityDefinition(name ,properties);
     }
 
     private static Map<String, EntityDefinition> createEntitiesDefinition(PRDEntities prdEntities) {
@@ -137,7 +136,7 @@ public abstract class FactoryDefinition {
         return new PropertyDefinition(name, type, null, range);
     }
 
-    private static Map<String, PropertyDefinition> createEnvironments(PRDEvironment prdEnvironment) {
+    private static Map<String, PropertyDefinition> createEnvironments(PRDEnvironment prdEnvironment) {
         Map<String, PropertyDefinition> res = new HashMap<>();
         List<PRDEnvProperty> prdEnvironmentList = prdEnvironment.getPRDEnvProperty();
         String duplicateName = FindDuplicateNamesForEnvironment(prdEnvironmentList);
@@ -194,21 +193,21 @@ public abstract class FactoryDefinition {
     private static Termination createTermination(PRDTermination prdTermination){
         int seconds = 0, ticks = 0;
 
-        if(prdTermination.getPRDByTicksOrPRDBySecond().size() == 1) {
-            if(prdTermination.getPRDByTicksOrPRDBySecond().get(0) instanceof PRDBySecond){
-                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+        if(prdTermination.getPRDBySecondOrPRDByTicks().size() == 1) {
+            if(prdTermination.getPRDBySecondOrPRDByTicks().get(0) instanceof PRDBySecond){
+                seconds = ((PRDBySecond)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
             } else {
-                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
+                ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
             }
         }
         else {
-            if(prdTermination.getPRDByTicksOrPRDBySecond().get(0) instanceof PRDBySecond) {
-                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
-                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(1)).getCount();
+            if(prdTermination.getPRDBySecondOrPRDByTicks().get(0) instanceof PRDBySecond) {
+                seconds = ((PRDBySecond)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
+                ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(1)).getCount();
             }
             else {
-                ticks = ((PRDByTicks)prdTermination.getPRDByTicksOrPRDBySecond().get(0)).getCount();
-                seconds = ((PRDBySecond)prdTermination.getPRDByTicksOrPRDBySecond().get(1)).getCount();
+                ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
+                seconds = ((PRDBySecond)prdTermination.getPRDBySecondOrPRDByTicks().get(1)).getCount();
             }
         }
         return new Termination(ticks,seconds);

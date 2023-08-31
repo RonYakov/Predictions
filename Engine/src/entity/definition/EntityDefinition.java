@@ -8,20 +8,24 @@ import java.util.Map;
 public class EntityDefinition implements Serializable {
     private final String name;
     private Map<String, PropertyDefinition> properties;
-    private final int population;
+    private Integer population;
 
-    public EntityDefinition(String name,int population ,Map<String, PropertyDefinition> properties) {
+    public EntityDefinition(String name ,Map<String, PropertyDefinition> properties) {
         this.name = name;
         this.properties = properties;
-        this.population = population;
+        population = null;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPopulation() {
+    public Integer getPopulation() {
         return population;
+    }
+
+    public void setPopulation(Integer population) {
+        this.population = population;
     }
 
     public PropertyDefinition getProperty(String propName) {

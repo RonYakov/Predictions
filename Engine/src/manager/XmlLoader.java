@@ -11,7 +11,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.nio.file.Files;
 
 import static factory.definition.FactoryDefinition.createSimulationDefinition;
