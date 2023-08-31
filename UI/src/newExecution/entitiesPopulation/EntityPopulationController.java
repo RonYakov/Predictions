@@ -1,14 +1,64 @@
 package newExecution.entitiesPopulation;
 
+import details.selectedComponent.rule.action.increase.IncreaseDataController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import newExecution.entitiesPopulation.entityCount.EntityCountController;
+import newExecution.entitiesPopulation.entityCount.PopulationCountListener;
+import option2.EntityDefinitionDTO;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EntityPopulationController {
+
+    @FXML
+    private VBox entitiesPopulation;
 
     @FXML
     private Label currentCountLable;
 
     @FXML
     private Label maxCountLable;
+
+    private List<PopulationCountListener> populationCountListeners = new LinkedList<>();
+
+    @FXML
+    public void initialize(){
+        currentCountLable.setText("0");
+    }
+
+    public void setEntities(List<EntityDefinitionDTO> entityDefinitionDTOList) {
+        for(EntityDefinitionDTO entityDefinitionDTO : entityDefinitionDTOList) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/newExecution/entitiesPopulation/entityCount/EntityCount.fxml"));
+                Parent entityCountLoaderContent = loader.load();
+                EntityCountController entityCountController = loader.getController();
+
+                entitiesPopulation.getChildren().add(entityCountLoaderContent);
+                entityCountController.setDataMembers(entityDefinitionDTO);
+                entityCountController.setEntityPopulationController(this);
+                populationCountListeners.add(entityCountController);
+
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    public void currentCounterChanged(int oldValue, int newValue){
+        Integer oldCurrValue = Integer.parseInt(currentCountLable.getText());
+        Integer temp = oldCurrValue;
+        temp = temp - oldValue + newValue;
+        currentCountLable.setText(temp.toString());
+
+        for(PopulationCountListener populationCountListener :populationCountListeners) {
+            populationCountListener.onChange(oldCurrValue, temp);
+        }
+    }
+
 
 }
