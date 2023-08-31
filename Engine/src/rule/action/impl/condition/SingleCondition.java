@@ -5,6 +5,9 @@ import exception.ExpressionTypeException;
 import exception.PropertyTypeException;
 import expression.ExpressionType;
 import expression.api.Expression;
+import option2.ActionDTO.ActionDTO;
+import option2.ActionDTO.MultipleConditionDTO;
+import option2.ActionDTO.SingleConditionDTO;
 import property.definition.PropertyDefinition;
 import property.definition.PropertyType;
 import rule.action.ActionType;
@@ -18,15 +21,25 @@ import java.util.List;
 import static utills.string.StringConvertor.convertStringToFloat;
 
 public class SingleCondition extends AbstractCondition {
-    private String property;
+    private Expression property;
     private Expression value;
     private OperatorType operator;
 
-    public SingleCondition(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition ,List<Action> then, List<Action> elsE, String property, Expression value, OperatorType operator) {
+    public SingleCondition(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition ,List<Action> then, List<Action> elsE, Expression property, Expression value, OperatorType operator) {
         super(primaryEntityDefinition,secondaryEntityDefinition ,ActionType.SINGLE_CONDITION, then, elsE);
         this.property = property;
         this.value = value;
         this.operator = operator;
+    }
+
+    @Override
+    public ActionDTO createDTO() {
+        if(getSecondaryEntityDefinition() == null) {
+            return new SingleConditionDTO("Single Condition", getPrimaryEntityDefinition().getName(), null,
+                    property.GetSimpleValue(), value.GetSimpleValue(), operator.toString(), thenAmount(), elseAmount());
+        }
+        return new SingleConditionDTO("Single Condition", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+                property.GetSimpleValue(), value.GetSimpleValue(), operator.toString(), thenAmount(), elseAmount());
     }
 
     @Override
@@ -46,7 +59,7 @@ public class SingleCondition extends AbstractCondition {
     private boolean ltCondition(ActionContext context) {
         checkIfNumberExpression();
         checkIfNumberProperty(context);
-        float propVal = convertStringToFloat(context.getPrimaryEntityInstance().getSpecificPropertyValue(property));
+        float propVal = convertStringToFloat(property.GetExplicitValue(context.getPrimaryEntityInstance()));
         float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance()));
 
         return propVal < expVal;
@@ -54,14 +67,14 @@ public class SingleCondition extends AbstractCondition {
     private boolean btCondition(ActionContext context) {
         checkIfNumberExpression();
         checkIfNumberProperty(context);
-        float propVal = convertStringToFloat(context.getPrimaryEntityInstance().getSpecificPropertyValue(property));
+        float propVal = convertStringToFloat(property.GetExplicitValue(context.getPrimaryEntityInstance()));
         float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance()));
 
         return propVal > expVal;
     }
 
     private boolean equalCondition(ActionContext context) {
-        String propValue = context.getPrimaryEntityInstance().getSpecificPropertyValue(property);
+        String propValue = property.GetExplicitValue(context.getPrimaryEntityInstance());
         String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance());
 
         if(isANumberProp(context) && isANumberExp()){
@@ -71,21 +84,20 @@ public class SingleCondition extends AbstractCondition {
         } else if (isAStringProp(context) && isAStringExp()) {
             return propValue.equals(expValue);
         }else{
-            throw new PropertyTypeException("PropertyTypeException: can not try equaling '" + context.getPrimaryEntityInstance().getProperty(property).getValue() + "' and '" + value.GetSimpleValue() + "'.\n" +
+            throw new PropertyTypeException("PropertyTypeException: can not try equaling '" + property.GetSimpleValue() + "' and '" + value.GetSimpleValue() + "'.\n" +
                     "       Note that you can only equal number to number, string to string or boolean to boolean." +
                     "       Exception thrown while trying to do equal in SingleCondition class");
         }
     }
 
     private boolean isANumberProp(ActionContext context){
-        return context.getPrimaryEntityInstance().getProperty(property).getType() == PropertyType.DECIMAL ||
-                context.getPrimaryEntityInstance().getProperty(property).getType() == PropertyType.FLOAT;
+        return property.getType() == ExpressionType.FLOAT || property.getType() == ExpressionType.INT;
     }
     private boolean isABoolProp(ActionContext context){
-        return context.getPrimaryEntityInstance().getProperty(property).getType() == PropertyType.BOOLEAN;
+        return property.getType() == ExpressionType.BOOLEAN;
     }
     private boolean isAStringProp(ActionContext context){
-        return context.getPrimaryEntityInstance().getProperty(property).getType() == PropertyType.STRING;
+        return property.getType() == ExpressionType.STRING;
     }
     private boolean isANumberExp(){
         return value.getType() == ExpressionType.FLOAT || value.getType() == ExpressionType.INT;

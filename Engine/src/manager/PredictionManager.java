@@ -6,6 +6,7 @@ import entity.instance.EntityInstanceManager;
 import exception.FileNotFoundException;
 import option1.XmlFullPathDTO;
 import option2.*;
+import option2.ActionDTO.ActionDTO;
 import option3.*;
 import option4.AmountDTO;
 import option4.PastSimulationInfoDTO;
@@ -119,14 +120,17 @@ public class PredictionManager {
 
         for (Rule rule: simulationDefinition.getRules()){
             Integer actionCount = rule.numOfActions();
-            List<String> actionType = new ArrayList<>();
+            List<ActionDTO> actions = new ArrayList<>();
             for(Action action: rule.getActions()){
-                actionType.add(action.getClass().getSimpleName());
+                actions.add(createActionDTO(action));
             }
-            rulesDTOList.add(new RulesDTO(rule.getName(), rule.getActivation().getTicks(), rule.getActivation().getProbability(), actionCount, null ));
-            //todo - replace null with List<ActionDTO>
+            rulesDTOList.add(new RulesDTO(rule.getName(), rule.getActivation().getTicks(), rule.getActivation().getProbability(), actionCount, actions ));
         }
         return rulesDTOList;
+    }
+
+    private ActionDTO createActionDTO(Action action) {
+        return action.createDTO();
     }
 
     private List<EntityDefinitionDTO> createEntityDTOlist(){

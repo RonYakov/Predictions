@@ -5,6 +5,8 @@ import details.selectedComponent.rule.action.decrease.DecreaseDataController;
 import details.selectedComponent.rule.action.increase.IncreaseDataController;
 import details.selectedComponent.rule.action.kill.KillDataController;
 import details.selectedComponent.rule.action.multipleCondition.MultipleConditionDataController;
+import details.selectedComponent.rule.action.proximity.ProximityDataController;
+import details.selectedComponent.rule.action.replace.ReplaceDataController;
 import details.selectedComponent.rule.action.set.SetDataController;
 import details.selectedComponent.rule.action.singleCondition.SingleConditionDataController;
 import javafx.event.ActionEvent;
@@ -71,29 +73,35 @@ public class RulesDetailsController {
 
     private void setActionDetailsPain(ActionDTO actionDTO) {
         switch (actionDTO.getName()) {
-            case "INCREASE":
+            case "Increase":
                 createIncreaseAction((IncreaseDTO)actionDTO);
                 break;
-            case "DECREASE":
+            case "Decrease":
                 createDecreaseAction((DecreaseDTO)actionDTO);
                 break;
-            case "MULTIPLY":
+            case "Multiply":
                 createCalculationAction((CalculationDTO)actionDTO);
                 break;
-            case "DIVIDE":
+            case "Divide":
                 createCalculationAction((CalculationDTO)actionDTO);
                 break;
-            case "MULTIPLE-CONDITION":
+            case "Multiple Condition":
                 createMulConAction((MultipleConditionDTO)actionDTO);
                 break;
-            case "SINGLE-CONDITION":
+            case "Single Condition":
                 createSinConAction((SingleConditionDTO)actionDTO);
                 break;
-            case "KILL":
+            case "Kill":
                 createKillAction((KillDTO)actionDTO);
                 break;
-            case "SET":
+            case "Set":
                 createSetAction((SetDTO)actionDTO);
+                break;
+            case "Proximity":
+                createProximityAction((ProximityDTO)actionDTO);
+                break;
+            case "Replace":
+                createReplaceAction((ReplaceDTO)actionDTO);
                 break;
         }
     }
@@ -104,6 +112,7 @@ public class RulesDetailsController {
             Parent increaseContent = loader.load();
             IncreaseDataController increaseDataController = loader.getController();
 
+            increaseDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(increaseContent);
 
@@ -117,6 +126,7 @@ public class RulesDetailsController {
             Parent decreaseContent = loader.load();
             DecreaseDataController decreaseDataController = loader.getController();
 
+            decreaseDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(decreaseContent);
 
@@ -130,6 +140,7 @@ public class RulesDetailsController {
             Parent calculationContent = loader.load();
             CalculationDataController calculationDataController = loader.getController();
 
+            calculationDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(calculationContent);
 
@@ -143,6 +154,7 @@ public class RulesDetailsController {
             Parent multipleConditionContent = loader.load();
             MultipleConditionDataController multipleConditionDataController = loader.getController();
 
+            multipleConditionDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(multipleConditionContent);
 
@@ -156,6 +168,7 @@ public class RulesDetailsController {
             Parent singleConditionContent = loader.load();
             SingleConditionDataController singleConditionDataController = loader.getController();
 
+            singleConditionDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(singleConditionContent);
 
@@ -169,6 +182,7 @@ public class RulesDetailsController {
             Parent killContent = loader.load();
             KillDataController killDataController = loader.getController();
 
+            killDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(killContent);
 
@@ -182,8 +196,37 @@ public class RulesDetailsController {
             Parent setContent = loader.load();
             SetDataController setDataController = loader.getController();
 
+            setDataController.SetData(actionDTO);
             actionDetails.getChildren().clear();
             actionDetails.getChildren().add(setContent);
+
+        } catch (IOException e) {
+        }
+    }
+
+    private void createProximityAction(ProximityDTO actionDTO) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/rule/action/proximity/ProximityData.fxml"));
+            Parent proximityContent = loader.load();
+            ProximityDataController proximityDataController = loader.getController();
+
+            proximityDataController.SetData(actionDTO);
+            actionDetails.getChildren().clear();
+            actionDetails.getChildren().add(proximityContent);
+
+        } catch (IOException e) {
+        }
+    }
+
+    private void createReplaceAction(ReplaceDTO actionDTO) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/rule/action/replace/ReplaceData.fxml"));
+            Parent replaceContent = loader.load();
+            ReplaceDataController replaceDataController = loader.getController();
+
+            replaceDataController.SetData(actionDTO);
+            actionDetails.getChildren().clear();
+            actionDetails.getChildren().add(replaceContent);
 
         } catch (IOException e) {
         }

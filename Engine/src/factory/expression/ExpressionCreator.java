@@ -1,11 +1,12 @@
 package factory.expression;
 
+import entity.definition.EntityDefinition;
 import exception.EnvironmentInputException;
+import exception.ExpressionTypeException;
 import exception.RandomInputException;
 import expression.ExpressionType;
 import expression.api.Expression;
-import expression.impl.function.EnvironmentFunctionExpression;
-import expression.impl.function.RandomFunctionExpression;
+import expression.impl.function.*;
 import expression.impl.property.BooleanPropertyExpression;
 import expression.impl.property.DecimalPropertyExpression;
 import expression.impl.property.FloatPropertyExpression;
@@ -23,6 +24,8 @@ import static utills.string.StringConvertor.*;
 public abstract class ExpressionCreator {
     private static Map<String, PropertyDefinition> propertiesOfEntities;
     private static Map<String, PropertyDefinition> environmentsDefinition;
+
+    private static Map<String, EntityDefinition> entityDefinition;
 
     public static Expression createExpression(String input) {
         Expression res;
@@ -48,15 +51,67 @@ public abstract class ExpressionCreator {
 
             return new RandomFunctionExpression(input,randomArg);
         }
-        else if (input.startsWith("environment(") && input.endsWith(")")) {
+        else if (input.startsWith("evaluate(") && input.endsWith(")")) {
+            String evaluateInput = input.substring(9, input.length() - 1);
+            String[] helper = evaluateInput.split("\\.");
+            isValidInput(helper, evaluateInput);
+            EntityDefinition entityDefinition = isAnEntity(helper[0]);
+            isValidProperty(entityDefinition, helper[1]);
+            ExpressionType type = getPropertyExpressionType(entityDefinition.getProperty(helper[1]));
+
+            return new EvaluateFunctionExpression(input, type, entityDefinition.getName(), helper[1]);
+
+        }else if (input.startsWith("percent(") && input.endsWith(")")) {
+            String percentInput = input.substring(8, input.length() - 1);
+            String[] helper = percentInput.split(",");
+            isValidInput(helper, percentInput);
+
+            Expression arg1 = ExpressionCreator.createExpression(helper[0]);
+            Expression arg2 = ExpressionCreator.createExpression(helper[1]);
+
+            isExpressionANumber(arg1);
+            isExpressionANumber(arg2);
+
+            return new PercentFunctionExpression(input,arg1,arg2);
+        }else if (input.startsWith("ticks(") && input.endsWith(")")) {
+            String ticksInput = input.substring(6, input.length() - 1);
+            String[] helper = ticksInput.split("\\.");
+            isValidInput(helper, ticksInput);
+            EntityDefinition entityDefinition = isAnEntity(helper[0]);
+            isValidProperty(entityDefinition, helper[1]);
+            ExpressionType type = getPropertyExpressionType(entityDefinition.getProperty(helper[1]));
+
+            return new TicksFunctionExpression(input, type, entityDefinition.getName(), helper[1]);
+
+        }else if (input.startsWith("environment(") && input.endsWith(")")) {
             String environmentInput = input.substring(12, input.length() - 1);
-            isAnEnvironment(environmentInput); // function that will throw exception if not!
+            isAnEnvironment(environmentInput);
             ExpressionType type = getEnvironmentExpressionType(environmentInput);
 
             return new EnvironmentFunctionExpression(input,environmentInput,type);
         }
         else {
             return null;
+        }
+    }
+
+    private static void isExpressionANumber(Expression expression) {
+        if(expression.getType() != ExpressionType.INT && expression.getType() != ExpressionType.FLOAT) {
+            throw new ExpressionTypeException("ExpressionTypeException! the expression: " + expression.GetSimpleValue() + " is not a number!");
+        }
+    }
+
+    private static void isValidProperty(EntityDefinition entityDefinition, String property) {
+        if(entityDefinition.getProperty(property) == null){
+            throw  new EnvironmentInputException("InputException: the following input '" + property + "' is not a property in "+ entityDefinition.getName() + ".\n" +
+                    "       Note that the input must be: <entity>.<property> ! Problem occurred in class ExpressionCreator");
+        }
+    }
+
+    private static void isValidInput(String[] helper, String WholeInput) {
+        if(helper.length != 2) {
+            throw  new EnvironmentInputException("InputException: the following input '" + WholeInput + "' is not valid.\n" +
+                    "       ! Problem occurred in class ExpressionCreator");
         }
     }
 
@@ -101,12 +156,16 @@ public abstract class ExpressionCreator {
         ExpressionCreator.environmentsDefinition = environmentsDefinition;
     }
 
+    public static void setEntityDefinition(Map<String, EntityDefinition> entityDefinition) {
+        ExpressionCreator.entityDefinition = entityDefinition;
+    }
+
     private static int isAnInteger(String randomInput) {
         try {
             return convertStringToInt(randomInput);
         } catch (Exception exception) {
-            throw new RandomInputException("RandomInputException: the following input " + randomInput + " is not a valid input to function random.\n" +
-                    "       Note that random has to get a single integer! Problem occurred in class ExpressionCreator");
+            throw new RandomInputException("RandomInputException: the following input " + randomInput + " is not a valid input .\n" +
+                    "       Note that you must enter a number! Problem occurred in class ExpressionCreator");
         }
     }
 
@@ -124,6 +183,18 @@ public abstract class ExpressionCreator {
                 return ExpressionType.STRING;
             }
         }
+    private static ExpressionType getPropertyExpressionType(PropertyDefinition propertyDefinition) {
+        switch (propertyDefinition.getType()) {
+            case DECIMAL:
+                return ExpressionType.INT;
+            case FLOAT:
+                return ExpressionType.FLOAT;
+            case BOOLEAN:
+                return ExpressionType.BOOLEAN;
+            default:
+                return ExpressionType.STRING;
+        }
+    }
 
     private static void isAnEnvironment(String environmentInput) {
         PropertyDefinition environmentDef = environmentsDefinition.get(environmentInput);
@@ -132,5 +203,14 @@ public abstract class ExpressionCreator {
             throw  new EnvironmentInputException("EnvironmentInputException: the following input '" + environmentInput + "' is not a valid input to function environment.\n" +
                     "       Note that environment has to get a single environment's name! Problem occurred in class ExpressionCreator");
         }
+    }
+    private static EntityDefinition isAnEntity(String entityInput) {
+        EntityDefinition environmentDef = entityDefinition.get(entityInput);
+
+        if(environmentDef == null) {
+            throw  new EnvironmentInputException("EntityInputException: the following input '" + entityInput + "' is not a entity.\n" +
+                    "       Note that evaluate has to get a <entity>.<property> ! Problem occurred in class ExpressionCreator");
+        }
+        return environmentDef;
     }
 }

@@ -4,10 +4,13 @@ import entity.definition.EntityDefinition;
 import exception.*;
 import expression.ExpressionType;
 import expression.api.Expression;
+import factory.expression.ExpressionCreator;
 import property.definition.PropertyDefinition;
 import property.definition.PropertyType;
 import rule.action.api.Action;
 import rule.action.impl.Kill;
+import rule.action.impl.Proximity;
+import rule.action.impl.Replace;
 import rule.action.impl.Set;
 import rule.action.impl.condition.AbstractCondition;
 import rule.action.impl.condition.MultipleCondition;
@@ -45,6 +48,10 @@ public abstract class ActionCreator {
                 return createSet(prdAction);
             case "kill":
                 return createKill(prdAction);
+            case "replace":
+                return createReplace(prdAction);
+            case "proximity":
+                return createProximity(prdAction);
             default:
                 throw new TypeUnmatchedException("TypeUnmatchedException: can not create action with type '" + type +"'.\n" +
                         "       Please enter a real action type. Problem occurred in class ActionCreator.");
@@ -141,9 +148,9 @@ public abstract class ActionCreator {
                         "       Note that singularity must be 'single' or 'multiple'. Problem occurred in class ActionCreator when trying to create condition action");
         }
     }
+
     private static AbstractCondition createSingleCondition(PRDAction prdAction, EntityDefinition entityDef, PRDCondition prdCondition) {
-        PropertyDefinition propertyDef = entityDef.getProperty(prdCondition.getProperty());
-        checkIfPropertyExist(entityDef.getName(), propertyDef,"Single-Condition", prdCondition.getProperty());
+        Expression propertyDef = ExpressionCreator.createExpression(prdCondition.getProperty());
 
         Expression value = createExpression(prdCondition.getValue());
 
@@ -161,7 +168,7 @@ public abstract class ActionCreator {
             }
         }
 
-        return new SingleCondition(entityDef, null ,Then, Else, propertyDef.getName(), value, operatorType);
+        return new SingleCondition(entityDef, null ,Then, Else, propertyDef, value, operatorType);
         //todo - change it after we load the new scheme cause now we dont yet have secondary entity
     }
     private static AbstractCondition createMultipleCondition(PRDAction prdAction, EntityDefinition entityDef, PRDCondition prdCondition) {
@@ -205,6 +212,27 @@ public abstract class ActionCreator {
         checkIfEntityExist(entityDef, "kill", prdAction.getEntity());
 
         return new Kill(entityDef , null); //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+    }
+
+    private static Action createProximity(PRDAction prdAction) {
+        EntityDefinition source = entityDefinitionMap.get(prdAction.getPRDBetween().getSourceEntity());
+        checkIfEntityExist(source, "proximity", prdAction.getEntity());
+        EntityDefinition target = entityDefinitionMap.get(prdAction.getPRDBetween().getTargetEntity());
+        checkIfEntityExist(target, "proximity", prdAction.getEntity());
+
+        Expression of = createExpression(prdAction.getPRDEnvDepth().getOf());
+        List<Action> actions = extractActionListFromPRD(prdAction.getPRDActions().getPRDAction());
+
+        return new Proximity(source, target, of, actions);
+    }
+
+    private static Action createReplace(PRDAction prdAction) {
+        EntityDefinition entityKill = entityDefinitionMap.get(prdAction.getKill());
+        checkIfEntityExist(entityKill, "replace", prdAction.getEntity());
+        EntityDefinition entityCreate = entityDefinitionMap.get(prdAction.getCreate());
+        checkIfEntityExist(entityCreate, "replace", prdAction.getEntity());
+
+        return new Replace(entityKill, entityCreate, prdAction.getMode());
     }
 
     public static void setEntityDefinitionMap(Map<String, EntityDefinition> entityDefinitionMap) {

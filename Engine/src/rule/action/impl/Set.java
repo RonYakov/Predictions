@@ -4,6 +4,10 @@ import entity.definition.EntityDefinition;
 import exception.TypeUnmatchedException;
 import expression.ExpressionType;
 import expression.api.Expression;
+import option2.ActionDTO.ActionDTO;
+import option2.ActionDTO.KillDTO;
+import option2.ActionDTO.ProximityDTO;
+import option2.ActionDTO.SetDTO;
 import property.definition.PropertyType;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
@@ -18,6 +22,15 @@ public class Set extends AbstractAction {
         super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.SET);
         this.property = property;
         this.value = value;
+    }
+    @Override
+    public ActionDTO createDTO() {
+        if(getSecondaryEntityDefinition() == null) {
+            return new SetDTO("Set", getPrimaryEntityDefinition().getName(), null,
+                    value.GetSimpleValue(), property);
+        }
+        return new SetDTO("Set", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+                value.GetSimpleValue(), property);
     }
 
     @Override

@@ -19,6 +19,11 @@ public abstract class AbstractExpression implements Expression, Serializable {
         this.type = type;
     }
 
+    @Override
+    public String getEntityName() {
+        return null;
+    }
+
     protected void setType(ExpressionType type) {
         this.type = type;
     }
@@ -26,6 +31,7 @@ public abstract class AbstractExpression implements Expression, Serializable {
     public ExpressionType getType() {
         return type;
     }
+
 
     @Override
     public boolean equals(Object o) {

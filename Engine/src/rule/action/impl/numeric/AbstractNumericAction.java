@@ -19,6 +19,10 @@ public abstract class AbstractNumericAction extends AbstractAction {
         this.resultProp = resultProp;
     }
 
+    public String getResultProp() {
+        return resultProp;
+    }
+
     protected Number extractANumber(ActionContext context) {
         AbstractPropertyInstance property = extractProperty(context);
         String propertyValue;

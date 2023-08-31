@@ -4,6 +4,10 @@ import entity.definition.EntityDefinition;
 import exception.TryToPreformFloatActionOnDecimalPropertyException;
 import expression.ExpressionType;
 import expression.api.Expression;
+import option2.ActionDTO.ActionDTO;
+import option2.ActionDTO.DecreaseDTO;
+import option2.ActionDTO.IncreaseDTO;
+import option2.ActionDTO.KillDTO;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
@@ -19,6 +23,16 @@ public class Decrease extends AbstractNumericAction {
     public Decrease(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression by) {
         super(primaryEntityDefinition,secondaryEntityDefinition,ActionType.DECREASE, resultProp);
         this.by = by;
+    }
+
+    @Override
+    public ActionDTO createDTO() {
+        if(getSecondaryEntityDefinition() == null) {
+            return new DecreaseDTO("Decrease", getPrimaryEntityDefinition().getName(), null,
+                    getResultProp(), by.GetSimpleValue());
+        }
+        return new DecreaseDTO("Decrease", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+                getResultProp(), by.GetSimpleValue());
     }
 
     @Override

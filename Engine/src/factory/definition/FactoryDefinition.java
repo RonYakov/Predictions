@@ -116,6 +116,7 @@ public abstract class FactoryDefinition {
 
         ActionCreator.setEntityDefinitionMap(res);
         ExpressionCreator.setPropertiesOfEntities(createPropOfEntitiesMap(res));
+        ExpressionCreator.setEntityDefinition(res);
         return res;
     }
 
@@ -192,6 +193,7 @@ public abstract class FactoryDefinition {
 
     private static Termination createTermination(PRDTermination prdTermination){
         int seconds = 0, ticks = 0;
+        Boolean byUser;
 
         if(prdTermination.getPRDBySecondOrPRDByTicks().size() == 1) {
             if(prdTermination.getPRDBySecondOrPRDByTicks().get(0) instanceof PRDBySecond){
@@ -199,8 +201,9 @@ public abstract class FactoryDefinition {
             } else {
                 ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
             }
+            byUser = false;
         }
-        else {
+        else  if(prdTermination.getPRDBySecondOrPRDByTicks().size() == 2) {
             if(prdTermination.getPRDBySecondOrPRDByTicks().get(0) instanceof PRDBySecond) {
                 seconds = ((PRDBySecond)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
                 ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(1)).getCount();
@@ -209,8 +212,12 @@ public abstract class FactoryDefinition {
                 ticks = ((PRDByTicks)prdTermination.getPRDBySecondOrPRDByTicks().get(0)).getCount();
                 seconds = ((PRDBySecond)prdTermination.getPRDBySecondOrPRDByTicks().get(1)).getCount();
             }
+            byUser = false;
         }
-        return new Termination(ticks,seconds);
+        else {
+            byUser = true;
+        }
+        return new Termination(ticks,seconds,byUser);
     }
 
     private static boolean isInRange(double numberToCheck, Range range) {
