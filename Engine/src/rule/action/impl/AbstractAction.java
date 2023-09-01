@@ -5,17 +5,18 @@ import property.definition.PropertyType;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.api.Action;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 import java.io.Serializable;
 
 public abstract class AbstractAction implements Action, Serializable {
     private EntityDefinition primaryEntityDefinition;
-    private EntityDefinition secondaryEntityDefinition;
+    private SecondaryEntity secondaryEntity;
     private ActionType type;
 
-    public AbstractAction(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type) {
+    public AbstractAction(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntity, ActionType type) {
         this.primaryEntityDefinition = primaryEntityDefinition;
-        this.secondaryEntityDefinition = secondaryEntityDefinition;
+        this.secondaryEntity = secondaryEntity;
         this.type = type;
     }
 
@@ -24,8 +25,8 @@ public abstract class AbstractAction implements Action, Serializable {
         return primaryEntityDefinition;
     }
 
-    public EntityDefinition getSecondaryEntityDefinition() {
-        return secondaryEntityDefinition;
+    public SecondaryEntity getSecondaryEntity() {
+        return secondaryEntity;
     }
 
     @Override

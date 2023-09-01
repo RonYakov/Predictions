@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface ActionContext {
     EntityInstance getPrimaryEntityInstance();
-    void setSecondaryEntities(List<EntityInstance> secondaryEntities);
+    void setSecondaryEntity(EntityInstance secondaryEntity);
+    EntityInstance getSecondaryEntityInstance();
     void setEntityManager(EntityInstanceManager entityManager);
     void setPrimaryEntityInstance(EntityInstance entity);
     void removeEntity(EntityInstance entity);

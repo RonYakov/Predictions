@@ -1,29 +1,43 @@
 package rule.action.impl;
 
 import entity.definition.EntityDefinition;
+import entity.instance.EntityInstance;
 import option2.ActionDTO.ActionDTO;
-import option2.ActionDTO.IncreaseDTO;
 import option2.ActionDTO.KillDTO;
-import option2.ActionDTO.MultipleConditionDTO;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
-import rule.action.impl.AbstractAction;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 public class Kill extends AbstractAction {
-    public Kill(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition) {
+    public Kill(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition) {
         super(primaryEntityDefinition, secondaryEntityDefinition ,ActionType.KILL);
     }
 
     @Override
     public ActionDTO createDTO() {
-        if(getSecondaryEntityDefinition() == null) {
+        if(getSecondaryEntity() == null) {
             return new KillDTO("Kill", getPrimaryEntityDefinition().getName(), null);
         }
-        return new KillDTO("Kill", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName());
+        return new KillDTO("Kill", getPrimaryEntityDefinition().getName(), getSecondaryEntity().getEntityName());
+    }
+
+    private EntityInstance getEntityForInvoke(ActionContext context) {
+        if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getPrimaryEntityInstance();
+        }
+        else if(context.getSecondaryEntityInstance() == null) {
+            throw new RuntimeException(); //todo think later
+        } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getSecondaryEntityInstance();
+        }
+        else {
+            throw new RuntimeException(); //todo think later
+        }
     }
 
     @Override
     public void Invoke(ActionContext context) {
-        context.getPrimaryEntityInstance().killMe();
+        EntityInstance entityInstanceToKill = getEntityForInvoke(context);
+        entityInstanceToKill.killMe();
     }
 }

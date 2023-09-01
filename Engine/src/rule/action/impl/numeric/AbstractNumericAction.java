@@ -1,6 +1,7 @@
 package rule.action.impl.numeric;
 
 import entity.definition.EntityDefinition;
+import entity.instance.EntityInstance;
 import exception.NotRealPropertyException;
 import exception.PropertyNotFoundException;
 import property.definition.PropertyType;
@@ -8,19 +9,34 @@ import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
 import rule.action.impl.AbstractAction;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 import static utills.helperFunction.Helper.isDecimal;
 
 public abstract class AbstractNumericAction extends AbstractAction {
     private final String resultProp;
 
-    public AbstractNumericAction(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type, String resultProp) {
+    public AbstractNumericAction(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, ActionType type, String resultProp) {
         super(primaryEntityDefinition, secondaryEntityDefinition ,type);
         this.resultProp = resultProp;
     }
 
     public String getResultProp() {
         return resultProp;
+    }
+
+    private EntityInstance getEntityForInvoke(ActionContext context) {
+        if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getPrimaryEntityInstance();
+        }
+        else if(context.getSecondaryEntityInstance() == null) {
+            throw new RuntimeException(); //todo think later
+        } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getSecondaryEntityInstance();
+        }
+        else {
+            throw new RuntimeException(); //todo think later
+        }
     }
 
     protected Number extractANumber(ActionContext context) {
@@ -36,7 +52,8 @@ public abstract class AbstractNumericAction extends AbstractAction {
     }
 
     protected AbstractPropertyInstance extractProperty(ActionContext context) {
-        AbstractPropertyInstance res = context.getPrimaryEntityInstance().getProperty(resultProp);
+        EntityInstance entityInstance = getEntityForInvoke(context);
+        AbstractPropertyInstance res = entityInstance.getProperty(resultProp);
 
         if(res != null) {
             return res;

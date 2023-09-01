@@ -1,6 +1,7 @@
 package simulation.impl;
 
 import entity.instance.EntityInstanceManager;
+import grid.Grid;
 import property.instance.AbstractPropertyInstance;
 import rule.Rule;
 import rule.action.context.api.ActionContext;
@@ -21,13 +22,15 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
     private Map<String, EntityInstanceManager> entityManager;
     private final Map<String, AbstractPropertyInstance> environments;
     private final List<Rule> rules;
+    private final Grid grid;
     private final Termination termination;
     private String formattedDate;
     private final int identifyNumber;
     private String simulationStopCause;
-    public Simulation(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments, List<Rule> rules, Termination termination, int identifyNumber) {
+    public Simulation(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments,Grid grid, List<Rule> rules, Termination termination, int identifyNumber) {
         this.entityManager = entityManager;
         this.environments = environments;
+        this.grid = grid;
         this.rules = rules;
         this.termination = termination;
         this.identifyNumber = identifyNumber;

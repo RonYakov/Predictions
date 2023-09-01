@@ -8,10 +8,7 @@ import factory.expression.ExpressionCreator;
 import property.definition.PropertyDefinition;
 import property.definition.PropertyType;
 import rule.action.api.Action;
-import rule.action.impl.Kill;
-import rule.action.impl.Proximity;
-import rule.action.impl.Replace;
-import rule.action.impl.Set;
+import rule.action.impl.*;
 import rule.action.impl.condition.AbstractCondition;
 import rule.action.impl.condition.MultipleCondition;
 import rule.action.impl.condition.SingleCondition;
@@ -21,6 +18,7 @@ import rule.action.impl.numeric.Decrease;
 import rule.action.impl.numeric.Increase;
 import rule.action.impl.numeric.calculation.Divide;
 import rule.action.impl.numeric.calculation.Multiply;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 import schema.generated.*;
 
 import java.util.ArrayList;
@@ -68,6 +66,8 @@ public abstract class ActionCreator {
 
         Expression expression = createExpression(prdAction.getBy());
         checkIfNumberExpression(expression,"increase");
+
+        SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
 
         return new Increase(entityDef, null,prdAction.getProperty(), expression);
         //todo - change it after we load the new scheme cause now we dont yet have secondary entity
@@ -168,7 +168,7 @@ public abstract class ActionCreator {
             }
         }
 
-        return new SingleCondition(entityDef, null ,Then, Else, propertyDef, value, operatorType);
+        return new SingleCondition(entityDef, null ,Then, Else,prdCondition.getEntity(), propertyDef, value, operatorType);
         //todo - change it after we load the new scheme cause now we dont yet have secondary entity
     }
     private static AbstractCondition createMultipleCondition(PRDAction prdAction, EntityDefinition entityDef, PRDCondition prdCondition) {
@@ -217,8 +217,10 @@ public abstract class ActionCreator {
     private static Action createProximity(PRDAction prdAction) {
         EntityDefinition source = entityDefinitionMap.get(prdAction.getPRDBetween().getSourceEntity());
         checkIfEntityExist(source, "proximity", prdAction.getEntity());
-        EntityDefinition target = entityDefinitionMap.get(prdAction.getPRDBetween().getTargetEntity());
-        checkIfEntityExist(target, "proximity", prdAction.getEntity());
+        EntityDefinition targetEntity = entityDefinitionMap.get(prdAction.getPRDBetween().getTargetEntity());
+        checkIfEntityExist(targetEntity, "proximity", prdAction.getEntity());
+
+        SecondaryEntity target = new SecondaryEntity(targetEntity.getName(), null, null);
 
         Expression of = createExpression(prdAction.getPRDEnvDepth().getOf());
         List<Action> actions = extractActionListFromPRD(prdAction.getPRDActions().getPRDAction());
@@ -232,7 +234,9 @@ public abstract class ActionCreator {
         EntityDefinition entityCreate = entityDefinitionMap.get(prdAction.getCreate());
         checkIfEntityExist(entityCreate, "replace", prdAction.getEntity());
 
-        return new Replace(entityKill, entityCreate, prdAction.getMode());
+        SecondaryEntity secondaryEntity = new SecondaryEntity(entityCreate.getName(), 1, null);
+
+        return new Replace(entityKill, secondaryEntity, prdAction.getMode());
     }
 
     public static void setEntityDefinitionMap(Map<String, EntityDefinition> entityDefinitionMap) {
@@ -315,6 +319,24 @@ public abstract class ActionCreator {
         }
 
         return res;
+    }
+
+    private static SecondaryEntity createSecondaryEntity(PRDAction.PRDSecondaryEntity prdSecondaryEntity) {
+        if(prdSecondaryEntity == null) {
+            return null;
+        }
+
+        Integer count;
+        if(prdSecondaryEntity.getPRDSelection().getCount().equals("ALL")) {
+            count = null;
+        }
+        else {
+            count = Integer.parseInt(prdSecondaryEntity.getPRDSelection().getCount());
+        }
+
+        AbstractCondition condition = createConditionHelper(null, prdSecondaryEntity.getPRDSelection().getPRDCondition(), null);
+
+        return new SecondaryEntity(prdSecondaryEntity.getEntity(), count, condition);
     }
 
 }

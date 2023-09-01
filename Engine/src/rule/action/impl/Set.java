@@ -1,44 +1,57 @@
 package rule.action.impl;
 
 import entity.definition.EntityDefinition;
+import entity.instance.EntityInstance;
 import exception.TypeUnmatchedException;
 import expression.ExpressionType;
 import expression.api.Expression;
 import option2.ActionDTO.ActionDTO;
-import option2.ActionDTO.KillDTO;
-import option2.ActionDTO.ProximityDTO;
 import option2.ActionDTO.SetDTO;
 import property.definition.PropertyType;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
-import rule.action.impl.AbstractAction;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 public class Set extends AbstractAction {
     private final String property;
     private final Expression value;
 
-    public Set(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String property, Expression value) {
+    public Set(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, String property, Expression value) {
         super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.SET);
         this.property = property;
         this.value = value;
     }
     @Override
     public ActionDTO createDTO() {
-        if(getSecondaryEntityDefinition() == null) {
+        if(getSecondaryEntity() == null) {
             return new SetDTO("Set", getPrimaryEntityDefinition().getName(), null,
                     value.GetSimpleValue(), property);
         }
-        return new SetDTO("Set", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+        return new SetDTO("Set", getPrimaryEntityDefinition().getName(), getSecondaryEntity().getEntityName(),
                 value.GetSimpleValue(), property);
+    }
+    private EntityInstance getEntityForInvoke(ActionContext context) {
+        if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getPrimaryEntityInstance();
+        }
+        else if(context.getSecondaryEntityInstance() == null) {
+            throw new RuntimeException(); //todo think later
+        } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+            return context.getSecondaryEntityInstance();
+        }
+        else {
+            throw new RuntimeException(); //todo think later
+        }
     }
 
     @Override
     public void Invoke(ActionContext context) {
-        PropertyType propertyType = context.getPrimaryEntityInstance().getProperty(property).getType();
-        AbstractPropertyInstance propertyToSet = context.getPrimaryEntityInstance().getProperty(property);
+        EntityInstance entityInstance = getEntityForInvoke(context);
+        PropertyType propertyType = entityInstance.getProperty(property).getType();
+        AbstractPropertyInstance propertyToSet = entityInstance.getProperty(property);
         ExpressionType valueType = value.getType();
-        String newValue = value.GetExplicitValue(context.getPrimaryEntityInstance());
+        String newValue = value.GetExplicitValue(entityInstance);
 
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.INT) {
             Integer numberNewValue = Integer.parseInt(newValue);

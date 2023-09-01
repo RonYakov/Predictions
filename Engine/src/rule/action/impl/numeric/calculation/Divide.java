@@ -5,27 +5,26 @@ import expression.ExpressionType;
 import expression.api.Expression;
 import option2.ActionDTO.ActionDTO;
 import option2.ActionDTO.CalculationDTO;
-import option2.ActionDTO.KillDTO;
-import option2.ActionDTO.SetDTO;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 import static utills.string.StringConvertor.convertStringToFloat;
 import static utills.string.StringConvertor.convertStringToInt;
 
 public class Divide extends AbstractCalculation {
-    public Divide(EntityDefinition primaryEntityDefinition,EntityDefinition secondaryEntityDefinition, String resultProp, Expression firstArgument, Expression secondArgument) {
+    public Divide(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, String resultProp, Expression firstArgument, Expression secondArgument) {
         super(primaryEntityDefinition,secondaryEntityDefinition ,ActionType.DIVIDE, resultProp, firstArgument, secondArgument);
     }
 
     @Override
     public ActionDTO createDTO() {
-        if(getSecondaryEntityDefinition() == null) {
+        if(getSecondaryEntity() == null) {
             return new CalculationDTO("Divide", getPrimaryEntityDefinition().getName(), null,
                     getFirstArgument().GetSimpleValue(), getSecondArgument().GetSimpleValue(), getResultProp());
         }
-        return new CalculationDTO("Divide", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+        return new CalculationDTO("Divide", getPrimaryEntityDefinition().getName(), getSecondaryEntity().getEntityName(),
                 getFirstArgument().GetSimpleValue(), getSecondArgument().GetSimpleValue(), getResultProp());
     }
 

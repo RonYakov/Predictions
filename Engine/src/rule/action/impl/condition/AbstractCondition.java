@@ -7,6 +7,7 @@ import rule.action.ActionType;
 import rule.action.api.Action;
 import rule.action.context.api.ActionContext;
 import rule.action.impl.AbstractAction;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public abstract class AbstractCondition extends AbstractAction {
     private List<Action> Then;
     private List<Action> Else;
 
-    public AbstractCondition(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,ActionType type, List<Action> Then, List<Action> Else) {
+    public AbstractCondition(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, ActionType type, List<Action> Then, List<Action> Else) {
         super(primaryEntityDefinition, secondaryEntityDefinition ,type);
         this.Then = Then;
         this.Else = Else;

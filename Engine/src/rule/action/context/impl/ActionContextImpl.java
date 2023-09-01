@@ -11,18 +11,23 @@ import java.util.Map;
 
 public class ActionContextImpl implements ActionContext, Serializable {
     private EntityInstance primaryEntity;
-    private List<EntityInstance> secondaryEntities;
+    private EntityInstance secondaryEntity;
     private EntityInstanceManager entityManager;
 
     public ActionContextImpl() {
         primaryEntity = null;
-        secondaryEntities = null;
+        secondaryEntity = null;
         entityManager = null;
     }
 
     @Override
-    public void setSecondaryEntities(List<EntityInstance> secondaryEntities) {
-        this.secondaryEntities = secondaryEntities;
+    public void setSecondaryEntity(EntityInstance secondaryEntity) {
+        this.secondaryEntity = secondaryEntity;
+    }
+
+    @Override
+    public EntityInstance getSecondaryEntityInstance() {
+        return secondaryEntity;
     }
 
     @Override

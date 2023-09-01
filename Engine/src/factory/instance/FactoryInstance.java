@@ -1,6 +1,7 @@
 package factory.instance;
 
 import entity.instance.EntityInstanceManager;
+import grid.Grid;
 import property.definition.PropertyDefinition;
 import property.instance.AbstractPropertyInstance;
 import simulation.definition.SimulationDefinition;
@@ -19,7 +20,8 @@ public abstract class FactoryInstance {
         Map<String, EntityInstanceManager> entityInstanceMap = createEntityInstanceManagerMap(simulationDefinition.getEntitiesDef());
         Map<String, AbstractPropertyInstance> environmentsMap = createPropertyInstanceManagerMap(simulationDefinition.getEnvironmentsDef());
 
-        return new Simulation(entityInstanceMap, environmentsMap, simulationDefinition.getRules(), simulationDefinition.getTermination(), identifyNumber);
+        Grid grid = new Grid(simulationDefinition.getGrid().getRows(), simulationDefinition.getGrid().getCols());
+        return new Simulation(entityInstanceMap, environmentsMap,grid , simulationDefinition.getRules(), simulationDefinition.getTermination(), identifyNumber);
     }
 
     private static  Map<String, AbstractPropertyInstance> createPropertyInstanceManagerMap(Map<String, PropertyDefinition> propertyDefinitionMap) {

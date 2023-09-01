@@ -5,31 +5,30 @@ import exception.TryToPreformFloatActionOnDecimalPropertyException;
 import expression.ExpressionType;
 import expression.api.Expression;
 import option2.ActionDTO.ActionDTO;
-import option2.ActionDTO.DecreaseDTO;
 import option2.ActionDTO.IncreaseDTO;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 
 import static utills.helperFunction.Helper.isDecimal;
-import static utills.helperFunction.Helper.isFloat;
 
 public class Increase extends AbstractNumericAction {
     private final Expression by;
 
-    public Increase(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression by) {
+    public Increase(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, String resultProp, Expression by) {
         super(primaryEntityDefinition, secondaryEntityDefinition,ActionType.INCREASE, resultProp);
         this.by = by;
     }
 
     @Override
     public ActionDTO createDTO() {
-        if(getSecondaryEntityDefinition() == null) {
+        if(getSecondaryEntity() == null) {
             return new IncreaseDTO("Increase", getPrimaryEntityDefinition().getName(), null,
                     getResultProp(), by.GetSimpleValue());
         }
-        return new IncreaseDTO("Increase", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+        return new IncreaseDTO("Increase", getPrimaryEntityDefinition().getName(), getSecondaryEntity().getEntityName(),
                 getResultProp(), by.GetSimpleValue());
     }
 

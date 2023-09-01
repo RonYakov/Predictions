@@ -6,12 +6,10 @@ import expression.ExpressionType;
 import expression.api.Expression;
 import option2.ActionDTO.ActionDTO;
 import option2.ActionDTO.DecreaseDTO;
-import option2.ActionDTO.IncreaseDTO;
-import option2.ActionDTO.KillDTO;
 import property.instance.AbstractPropertyInstance;
 import rule.action.ActionType;
 import rule.action.context.api.ActionContext;
-import rule.action.impl.AbstractAction;
+import rule.action.impl.secondaryEntity.SecondaryEntity;
 
 import static utills.helperFunction.Helper.isDecimal;
 import static utills.helperFunction.Helper.isFloat;
@@ -20,18 +18,18 @@ public class Decrease extends AbstractNumericAction {
 
     private final Expression by;
 
-    public Decrease(EntityDefinition primaryEntityDefinition, EntityDefinition secondaryEntityDefinition,String resultProp, Expression by) {
+    public Decrease(EntityDefinition primaryEntityDefinition, SecondaryEntity secondaryEntityDefinition, String resultProp, Expression by) {
         super(primaryEntityDefinition,secondaryEntityDefinition,ActionType.DECREASE, resultProp);
         this.by = by;
     }
 
     @Override
     public ActionDTO createDTO() {
-        if(getSecondaryEntityDefinition() == null) {
+        if(getSecondaryEntity() == null) {
             return new DecreaseDTO("Decrease", getPrimaryEntityDefinition().getName(), null,
                     getResultProp(), by.GetSimpleValue());
         }
-        return new DecreaseDTO("Decrease", getPrimaryEntityDefinition().getName(), getSecondaryEntityDefinition().getName(),
+        return new DecreaseDTO("Decrease", getPrimaryEntityDefinition().getName(), getSecondaryEntity().getEntityName(),
                 getResultProp(), by.GetSimpleValue());
     }
 

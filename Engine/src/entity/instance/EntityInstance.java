@@ -18,6 +18,9 @@ public class EntityInstance implements Serializable {
         toKill = false;
     }
 
+    public String getEntType() {
+        return entType;
+    }
 
     public AbstractPropertyInstance getProperty(String propertyName) {
         return properties.get(propertyName);

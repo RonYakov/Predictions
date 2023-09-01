@@ -6,6 +6,7 @@ import exception.NumberNotInRangeException;
 import exception.PropertyTypeException;
 import factory.action.ActionCreator;
 import factory.expression.ExpressionCreator;
+import grid.Grid;
 import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import property.definition.PropertyDefinition;
 import property.definition.range.Range;
@@ -27,11 +28,14 @@ public abstract class FactoryDefinition {
         Map<String, EntityDefinition> entityDefinitionMap = createEntitiesDefinition(prdWorld.getPRDEntities());
         Map<String, PropertyDefinition> environmentsMap = createEnvironments(prdWorld.getPRDEnvironment());
         List<Rule> ruleList = createRules(prdWorld.getPRDRules());
+        Grid grid = createGrid(prdWorld.getPRDGrid());
         Termination termination = createTermination(prdWorld.getPRDTermination());
 
+        return new SimulationDefinition(entityDefinitionMap, environmentsMap, grid, ruleList, termination);
+    }
 
-
-        return new SimulationDefinition(entityDefinitionMap, environmentsMap, ruleList, termination);
+    private static Grid createGrid(PRDWorld.PRDGrid prdGrid) {
+        return new Grid(prdGrid.getRows(), prdGrid.getColumns());
     }
 
     private static PropertyDefinition createPropertyDefinition(PRDProperty prdProperty) {
