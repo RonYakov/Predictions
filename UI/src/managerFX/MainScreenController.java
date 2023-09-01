@@ -61,6 +61,9 @@ public class MainScreenController {
             Parent newExecutionContent = loader.load();
             newExecutionController = loader.getController();
 
+            //todo need to change it (just for testing)
+            newExecutionController.setEntitiesData(predictionManager.showCurrentSimulationData().getEntityDefinitionDTOList(), 100);
+
             newExecutionController.setMainScreenController(this);
 
             mainBorderPane.setCenter(newExecutionContent);

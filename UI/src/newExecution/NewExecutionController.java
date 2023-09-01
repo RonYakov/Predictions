@@ -8,8 +8,10 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import managerFX.MainScreenController;
+import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.environmentInputs.EnvironmentInputsController;
 import newExecution.listener.StartButtonClickedListener;
+import option2.EntityDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
 import option3.EnvironmentInitDTO;
 import option3.EnvironmentInitListDTO;
@@ -23,6 +25,11 @@ public class NewExecutionController {
     private BorderPane environmentInputs;
     @FXML
     private EnvironmentInputsController environmentInputsController;
+
+    @FXML
+    private BorderPane entityPopulation;
+    @FXML
+    private EntityPopulationController entityPopulationController;
     @FXML
     private Button clearButton;
     @FXML
@@ -52,6 +59,11 @@ public class NewExecutionController {
             // Reset the position to the original value
             mainSplitPane.setDividerPositions(originalDividerPosition);
         });
+    }
+
+    public void setEntitiesData(List<EntityDefinitionDTO> entityDefinitionDTOList, int gridSize) {
+        entityPopulationController.setMaxCountLable(gridSize);
+        entityPopulationController.setEntities(entityDefinitionDTOList);
     }
 
     public void addEnvironmentToList(EnvironmentInitDTO environmentInitDTO) {

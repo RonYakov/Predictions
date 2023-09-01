@@ -1,6 +1,5 @@
 package newExecution.entitiesPopulation;
 
-import details.selectedComponent.rule.action.increase.IncreaseDataController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,6 +31,10 @@ public class EntityPopulationController {
         currentCountLable.setText("0");
     }
 
+    public void setMaxCountLable(int maxSize) {
+        maxCountLable.setText(Integer.toString(maxSize));
+    }
+
     public void setEntities(List<EntityDefinitionDTO> entityDefinitionDTOList) {
         for(EntityDefinitionDTO entityDefinitionDTO : entityDefinitionDTOList) {
             try {
@@ -39,12 +42,14 @@ public class EntityPopulationController {
                 Parent entityCountLoaderContent = loader.load();
                 EntityCountController entityCountController = loader.getController();
 
+                entityCountController.setMaxSize(Integer.parseInt(maxCountLable.getText()));
                 entitiesPopulation.getChildren().add(entityCountLoaderContent);
                 entityCountController.setDataMembers(entityDefinitionDTO);
                 entityCountController.setEntityPopulationController(this);
                 populationCountListeners.add(entityCountController);
 
             } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -55,7 +60,7 @@ public class EntityPopulationController {
         temp = temp - oldValue + newValue;
         currentCountLable.setText(temp.toString());
 
-        for(PopulationCountListener populationCountListener :populationCountListeners) {
+        for(PopulationCountListener populationCountListener : populationCountListeners) {
             populationCountListener.onChange(oldCurrValue, temp);
         }
     }

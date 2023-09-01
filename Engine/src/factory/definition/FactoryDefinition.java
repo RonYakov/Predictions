@@ -29,6 +29,8 @@ public abstract class FactoryDefinition {
         List<Rule> ruleList = createRules(prdWorld.getPRDRules());
         Termination termination = createTermination(prdWorld.getPRDTermination());
 
+
+
         return new SimulationDefinition(entityDefinitionMap, environmentsMap, ruleList, termination);
     }
 

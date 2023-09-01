@@ -25,10 +25,10 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <Label fx:id="currentCountLable" styleClass="bodyLabels" />
+            <Label fx:id="currentCountLable" prefHeight="25.0" prefWidth="47.0" styleClass="bodyLabels" />
          </children>
          <padding>
-            <Insets left="50.0" right="50.0" top="10.0" />
+            <Insets left="50.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
    </bottom>
@@ -38,7 +38,7 @@
             <Insets left="50.0" top="20.0" />
          </BorderPane.margin>
          <content>
-            <VBox prefHeight="330.0" prefWidth="376.0">
+            <VBox fx:id="entitiesPopulation" prefHeight="330.0" prefWidth="376.0">
                <children>
                   <HBox prefHeight="43.0" prefWidth="356.0" spacing="150.0">
                      <children>
