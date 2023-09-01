@@ -21,7 +21,7 @@ public class EnvironmentFunctionExpression extends AbstractFunctionExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance entity) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
         String environmentVarValue = environment(environmentName);
         return environmentVarValue;
     }

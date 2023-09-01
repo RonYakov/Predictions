@@ -69,9 +69,7 @@ public abstract class ActionCreator {
 
         SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
 
-        return new Increase(entityDef, null,prdAction.getProperty(), expression);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
-
+        return new Increase(entityDef, secondaryEntity,prdAction.getProperty(), expression);
     }
 
     private static Action createDecrease(PRDAction prdAction) {
@@ -85,9 +83,9 @@ public abstract class ActionCreator {
         Expression expression = createExpression(prdAction.getBy());
         checkIfNumberExpression(expression,"decrease");
 
-        return new Decrease(entityDef, null,prdAction.getProperty(), expression);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+        SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
 
+        return new Decrease(entityDef, secondaryEntity,prdAction.getProperty(), expression);
     }
 
     private static Action createCalculation(PRDAction prdAction) {
@@ -98,26 +96,27 @@ public abstract class ActionCreator {
         checkIfPropertyExist(entityDef.getName(), propertyDef,"calculation", prdAction.getResultProp());
         checkIfNumberProperty(propertyDef, "calculation");
 
+        SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
+
         String desireCalc = checkIfMultiplyOrDivide(prdAction);
         switch (desireCalc) {
             case "multiply":
-                return createMultiply(entityDef, propertyDef.getName(), prdAction.getPRDMultiply());
+                return createMultiply(entityDef, propertyDef.getName(), prdAction.getPRDMultiply(), secondaryEntity);
             default:
-                return createDivide(entityDef, propertyDef.getName(), prdAction.getPRDDivide());
+                return createDivide(entityDef, propertyDef.getName(), prdAction.getPRDDivide(), secondaryEntity);
         }
     }
-    private static Action createMultiply(EntityDefinition entityDef, String propertyName, PRDMultiply prdMultiply) {
+    private static Action createMultiply(EntityDefinition entityDef, String propertyName, PRDMultiply prdMultiply , SecondaryEntity secondaryEntity) {
         Expression argument1 = createExpression(prdMultiply.getArg1());
         checkIfNumberExpression(argument1,"multiply");
 
         Expression argument2 = createExpression(prdMultiply.getArg2());
         checkIfNumberExpression(argument2,"multiply");
 
-        return new Multiply(entityDef, null,propertyName, argument1, argument2);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+        return new Multiply(entityDef, secondaryEntity,propertyName, argument1, argument2);
 
     }
-    private static Action createDivide(EntityDefinition entityDef, String propertyName, PRDDivide prdDivide) {
+    private static Action createDivide(EntityDefinition entityDef, String propertyName, PRDDivide prdDivide, SecondaryEntity secondaryEntity) {
         Expression argument1 = createExpression(prdDivide.getArg1());
         checkIfNumberExpression(argument1,"divide");
 
@@ -125,7 +124,6 @@ public abstract class ActionCreator {
         checkIfNumberExpression(argument2,"divide");
 
         return new Divide(entityDef, null,propertyName, argument1, argument2);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
 
     }
 
@@ -156,9 +154,12 @@ public abstract class ActionCreator {
 
         OperatorType operatorType = getOperatorFromString(prdCondition.getOperator());
 
+        SecondaryEntity secondaryEntity =  null;
+
         List<Action> Else = null;
         List<Action> Then = null;
         if(prdAction != null) {
+            secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
             PRDThen prdThen = prdAction.getPRDThen();
             Then = extractActionListFromPRD(prdThen.getPRDAction());
 
@@ -168,17 +169,19 @@ public abstract class ActionCreator {
             }
         }
 
-        return new SingleCondition(entityDef, null ,Then, Else,prdCondition.getEntity(), propertyDef, value, operatorType);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+        return new SingleCondition(entityDef, secondaryEntity ,Then, Else,prdCondition.getEntity(), propertyDef, value, operatorType);
     }
     private static AbstractCondition createMultipleCondition(PRDAction prdAction, EntityDefinition entityDef, PRDCondition prdCondition) {
         LogicType logicType = getLogicalFromString(prdCondition.getLogical());
 
         List<AbstractCondition> conditionList = extractConditionListFromPRD(prdCondition.getPRDCondition(), entityDef);
 
+        SecondaryEntity secondaryEntity = null;
+
         List<Action> Else = null;
         List<Action> Then = null;
         if(prdAction != null) {
+            secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
             PRDThen prdThen = prdAction.getPRDThen();
             Then = extractActionListFromPRD(prdThen.getPRDAction());
 
@@ -188,9 +191,7 @@ public abstract class ActionCreator {
             }
         }
 
-        return new MultipleCondition(entityDef, null,Then, Else, conditionList, logicType);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
-
+        return new MultipleCondition(entityDef, secondaryEntity,Then, Else, conditionList, logicType);
     }
 
     private static Action createSet(PRDAction prdAction) {
@@ -202,16 +203,18 @@ public abstract class ActionCreator {
 
         Expression value = createExpression(prdAction.getValue());
 
-        return new Set(entityDef, null,propertyDef.getName(), value);
-        //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+        SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
 
+        return new Set(entityDef, secondaryEntity,propertyDef.getName(), value);
     }
 
     private static Action createKill(PRDAction prdAction) {
         EntityDefinition entityDef = entityDefinitionMap.get(prdAction.getEntity());
         checkIfEntityExist(entityDef, "kill", prdAction.getEntity());
 
-        return new Kill(entityDef , null); //todo - change it after we load the new scheme cause now we dont yet have secondary entity
+        SecondaryEntity secondaryEntity =  createSecondaryEntity(prdAction.getPRDSecondaryEntity());
+
+        return new Kill(entityDef , secondaryEntity);
     }
 
     private static Action createProximity(PRDAction prdAction) {

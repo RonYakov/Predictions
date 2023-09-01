@@ -44,14 +44,23 @@ public class Set extends AbstractAction {
             throw new RuntimeException(); //todo think later
         }
     }
+    private EntityInstance getOtherEntity(EntityInstance entityInstance, ActionContext context) {
+        if(context.getPrimaryEntityInstance().equals(entityInstance)) {
+            return context.getSecondaryEntityInstance();
+        }
+        else {
+            return context.getPrimaryEntityInstance();
+        }
+    }
 
     @Override
     public void Invoke(ActionContext context) {
         EntityInstance entityInstance = getEntityForInvoke(context);
+        EntityInstance otherEntity = getOtherEntity(entityInstance, context);
         PropertyType propertyType = entityInstance.getProperty(property).getType();
         AbstractPropertyInstance propertyToSet = entityInstance.getProperty(property);
         ExpressionType valueType = value.getType();
-        String newValue = value.GetExplicitValue(entityInstance);
+        String newValue = value.GetExplicitValue(entityInstance, otherEntity);
 
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.INT) {
             Integer numberNewValue = Integer.parseInt(newValue);
@@ -64,11 +73,11 @@ public class Set extends AbstractAction {
             return;
         }
         if(propertyType == PropertyType.BOOLEAN && valueType == ExpressionType.BOOLEAN) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(context.getPrimaryEntityInstance()));
+            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity));
             return;
         }
         if(propertyType == PropertyType.STRING && valueType == ExpressionType.STRING) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(context.getPrimaryEntityInstance()));
+            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity));
             return;
         }
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.FLOAT) {

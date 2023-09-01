@@ -6,8 +6,7 @@ import expression.ExpressionType;
 public interface Expression {
     String GetSimpleValue();
 
-    //todo - must give the function also the secondary entity (now the expression can work on both primary and secondary)
-    String GetExplicitValue(EntityInstance entity);
+    String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity);
     ExpressionType getType();
     String getEntityName();
 }

@@ -25,7 +25,7 @@ public abstract class AbstractNumericAction extends AbstractAction {
         return resultProp;
     }
 
-    private EntityInstance getEntityForInvoke(ActionContext context) {
+    protected EntityInstance getEntityForInvoke(ActionContext context) {
         if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getPrimaryEntityInstance();
         }
@@ -36,6 +36,14 @@ public abstract class AbstractNumericAction extends AbstractAction {
         }
         else {
             throw new RuntimeException(); //todo think later
+        }
+    }
+    protected EntityInstance getOtherEntity(EntityInstance entityInstance, ActionContext context) {
+        if(context.getPrimaryEntityInstance().equals(entityInstance)) {
+            return context.getSecondaryEntityInstance();
+        }
+        else {
+            return context.getPrimaryEntityInstance();
         }
     }
 

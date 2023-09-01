@@ -6,10 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.EntityPopulationController;
+import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
+import option3.EntityPopulationDTO;
 
-public class EntityCountController implements PopulationCountListener {
+public class EntityCountController implements PopulationCountListener, StartButtonClickedListener {
 
     @FXML
     private Spinner<Integer> count;
@@ -20,6 +23,8 @@ public class EntityCountController implements PopulationCountListener {
 
     private EntityPopulationController entityPopulationController;
 
+    private NewExecutionController newExecutionController;
+
     private Boolean isICanged;
 
     private SpinnerValueFactory<Integer> spinnerValueFactory;
@@ -28,6 +33,10 @@ public class EntityCountController implements PopulationCountListener {
     public void initialize() {
         count.setEditable(true);
         isICanged = false;
+    }
+
+    public void setNewExecutionController(NewExecutionController newExecutionController) {
+        this.newExecutionController = newExecutionController;
     }
 
     public void setMaxSize(Integer newMaxSize) {
@@ -54,6 +63,11 @@ public class EntityCountController implements PopulationCountListener {
             count.setValueFactory(spinnerValueFactory);
         }
         isICanged = false;
+    }
+
+    @Override
+    public void startOnClicked() {
+        newExecutionController.addToEntityPopulationDTOList(new EntityPopulationDTO(name.getText(), spinnerValueFactory.getValue()));
     }
 
     public void setEntityPopulationController(EntityPopulationController entityPopulationController) {

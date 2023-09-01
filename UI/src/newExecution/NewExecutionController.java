@@ -1,20 +1,18 @@
 package newExecution;
 
-import header.PredictionHeaderController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import managerFX.MainScreenController;
 import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.environmentInputs.EnvironmentInputsController;
 import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
+import option3.EntityPopulationDTO;
 import option3.EnvironmentDefinitionListDTO;
 import option3.EnvironmentInitDTO;
-import option3.EnvironmentInitListDTO;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,6 +38,7 @@ public class NewExecutionController {
     private Double originalDividerPosition;
     private List<StartButtonClickedListener> startListener;
     private List<EnvironmentInitDTO> environmentInitDTOList;
+    private List<EntityPopulationDTO>entityPopulationDTOList = new ArrayList<>();
 
 
     @FXML
@@ -49,6 +48,7 @@ public class NewExecutionController {
         setDivider();
         environmentInputsController.setNewExecutionController(this);
         environmentInitDTOList = new ArrayList<>();
+        entityPopulationController.setNewExecutionController(this);
     }
 
     private void setDivider(){
@@ -66,6 +66,9 @@ public class NewExecutionController {
         entityPopulationController.setEntities(entityDefinitionDTOList);
     }
 
+    public void addToEntityPopulationDTOList(EntityPopulationDTO entityPopulationDTO) {
+        entityPopulationDTOList.add(entityPopulationDTO);
+    }
     public void addEnvironmentToList(EnvironmentInitDTO environmentInitDTO) {
         environmentInitDTOList.add(environmentInitDTO);
     }

@@ -10,15 +10,19 @@ public class DecimalPropertyExpression extends AbstractPropertyExpression {
         super(value, ExpressionType.INT);
     }
 
-
     @Override
-    public String GetExplicitValue(EntityInstance entity) {
-        String res = entity.getSpecificPropertyValue(getValue());
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity){
+        String res = primaryEntity.getSpecificPropertyValue(getValue());
         if(res == null) {
-            throw new PropertyNotFoundException("PropertyNotFoundException: " + getValue() + "was not found!\n" +
-                    "       Please make sure the property you enter to an action is in the right entity. Problem occurred in class DecimalPropertyExpression");
-        }
+            if (secondaryEntity != null) {
+                res = secondaryEntity.getSpecificPropertyValue(getValue());
+            }
 
+            if(res == null) {
+                throw new PropertyNotFoundException("PropertyNotFoundException: " + getValue() + "was not found!\n" +
+                        "       Please make sure the property you enter to an action is in the right entity. Problem occurred in class DecimalPropertyExpression");
+            }
+        }
         return res;
     }
 }

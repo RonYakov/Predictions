@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.entityCount.EntityCountController;
 import newExecution.entitiesPopulation.entityCount.PopulationCountListener;
 import option2.EntityDefinitionDTO;
@@ -24,11 +25,16 @@ public class EntityPopulationController {
     @FXML
     private Label maxCountLable;
 
+    private NewExecutionController newExecutionController;
     private List<PopulationCountListener> populationCountListeners = new LinkedList<>();
 
     @FXML
     public void initialize(){
         currentCountLable.setText("0");
+    }
+
+    public void setNewExecutionController(NewExecutionController newExecutionController) {
+        this.newExecutionController = newExecutionController;
     }
 
     public void setMaxCountLable(int maxSize) {
@@ -44,6 +50,7 @@ public class EntityPopulationController {
 
                 entityCountController.setMaxSize(Integer.parseInt(maxCountLable.getText()));
                 entitiesPopulation.getChildren().add(entityCountLoaderContent);
+                entityCountController.setNewExecutionController(newExecutionController);
                 entityCountController.setDataMembers(entityDefinitionDTO);
                 entityCountController.setEntityPopulationController(this);
                 populationCountListeners.add(entityCountController);

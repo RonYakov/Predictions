@@ -14,7 +14,7 @@ public class DecimalExpression extends AbstractValueExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance entity) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
         return getValue();
     }
 }

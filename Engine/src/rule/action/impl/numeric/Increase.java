@@ -1,6 +1,7 @@
 package rule.action.impl.numeric;
 
 import entity.definition.EntityDefinition;
+import entity.instance.EntityInstance;
 import exception.TryToPreformFloatActionOnDecimalPropertyException;
 import expression.ExpressionType;
 import expression.api.Expression;
@@ -36,13 +37,15 @@ public class Increase extends AbstractNumericAction {
     public void Invoke(ActionContext context) {
         AbstractPropertyInstance property = extractProperty(context);
         Number newPropertyValue = extractANumber(context);
+        EntityInstance mainEntity = getEntityForInvoke(context);
+        EntityInstance otherEntity = getOtherEntity(mainEntity, context);
 
         if(by.getType() == ExpressionType.INT) {
             if(isDecimal(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.intValue() + Integer.parseInt(by.GetExplicitValue(context.getPrimaryEntityInstance()));
+                newPropertyValue = newPropertyValue.intValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
             }
             else {
-                newPropertyValue = newPropertyValue.floatValue() + Integer.parseInt(by.GetExplicitValue(context.getPrimaryEntityInstance()));
+                newPropertyValue = newPropertyValue.floatValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
             }
         }
         else if (by.getType() == ExpressionType.FLOAT) {
@@ -51,7 +54,7 @@ public class Increase extends AbstractNumericAction {
                         + this.getClass());
             }
             else {
-                newPropertyValue = newPropertyValue.floatValue() + Float.parseFloat(by.GetExplicitValue(context.getPrimaryEntityInstance()));
+                newPropertyValue = newPropertyValue.floatValue() + Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity));
             }
         }
 

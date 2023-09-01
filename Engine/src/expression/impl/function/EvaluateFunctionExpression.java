@@ -26,7 +26,7 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
 
     //todo method
     @Override
-    public String GetExplicitValue(EntityInstance entity) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package rule.action.impl.numeric.calculation;
 
 import entity.definition.EntityDefinition;
+import entity.instance.EntityInstance;
 import expression.ExpressionType;
 import expression.api.Expression;
 import option2.ActionDTO.ActionDTO;
@@ -31,14 +32,17 @@ public class Multiply extends AbstractCalculation {
     @Override
     public void Invoke(ActionContext context) {
         Number result;
+        EntityInstance mainEntity = getEntityForInvoke(context);
+        EntityInstance otherEntity = getOtherEntity(mainEntity, context);
+
 
         if(getFirstArgument().getType() == ExpressionType.FLOAT || getSecondArgument().getType() == ExpressionType.FLOAT){
-            result = convertStringToFloat(getFirstArgument().GetExplicitValue(context.getPrimaryEntityInstance())) *
-                    convertStringToFloat(getSecondArgument().GetExplicitValue(context.getPrimaryEntityInstance()));
+            result = convertStringToFloat(getFirstArgument().GetExplicitValue(mainEntity, otherEntity)) *
+                    convertStringToFloat(getSecondArgument().GetExplicitValue(mainEntity, otherEntity));
         }
         else{
-            result = convertStringToInt(getFirstArgument().GetExplicitValue(context.getPrimaryEntityInstance())) *
-                    convertStringToInt(getSecondArgument().GetExplicitValue(context.getPrimaryEntityInstance()));
+            result = convertStringToInt(getFirstArgument().GetExplicitValue(mainEntity, otherEntity)) *
+                    convertStringToInt(getSecondArgument().GetExplicitValue(mainEntity, otherEntity));
         }
 
         AbstractPropertyInstance propertyInstance = extractProperty(context);
