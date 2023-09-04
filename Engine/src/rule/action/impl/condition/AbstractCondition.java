@@ -41,7 +41,7 @@ public abstract class AbstractCondition extends AbstractAction {
         }
     }
 
-    protected abstract boolean runCondition(ActionContext context);
+    public abstract boolean runCondition(ActionContext context);
 
     @Override
     public void Invoke(ActionContext context) {

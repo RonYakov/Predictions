@@ -29,6 +29,8 @@ public class FloatPropertyInstance extends AbstractPropertyInstance {
 
         try {
             newValue = convertStringToFloat(value);
+            setTicks(0);
+            setModified(true);
         }
         catch (NumberFormatException e) {
             throw new NumberFormatException(e.getMessage() + "Error occurred in setValue in FloatPropertyInstance class");

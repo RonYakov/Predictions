@@ -31,7 +31,7 @@ public class MultipleCondition extends AbstractCondition {
     }
 
     @Override
-    protected boolean runCondition(ActionContext context) {
+    public boolean runCondition(ActionContext context) {
         switch (logic){
             case OR:
                 return runOrCondition(context);

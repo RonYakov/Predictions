@@ -63,7 +63,7 @@ public class MainScreenController {
 
             //todo need to change it (just for testing)
             newExecutionController.setEntitiesData(predictionManager.showCurrentSimulationData().getEntityDefinitionDTOList(), 100);
-
+            newExecutionController.setPredictionManager(predictionManager);
             newExecutionController.setMainScreenController(this);
 
             mainBorderPane.setCenter(newExecutionContent);

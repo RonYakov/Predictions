@@ -23,4 +23,7 @@ public class SecondaryEntity {
         return count;
     }
 
+    public AbstractCondition getCondition() {
+        return condition;
+    }
 }

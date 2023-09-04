@@ -27,6 +27,8 @@ public class BooleanPropertyInstance extends AbstractPropertyInstance {
     public void setValue(String value) {
         try {
             this.value = convertStringToBool(value);
+            setTicks(0);
+            setModified(true);
         }
         catch (IllegalArgumentException e){
             throw new IllegalArgumentException(e.getMessage() + "Error occurred in setValue in BooleanPropertyInstance class");

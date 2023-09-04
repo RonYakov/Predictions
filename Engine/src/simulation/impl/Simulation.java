@@ -1,5 +1,6 @@
 package simulation.impl;
 
+import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
 import grid.Grid;
 import property.instance.AbstractPropertyInstance;
@@ -12,6 +13,7 @@ import termination.Termination;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -85,6 +87,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
                 if(currTick.equals(ticks)) {
                     simulationStopCause = "Ticks";
                 }
+                updateTicks();
             }
         } else if (ticks == null && seconds !=null) {
             boolean timesUp = false;
@@ -98,12 +101,31 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
                 }
                 simulationIteration(currTick);
                 currTick++;
+                updateTicks();
             }
         }else {
             for(; currTick <= ticks ; currTick++){
                 simulationIteration(currTick);
                 if(currTick.equals(ticks)) {
                     simulationStopCause = "Ticks";
+                }
+                updateTicks();
+            }
+        }
+    }
+
+    private void updateTicks(){
+        List<EntityInstanceManager> managerList = new ArrayList<>(entityManager.values());
+
+        for (EntityInstanceManager entityInstanceManager: managerList) {
+            for (EntityInstance entityInstance:entityInstanceManager.getEntityInstanceList()) {
+                List<AbstractPropertyInstance> propertyInstances = new ArrayList<>(entityInstance.getProperties().values());
+                for (AbstractPropertyInstance abstractPropertyInstance: propertyInstances) {
+                    if(abstractPropertyInstance.isModified()){
+                        abstractPropertyInstance.setModified(false);
+                    }else {
+                        abstractPropertyInstance.setTicks(abstractPropertyInstance.getTicks() + 1);
+                    }
                 }
             }
         }

@@ -28,5 +28,7 @@ public class StringPropertyInstance extends AbstractPropertyInstance {
     @Override
     public void setValue(String value) {
         this.value = value;
+        setTicks(0);
+        setModified(true);
     }
 }

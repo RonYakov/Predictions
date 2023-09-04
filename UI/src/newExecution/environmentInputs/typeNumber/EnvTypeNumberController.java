@@ -20,14 +20,16 @@ public class EnvTypeNumberController implements StartButtonClickedListener {
     @FXML
     private Spinner<Double> userChoice;
     private NewExecutionController newExecutionController;
-    private Boolean isValueSet = false;
+    private Boolean isValueSet;
     private Double from = new Double(0);
     private Double to = new Double(1000);
 
     @FXML
     public void initialize() {
+        isValueSet = false;
+
         userChoice.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
+            if(oldValue != null){
                 isValueSet = true;
             }
         });

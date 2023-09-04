@@ -198,7 +198,7 @@ public abstract class FactoryDefinition {
     }
 
     private static Termination createTermination(PRDTermination prdTermination){
-        int seconds = 0, ticks = 0;
+        Integer seconds = null, ticks = null;
         Boolean byUser;
 
         if(prdTermination.getPRDBySecondOrPRDByTicks().size() == 1) {

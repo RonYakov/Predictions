@@ -88,11 +88,15 @@ public class PredictionManager {
         return new EnvironmentDefinitionListDTO(environmentDefinitionDTOList);
     }
 
-    public SimulationFinishDTO runSimulationStep2(EnvironmentInitListDTO environmentInitListDTO) {
+    public SimulationFinishDTO runSimulationStep2(List<EnvironmentInitDTO> environmentInitListDTO, List<EntityPopulationDTO> entityPopulationDTOList) {
+        for(EntityPopulationDTO entityPopulationDTO : entityPopulationDTOList){
+            simulationDefinition.getEntitiesDef().get(entityPopulationDTO.getEntityName()).setPopulation(entityPopulationDTO.getCount());
+        }
+
         Simulation simulation = createSimulation(simulationDefinition, currIDNum);
         Map<String, AbstractPropertyInstance> environment = simulation.getEnvironments();
 
-        for (EnvironmentInitDTO environmentInitDTO: environmentInitListDTO.getEnvironmentInitListDTOList()){
+        for (EnvironmentInitDTO environmentInitDTO: environmentInitListDTO){
             environment.get(environmentInitDTO.getName()).setValue(environmentInitDTO.getNewValue());
         }
 

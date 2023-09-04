@@ -240,7 +240,7 @@ public class UIManager {
 
         EnvironmentInitListDTO environmentsIntDTO = new EnvironmentInitListDTO(environmentInitDTOList);
 
-        return predictionManager.runSimulationStep2(environmentsIntDTO);
+        return predictionManager.runSimulationStep2(null,null);//todo
     }
     private EnvironmentInitDTO createEnvironmentInit(EnvironmentDefinitionDTO environmentDefinitionDTO, boolean isNotRandom, Scanner scanner) {
         String name = environmentDefinitionDTO.getName();

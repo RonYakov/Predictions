@@ -48,6 +48,10 @@ public class EntityInstance implements Serializable {
         return toKill;
     }
 
+    public Map<String, AbstractPropertyInstance> getProperties() {
+        return properties;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

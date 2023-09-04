@@ -3,14 +3,16 @@ package expression.impl.function;
 import entity.instance.EntityInstance;
 import expression.ExpressionType;
 
+import static utills.helperFunction.Helper.ticks;
+
 public class TicksFunctionExpression extends AbstractFunctionExpression{
     String entityName;
-    String PropertyName;
+    String propertyName;
 
     public TicksFunctionExpression(String value, ExpressionType type, String entityName, String propertyName) {
         super(value, type);
         this.entityName = entityName;
-        PropertyName = propertyName;
+        this.propertyName = propertyName;
     }
 
     @Override
@@ -24,9 +26,14 @@ public class TicksFunctionExpression extends AbstractFunctionExpression{
         return getValue();
     }
 
-    //todo method
     @Override
     public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
-        return null;
+        if(entityName.equals(primaryEntity.getEntType())){
+            return ticks(primaryEntity, propertyName).toString();
+        } else if (entityName.equals(secondaryEntity.getEntType())) {
+            return ticks(secondaryEntity, propertyName).toString();
+        } else {
+            throw new RuntimeException(); //todo
+        }
     }
 }

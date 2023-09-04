@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.entityCount.EntityCountController;
 import newExecution.entitiesPopulation.entityCount.PopulationCountListener;
+import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class EntityPopulationController {
                 entityCountController.setDataMembers(entityDefinitionDTO);
                 entityCountController.setEntityPopulationController(this);
                 populationCountListeners.add(entityCountController);
-
+                newExecutionController.addListenerToStartButton(entityCountController);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

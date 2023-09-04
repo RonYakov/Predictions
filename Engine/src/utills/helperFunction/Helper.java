@@ -1,5 +1,6 @@
 package utills.helperFunction;
 
+import entity.instance.EntityInstance;
 import exception.PropertyNotFoundException;
 import property.instance.AbstractPropertyInstance;
 import simulation.impl.Simulation;
@@ -43,5 +44,19 @@ public abstract class Helper {
         } catch (NumberFormatException exception) {
             return false;
         }
+    }
+
+    public static Double percent(Double whole, Double percentFromWhole){
+        if (percentFromWhole < 0 || percentFromWhole > 100) {
+            throw new IllegalArgumentException("Percentage should be between 0 and 100.");
+        }
+
+        return (percentFromWhole / 100) * whole;
+    }
+
+    public static Integer ticks(EntityInstance entityInstance, String propertyName){
+        AbstractPropertyInstance abstractPropertyInstance = entityInstance.getProperty(propertyName);
+
+        return abstractPropertyInstance.getTicks();
     }
 }

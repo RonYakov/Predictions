@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import manager.PredictionManager;
 import managerFX.MainScreenController;
 import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.environmentInputs.EnvironmentInputsController;
@@ -39,6 +40,8 @@ public class NewExecutionController {
     private List<StartButtonClickedListener> startListener;
     private List<EnvironmentInitDTO> environmentInitDTOList= new ArrayList<>();
     private List<EntityPopulationDTO>entityPopulationDTOList = new ArrayList<>();
+    private PredictionManager predictionManager;
+
 
 
     @FXML
@@ -49,6 +52,10 @@ public class NewExecutionController {
         environmentInputsController.setNewExecutionController(this);
         environmentInitDTOList = new ArrayList<>();
         entityPopulationController.setNewExecutionController(this);
+    }
+
+    public void setPredictionManager(PredictionManager predictionManager) {
+        this.predictionManager = predictionManager;
     }
 
     private void setDivider(){
@@ -96,6 +103,8 @@ public class NewExecutionController {
         for(StartButtonClickedListener listener : startListener) {
             listener.startOnClicked();
         }
+
+        predictionManager.runSimulationStep2(environmentInitDTOList, entityPopulationDTOList);
     }
 
 }

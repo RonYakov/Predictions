@@ -29,6 +29,8 @@ public class DecimalPropertyInstance extends AbstractPropertyInstance {
 
         try {
             newValue = convertStringToInt(value);
+            setTicks(0);
+            setModified(true);
         }
         catch (NumberFormatException e) {
             throw new NumberFormatException(e.getMessage() + "Error occurred in setValue in DecimalPropertyInstance class");

@@ -24,7 +24,7 @@ public abstract class AbstractAction implements Action, Serializable {
     public EntityDefinition getPrimaryEntityDefinition() {
         return primaryEntityDefinition;
     }
-
+    @Override
     public SecondaryEntity getSecondaryEntity() {
         return secondaryEntity;
     }

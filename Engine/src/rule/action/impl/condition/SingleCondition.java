@@ -44,7 +44,7 @@ public class SingleCondition extends AbstractCondition {
     }
 
     @Override
-    protected boolean runCondition(ActionContext context) {
+    public boolean runCondition(ActionContext context) {
         switch (operator){
             case EQUAL:
                 return equalCondition(context);

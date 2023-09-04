@@ -8,6 +8,8 @@ import java.io.Serializable;
 public abstract class AbstractPropertyInstance implements Serializable {
     private final String name;
     private final Range range;
+    private int ticks = 0;
+    private boolean modified = false;
 
     public String getName() {
         return name;
@@ -20,6 +22,22 @@ public abstract class AbstractPropertyInstance implements Serializable {
 
     public Range getRange() {
         return range;
+    }
+
+    public int getTicks() {
+        return ticks;
+    }
+
+    public void setTicks(int ticks) {
+        this.ticks = ticks;
+    }
+
+    public void setModified(boolean modified) {
+        this.modified = modified;
+    }
+
+    public boolean isModified() {
+        return modified;
     }
 
     public abstract PropertyType getType();
