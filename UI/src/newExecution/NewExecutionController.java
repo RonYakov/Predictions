@@ -37,7 +37,7 @@ public class NewExecutionController {
     private MainScreenController mainScreenController;
     private Double originalDividerPosition;
     private List<StartButtonClickedListener> startListener;
-    private List<EnvironmentInitDTO> environmentInitDTOList;
+    private List<EnvironmentInitDTO> environmentInitDTOList= new ArrayList<>();
     private List<EntityPopulationDTO>entityPopulationDTOList = new ArrayList<>();
 
 
