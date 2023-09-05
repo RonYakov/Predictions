@@ -33,6 +33,9 @@ public class Multiply extends AbstractCalculation {
     public void Invoke(ActionContext context) {
         Number result;
         EntityInstance mainEntity = getEntityForInvoke(context);
+        if(mainEntity == null){
+            return;
+        }
         EntityInstance otherEntity = getOtherEntity(mainEntity, context);
 
 

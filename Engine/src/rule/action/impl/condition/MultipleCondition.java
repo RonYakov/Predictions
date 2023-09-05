@@ -6,6 +6,7 @@ import option2.ActionDTO.MultipleConditionDTO;
 import rule.action.ActionType;
 import rule.action.api.Action;
 import rule.action.context.api.ActionContext;
+import rule.action.impl.condition.enums.ConditionResult;
 import rule.action.impl.condition.enums.LogicType;
 import rule.action.impl.secondaryEntity.SecondaryEntity;
 
@@ -31,34 +32,51 @@ public class MultipleCondition extends AbstractCondition {
     }
 
     @Override
-    public boolean runCondition(ActionContext context) {
+    public ConditionResult runCondition(ActionContext context) {
         switch (logic){
             case OR:
                 return runOrCondition(context);
             case AND:
                 return runAndCondition(context);
             default:
-                return false;
+                return ConditionResult.FALSE;
         }
     }
 
-    private boolean runAndCondition(ActionContext context) {
+    private ConditionResult runAndCondition(ActionContext context) {
+        if(isEveryConditionIgnore(context)){
+            return ConditionResult.IGNORE;
+        }
+
         for (AbstractCondition condition: conditions) {
-            if (!condition.runCondition(context)){
+            if (condition.runCondition(context) == ConditionResult.FALSE){
+                return ConditionResult.FALSE;
+            }
+        }
+        return ConditionResult.TRUE;
+    }
+
+    private ConditionResult runOrCondition(ActionContext context) {
+        if(isEveryConditionIgnore(context)){
+            return ConditionResult.IGNORE;
+        }
+
+        for (AbstractCondition condition: conditions) {
+            if (condition.runCondition(context) == ConditionResult.TRUE){
+                return ConditionResult.TRUE;
+            }
+        }
+        return ConditionResult.FALSE;
+    }
+
+    private boolean isEveryConditionIgnore(ActionContext context){
+        for (AbstractCondition condition: conditions) {
+            if (condition.runCondition(context) != ConditionResult.IGNORE){
                 return false;
             }
         }
+
         return true;
-    }
-
-    private boolean runOrCondition(ActionContext context) {
-
-        for (AbstractCondition condition: conditions) {
-            if (condition.runCondition(context)){
-                return true;
-            }
-        }
-        return false;
     }
 
 }

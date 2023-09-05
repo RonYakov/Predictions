@@ -35,12 +35,13 @@ public class Set extends AbstractAction {
         if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityInstance() == null) {
+        else if(context.getSecondaryEntityName() == null) {
             throw new RuntimeException(); //todo think later
         } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getSecondaryEntityInstance();
-        }
-        else {
+        } else if (context.getSecondaryEntityInstance() == null) {
+            return null;
+        } else {
             throw new RuntimeException(); //todo think later
         }
     }
@@ -56,6 +57,11 @@ public class Set extends AbstractAction {
     @Override
     public void Invoke(ActionContext context) {
         EntityInstance entityInstance = getEntityForInvoke(context);
+
+        if(entityInstance == null){
+            return;
+        }
+
         EntityInstance otherEntity = getOtherEntity(entityInstance, context);
         PropertyType propertyType = entityInstance.getProperty(property).getType();
         AbstractPropertyInstance propertyToSet = entityInstance.getProperty(property);

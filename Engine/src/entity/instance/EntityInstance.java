@@ -1,5 +1,6 @@
 package entity.instance;
 
+import grid.GridIndex;
 import property.definition.PropertyDefinition;
 import property.instance.AbstractPropertyInstance;
 
@@ -12,6 +13,7 @@ public class EntityInstance implements Serializable {
     private final String entType;
     private Boolean toKill;
 
+    private GridIndex gridIndex;
     public EntityInstance(Map<String, AbstractPropertyInstance> properties, String type) {
         this.properties = properties;
         entType = type;
@@ -20,6 +22,14 @@ public class EntityInstance implements Serializable {
 
     public String getEntType() {
         return entType;
+    }
+
+    public void setGridIndex(GridIndex gridIndex) {
+        this.gridIndex = gridIndex;
+    }
+
+    public GridIndex getGridIndex() {
+        return gridIndex;
     }
 
     public AbstractPropertyInstance getProperty(String propertyName) {

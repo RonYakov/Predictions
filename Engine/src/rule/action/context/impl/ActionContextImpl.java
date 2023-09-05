@@ -13,11 +13,55 @@ public class ActionContextImpl implements ActionContext, Serializable {
     private EntityInstance primaryEntity;
     private EntityInstance secondaryEntity;
     private EntityInstanceManager entityManager;
+    private int rows;
+    private int cols;
+    private boolean stopAction;
+    private String secondaryEntityName;
 
     public ActionContextImpl() {
         primaryEntity = null;
         secondaryEntity = null;
         entityManager = null;
+        stopAction = false;
+    }
+
+    @Override
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+    @Override
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
+
+    @Override
+    public int getRows() {
+        return rows;
+    }
+
+    @Override
+    public int getCols() {
+        return cols;
+    }
+
+    @Override
+    public boolean getStopAction() {
+        return stopAction;
+    }
+
+    @Override
+    public String getSecondaryEntityName() {
+        return secondaryEntityName;
+    }
+
+    @Override
+    public void setSecondaryEntityName(String name) {
+        secondaryEntityName = name;
+    }
+
+    @Override
+    public void setStopAction(boolean stopAction) {
+        this.stopAction = stopAction;
     }
 
     @Override
@@ -43,10 +87,4 @@ public class ActionContextImpl implements ActionContext, Serializable {
     public void setPrimaryEntityInstance(EntityInstance entity) {
         this.primaryEntity = entity;
     }
-
-    @Override
-    public void removeEntity(EntityInstance entity) {
-        entityManager.killEntity(entity);
-    }
-
 }

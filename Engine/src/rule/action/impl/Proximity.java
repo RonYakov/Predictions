@@ -2,6 +2,7 @@ package rule.action.impl;
 
 import entity.definition.EntityDefinition;
 import expression.api.Expression;
+import grid.GridIndex;
 import option2.ActionDTO.ActionDTO;
 import option2.ActionDTO.ProximityDTO;
 import rule.action.ActionType;
@@ -34,6 +35,24 @@ public class Proximity extends AbstractAction {
 
     @Override
     public void Invoke(ActionContext context) {
-        //todo
+        Integer degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
+
+        GridIndex source = context.getPrimaryEntityInstance().getGridIndex();
+        if(context.getSecondaryEntityInstance() == null){
+            return;
+        }
+        GridIndex target = context.getSecondaryEntityInstance().getGridIndex();
+
+        Integer rowsDist = Math.abs(source.getRow() - target.getRow());
+        Integer colsDist = Math.abs(source.getCol() - target.getCol());
+
+        rowsDist = Math.min(rowsDist, context.getRows() - rowsDist);
+        colsDist = Math.min(colsDist, context.getCols() - colsDist);
+
+        if(rowsDist <= degree && colsDist <= degree){
+            for (Action action: actionList) {
+                action.Invoke(context);
+            }
+        }
     }
 }

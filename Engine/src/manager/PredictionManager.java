@@ -112,7 +112,7 @@ public class PredictionManager {
         List<RulesDTO> rulesDTOList = createRulesDTOList();
         List<EntityDefinitionDTO> entityDefinitionDTOList = createEntityDTOlist();
 
-        return new SimulationDefinitionDTO(entityDefinitionDTOList, rulesDTOList,terminationDTO);
+        return new SimulationDefinitionDTO(entityDefinitionDTOList, rulesDTOList,terminationDTO, simulationDefinition.getGrid().getRows(), simulationDefinition.getGrid().getCols());
     }
 
     public SimulationDefinition getSimulationDefinition() {

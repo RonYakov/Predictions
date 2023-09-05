@@ -3,10 +3,12 @@ package rule;
 import entity.definition.EntityDefinition;
 import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
+import grid.Grid;
 import rule.action.api.Action;
 import rule.action.context.api.ActionContext;
 import rule.action.context.impl.ActionContextImpl;
 import rule.action.impl.Kill;
+import rule.action.impl.condition.enums.ConditionResult;
 import rule.action.impl.secondaryEntity.SecondaryEntity;
 import rule.activation.Activation;
 
@@ -26,8 +28,8 @@ public class Rule implements Serializable {
         context = new ActionContextImpl();
     }
 
-    public void activate(Map<String, EntityInstanceManager> entityInstanceManagerMap) {
-        actions.forEach(action -> runAction(action, entityInstanceManagerMap)); //todo
+    public void activate(Map<String, EntityInstanceManager> entityInstanceManagerMap , Grid grid) {
+        actions.forEach(action -> runAction(action, entityInstanceManagerMap , grid)); //todo
     }
 
     public String getName() {
@@ -38,22 +40,40 @@ public class Rule implements Serializable {
         return activation;
     }
 
-    private void runAction(Action action , Map<String, EntityInstanceManager> entityInstanceManagerMap) {
+    private void runAction(Action action , Map<String, EntityInstanceManager> entityInstanceManagerMap , Grid grid) {
         String entityMangerName = action.getPrimaryEntityDefinition().getName();
         EntityInstanceManager primaryEntity =  entityInstanceManagerMap.get(entityMangerName);
         Integer count;
         context.setEntityManager(primaryEntity);
+        context.setRows(grid.getRows());
+        context.setCols(grid.getCols());
+        context.setStopAction(false);
         List<EntityInstance> secondaryEntitiesFiltered = getFilteredSecondaryEntityList(action, entityInstanceManagerMap);
         Collections.shuffle(secondaryEntitiesFiltered);
 
-        if(action.getSecondaryEntity().getCount() == null){
-            count = secondaryEntitiesFiltered.size();
-        }
-        else {
-            count = action.getSecondaryEntity().getCount();
-        }
-        for(int i  = 0; i < count ; i++){
-            context.setSecondaryEntity(secondaryEntitiesFiltered.get(i));
+        if(action.getSecondaryEntity() != null){
+            if(action.getSecondaryEntity().getCount() == null){
+                count = secondaryEntitiesFiltered.size();
+            }
+            else {
+                count = action.getSecondaryEntity().getCount();
+            }
+
+            context.setSecondaryEntityName(action.getSecondaryEntity().getEntityName());
+
+            for (EntityInstance entityInstance : primaryEntity.getEntityInstanceList()) {
+                context.setPrimaryEntityInstance(entityInstance);
+
+                for(int i  = 0; i < count ; i++){
+                    context.setSecondaryEntity(secondaryEntitiesFiltered.get(i));
+                    if(context.getStopAction()){
+                        break;
+                    }
+                    action.Invoke(context);
+                }
+            }
+        } else {
+            context.setSecondaryEntityName(null);
 
             for (EntityInstance entityInstance : primaryEntity.getEntityInstanceList()) {
                 context.setPrimaryEntityInstance(entityInstance);
@@ -62,7 +82,6 @@ public class Rule implements Serializable {
         }
 
         entityKiller(primaryEntity);
-
     }
 
     private List<EntityInstance> getFilteredSecondaryEntityList(Action action, Map<String, EntityInstanceManager> entityInstanceManagerMap) {
@@ -73,7 +92,7 @@ public class Rule implements Serializable {
 
         for (EntityInstance ent : secondaryEntityInstance.getEntityInstanceList())  {
             context.setPrimaryEntityInstance(ent);
-            if(action.getSecondaryEntity().getCondition().runCondition(context)){
+            if(action.getSecondaryEntity().getCondition().runCondition(context) == ConditionResult.TRUE){
                 secondaryEntitiesFiltered.add(ent);
             }
         }

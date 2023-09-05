@@ -11,6 +11,7 @@ import option2.ActionDTO.SingleConditionDTO;
 import rule.action.ActionType;
 import rule.action.api.Action;
 import rule.action.context.api.ActionContext;
+import rule.action.impl.condition.enums.ConditionResult;
 import rule.action.impl.condition.enums.OperatorType;
 import rule.action.impl.secondaryEntity.SecondaryEntity;
 
@@ -44,12 +45,19 @@ public class SingleCondition extends AbstractCondition {
     }
 
     @Override
-    public boolean runCondition(ActionContext context) {
+    public ConditionResult runCondition(ActionContext context) {
         switch (operator){
             case EQUAL:
                 return equalCondition(context);
             case UNEQUAL:
-                return !equalCondition(context);
+                if(equalCondition(context).equals(ConditionResult.FALSE)){
+                    return ConditionResult.TRUE;
+                }else if(equalCondition(context).equals(ConditionResult.TRUE)) {
+                    return ConditionResult.FALSE;
+                }
+                else {
+                    return ConditionResult.IGNORE;
+                }
             case BT:
                 return btCondition(context);
             default:
@@ -65,6 +73,8 @@ public class SingleCondition extends AbstractCondition {
             throw new RuntimeException(); //todo think later
         } else if (context.getSecondaryEntityInstance().getEntType().equals(operatedEntityName)) {
             return context.getSecondaryEntityInstance();
+        }else if (context.getSecondaryEntityInstance() == null) {
+            return null;
         }
         else {
             throw new RuntimeException(); //todo think later
@@ -80,40 +90,66 @@ public class SingleCondition extends AbstractCondition {
         }
     }
 
-    private boolean ltCondition(ActionContext context) {
+    private ConditionResult ltCondition(ActionContext context) {
         checkIfNumberExpression();
         checkIfNumberProperty(context);
         EntityInstance entityToCondition = getEntityForCondition(context);
-
+        if(entityToCondition == null){
+            return ConditionResult.IGNORE;
+        }
         float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context)));
         float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
 
-        return propVal < expVal;
+        if(propVal<expVal){
+            return ConditionResult.TRUE;
+        }else {
+            return ConditionResult.FALSE;
+        }
     }
-    private boolean btCondition(ActionContext context) {
+    private ConditionResult btCondition(ActionContext context) {
         checkIfNumberExpression();
         checkIfNumberProperty(context);
         EntityInstance entityToCondition = getEntityForCondition(context);
-
+        if(entityToCondition == null){
+            return ConditionResult.IGNORE;
+        }
         float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context)));
         float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
 
-        return propVal > expVal;
+        if(propVal>expVal){
+            return ConditionResult.TRUE;
+        }else {
+            return ConditionResult.FALSE;
+        }
     }
 
-    private boolean equalCondition(ActionContext context) {
+    private ConditionResult equalCondition(ActionContext context) {
         EntityInstance entityToCondition = getEntityForCondition(context);
-
+        if(entityToCondition == null){
+            return ConditionResult.IGNORE;
+        }
         String propValue = property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context));
         String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance());
 
 
         if(isANumberProp(context) && isANumberExp()){
-            return convertStringToFloat(propValue) == convertStringToFloat(expValue);
+            if(convertStringToFloat(propValue) == convertStringToFloat(expValue)){
+                return ConditionResult.TRUE;
+            }else {
+                return ConditionResult.FALSE;
+            }
         } else if (isABoolProp(context) && isABoolExp()){
-            return propValue.equalsIgnoreCase(expValue);
+            if(propValue.equalsIgnoreCase(expValue)){
+                return ConditionResult.TRUE;
+            }else {
+                return ConditionResult.FALSE;
+            }
         } else if (isAStringProp(context) && isAStringExp()) {
-            return propValue.equals(expValue);
+            if(propValue.equals(expValue)){
+                return ConditionResult.TRUE;
+            }else {
+                return ConditionResult.FALSE;
+            }
         }else{
             throw new PropertyTypeException("PropertyTypeException: can not try equaling '" + property.GetSimpleValue() + "' and '" + value.GetSimpleValue() + "'.\n" +
                     "       Note that you can only equal number to number, string to string or boolean to boolean." +

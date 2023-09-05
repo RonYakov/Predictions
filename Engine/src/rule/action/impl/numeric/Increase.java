@@ -38,6 +38,9 @@ public class Increase extends AbstractNumericAction {
         AbstractPropertyInstance property = extractProperty(context);
         Number newPropertyValue = extractANumber(context);
         EntityInstance mainEntity = getEntityForInvoke(context);
+        if(mainEntity == null){
+            return;
+        }
         EntityInstance otherEntity = getOtherEntity(mainEntity, context);
 
         if(by.getType() == ExpressionType.INT) {

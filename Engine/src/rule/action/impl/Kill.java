@@ -25,12 +25,13 @@ public class Kill extends AbstractAction {
         if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityInstance() == null) {
+        else if(context.getSecondaryEntityName() == null) {
             throw new RuntimeException(); //todo think later
         } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getSecondaryEntityInstance();
-        }
-        else {
+        } else if (context.getSecondaryEntityInstance() == null) {
+            return null;
+        } else {
             throw new RuntimeException(); //todo think later
         }
     }
@@ -38,6 +39,9 @@ public class Kill extends AbstractAction {
     @Override
     public void Invoke(ActionContext context) {
         EntityInstance entityInstanceToKill = getEntityForInvoke(context);
-        entityInstanceToKill.killMe();
+
+        if(entityInstanceToKill != null){
+            entityInstanceToKill.killMe();
+        }
     }
 }

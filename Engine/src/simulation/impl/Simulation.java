@@ -13,10 +13,7 @@ import termination.Termination;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static utills.helperFunction.Helper.setCurrentSimulation;
 
@@ -75,6 +72,9 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
         Integer seconds = termination.getSeconds();
         Integer currTick = 1;
 
+
+        grid.setGrid(new LinkedList<>(entityManager.values()));
+
         if(ticks != null && seconds != null){
             maxRuntimeMilliseconds = seconds * 1000;
 
@@ -88,6 +88,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
                     simulationStopCause = "Ticks";
                 }
                 updateTicks();
+                moveEntities();
             }
         } else if (ticks == null && seconds !=null) {
             boolean timesUp = false;
@@ -114,6 +115,16 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
         }
     }
 
+    private void moveEntities() {
+        List<EntityInstanceManager> managerList = new ArrayList<>(entityManager.values());
+
+        for (EntityInstanceManager entityInstanceManager: managerList) {
+            for (EntityInstance entityInstance:entityInstanceManager.getEntityInstanceList()) {
+                grid.moveEntity(entityInstance);
+            }
+        }
+    }
+
     private void updateTicks(){
         List<EntityInstanceManager> managerList = new ArrayList<>(entityManager.values());
 
@@ -134,7 +145,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
     private void simulationIteration(Integer currTick) {
         for (Rule rule : rules) {
             if(rule.isActivatable(currTick)){
-                rule.activate(entityManager);
+                rule.activate(entityManager , grid);
             }
         }
     }
