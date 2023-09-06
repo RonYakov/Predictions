@@ -10,7 +10,7 @@ public class FloatPropertyInstance extends AbstractPropertyInstance {
     private  Float value;
 
     public FloatPropertyInstance(String name, Range range, Float value){
-        super(name,range);
+        super(name,range, PropertyType.FLOAT);
         this.value = value;
     }
 

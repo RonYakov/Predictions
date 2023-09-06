@@ -10,7 +10,7 @@ public class DecimalPropertyInstance extends AbstractPropertyInstance {
     private Integer value;
 
     public DecimalPropertyInstance(String name, Range range, Integer value){
-        super(name,range);
+        super(name,range, PropertyType.DECIMAL);
         this.value = value;
     }
 

@@ -103,6 +103,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
                 simulationIteration(currTick);
                 currTick++;
                 updateTicks();
+                moveEntities();
             }
         }else {
             for(; currTick <= ticks ; currTick++){
@@ -111,6 +112,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
                     simulationStopCause = "Ticks";
                 }
                 updateTicks();
+                moveEntities();
             }
         }
     }

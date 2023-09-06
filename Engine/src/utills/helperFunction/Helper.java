@@ -2,6 +2,7 @@ package utills.helperFunction;
 
 import entity.instance.EntityInstance;
 import exception.PropertyNotFoundException;
+import expression.ExpressionType;
 import property.instance.AbstractPropertyInstance;
 import simulation.impl.Simulation;
 
@@ -58,5 +59,31 @@ public abstract class Helper {
         AbstractPropertyInstance abstractPropertyInstance = entityInstance.getProperty(propertyName);
 
         return abstractPropertyInstance.getTicks();
+    }
+
+    public static EvaluateInfo evaluate(EntityInstance entityInstance, String propertyName){
+        if(entityInstance.getProperty(propertyName) == null){
+            throw new RuntimeException(); //todo
+        }
+
+        ExpressionType expressionType;
+
+        switch (entityInstance.getProperty(propertyName).getType()){
+            case DECIMAL:
+                expressionType = ExpressionType.INT;
+                break;
+            case FLOAT:
+                expressionType = ExpressionType.FLOAT;
+                break;
+            case BOOLEAN:
+                expressionType = ExpressionType.BOOLEAN;
+                break;
+            default:
+                expressionType = ExpressionType.STRING;
+                break;
+        }
+
+
+        return new EvaluateInfo(entityInstance.getProperty(propertyName).getValue(), expressionType);
     }
 }

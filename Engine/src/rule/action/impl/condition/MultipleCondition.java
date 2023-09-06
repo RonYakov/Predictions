@@ -66,6 +66,7 @@ public class MultipleCondition extends AbstractCondition {
                 return ConditionResult.TRUE;
             }
         }
+
         return ConditionResult.FALSE;
     }
 

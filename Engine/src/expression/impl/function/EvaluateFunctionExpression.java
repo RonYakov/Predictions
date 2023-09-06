@@ -2,15 +2,18 @@ package expression.impl.function;
 
 import entity.instance.EntityInstance;
 import expression.ExpressionType;
+import utills.helperFunction.EvaluateInfo;
+
+import static utills.helperFunction.Helper.evaluate;
 
 public class EvaluateFunctionExpression extends AbstractFunctionExpression {
-    String entityName;
-    String PropertyName;
+    private String entityName;
+    private String propertyName;
 
     public EvaluateFunctionExpression(String value, ExpressionType type, String entityName, String propertyName) {
         super(value, type);
         this.entityName = entityName;
-        PropertyName = propertyName;
+        this.propertyName = propertyName;
     }
 
     @Override
@@ -24,9 +27,24 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
         return getValue();
     }
 
-    //todo method
     @Override
     public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
-        return null;
+        EvaluateInfo res;
+
+        if(entityName.equals(primaryEntity.getEntType())){
+            res = evaluate(primaryEntity,propertyName);
+        }else if(secondaryEntity != null){
+            if(entityName.equals(secondaryEntity.getEntType())){
+               res = evaluate(secondaryEntity,propertyName);
+            }else {
+                throw new RuntimeException(); //todo
+            }
+        }
+        else {
+            throw new RuntimeException();
+        }
+
+        this.setType(res.getType());
+        return res.getValue();
     }
 }

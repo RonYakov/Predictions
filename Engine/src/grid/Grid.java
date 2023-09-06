@@ -104,6 +104,9 @@ public class Grid {
         }
     }
 
+    public void replaceEntities(EntityInstance toPlace, GridIndex gridIndex){
+        grid[gridIndex.getRow()][gridIndex.getRow()] = toPlace;
+    }
 
     public Integer getRows() {
         return rows;

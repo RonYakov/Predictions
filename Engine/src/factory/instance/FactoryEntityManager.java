@@ -30,9 +30,9 @@ public abstract class FactoryEntityManager {
             res.add(createEntityInstance(value));
         }
 
-        return new EntityInstanceManager(value.getName(), res);
+        return new EntityInstanceManager(value.getName(), res , value);
     }
-    private static EntityInstance createEntityInstance(EntityDefinition value) {
+    public static EntityInstance createEntityInstance(EntityDefinition value) {
         Map<String, AbstractPropertyInstance> res = new HashMap<>();
 
         for(Map.Entry<String, PropertyDefinition> entry : value.getProperties().entrySet()) {

@@ -9,7 +9,7 @@ public class BooleanPropertyInstance extends AbstractPropertyInstance {
     private Boolean value;
 
     public BooleanPropertyInstance(Boolean value , String name) {
-        super(name);
+        super(name , PropertyType.BOOLEAN);
         this.value = value;
     }
 

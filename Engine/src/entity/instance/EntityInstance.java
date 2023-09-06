@@ -1,23 +1,30 @@
 package entity.instance;
 
 import grid.GridIndex;
-import property.definition.PropertyDefinition;
 import property.instance.AbstractPropertyInstance;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static factory.instance.FactoryEntityManager.createEntityInstance;
 
 public class EntityInstance implements Serializable {
     private final Map<String, AbstractPropertyInstance> properties;
     private final String entType;
-    private Boolean toKill;
-
+    private EntityState state;
+    private String replaceMode;
     private GridIndex gridIndex;
+
+
+
     public EntityInstance(Map<String, AbstractPropertyInstance> properties, String type) {
         this.properties = properties;
         entType = type;
-        toKill = false;
+        state = EntityState.LIVING;
+        replaceMode = null;
     }
 
     public String getEntType() {
@@ -30,6 +37,14 @@ public class EntityInstance implements Serializable {
 
     public GridIndex getGridIndex() {
         return gridIndex;
+    }
+
+    public String getReplaceMode() {
+        return replaceMode;
+    }
+
+    public void setReplaceMode(String replaceMode) {
+        this.replaceMode = replaceMode;
     }
 
     public AbstractPropertyInstance getProperty(String propertyName) {
@@ -51,12 +66,14 @@ public class EntityInstance implements Serializable {
     }
 
     public void killMe() {
-        toKill = true;
+        state = EntityState.KILL;
     }
 
-    public Boolean getToKill() {
-        return toKill;
+    public EntityState getState() {
+        return state;
     }
+
+    public void replaceMe() {state = EntityState.REPLACE;}
 
     public Map<String, AbstractPropertyInstance> getProperties() {
         return properties;
@@ -74,4 +91,27 @@ public class EntityInstance implements Serializable {
     public int hashCode() {
         return Objects.hash(properties);
     }
+
+    public EntityInstance replaceMe(EntityInstanceManager entityInstanceManager) {
+        EntityInstance replacement = createEntityInstance(entityInstanceManager.getEntityDefinition());
+
+        replacement.setGridIndex(this.gridIndex);
+        if(replaceMode.equals("derived")){
+            createReplacementProperties(replacement.properties ,this.replaceMode);
+        }
+
+        return replacement;
+    }
+
+    private void createReplacementProperties(Map<String, AbstractPropertyInstance> target, String replaceMode) {
+        List<AbstractPropertyInstance> toReplace = new LinkedList<>( properties.values());
+
+        for (AbstractPropertyInstance property: toReplace) {
+            AbstractPropertyInstance change = target.get(property);
+            if(change != null){
+                change.setValue(property.getValue());
+            }
+        }
+    }
+
 }

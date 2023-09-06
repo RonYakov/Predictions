@@ -1,5 +1,7 @@
 package entity.instance;
 
+import entity.definition.EntityDefinition;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -7,10 +9,13 @@ import java.util.Objects;
 public class EntityInstanceManager implements Serializable {
     private final String name;
     private List<EntityInstance> entityInstanceList;
+    private EntityDefinition entityDefinition;
 
-    public EntityInstanceManager(String name, List<EntityInstance> list) {
+
+    public EntityInstanceManager(String name, List<EntityInstance> list,EntityDefinition entityDefinition) {
         this.name = name;
         this.entityInstanceList = list;
+        this.entityDefinition = entityDefinition;
     }
 
     public List<EntityInstance> getEntityInstanceList() {
@@ -27,6 +32,10 @@ public class EntityInstanceManager implements Serializable {
 
     public void setEntityInstanceList(List<EntityInstance> entityInstanceList) {
         this.entityInstanceList = entityInstanceList;
+    }
+
+    public EntityDefinition getEntityDefinition() {
+        return entityDefinition;
     }
 
     @Override

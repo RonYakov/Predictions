@@ -11,8 +11,9 @@ public class StringPropertyInstance extends AbstractPropertyInstance {
     private String value;
 
     public StringPropertyInstance(String name, String value) {
-        super(name);
+        super(name , PropertyType.STRING);
         this.value = value;
+
     }
 
     @Override
