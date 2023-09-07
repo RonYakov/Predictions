@@ -2,7 +2,10 @@ package expression.impl.function;
 
 import entity.instance.EntityInstance;
 import expression.ExpressionType;
+import property.instance.AbstractPropertyInstance;
 import utills.helperFunction.EvaluateInfo;
+
+import java.util.Map;
 
 import static utills.helperFunction.Helper.evaluate;
 
@@ -28,7 +31,7 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
         EvaluateInfo res;
 
         if(entityName.equals(primaryEntity.getEntType())){

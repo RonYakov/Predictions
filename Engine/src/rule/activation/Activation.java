@@ -9,6 +9,11 @@ public class Activation implements Serializable {
     public Activation() {
     }
 
+    public Activation(Activation activation) {
+        ticks = new Integer(activation.getTicks());
+        probability = new Double(activation.getProbability());
+    }
+
     public Activation(Integer ticks, Double probabilty) {
         if(ticks != null) {
             this.ticks = ticks;

@@ -2,90 +2,60 @@ package simulation.impl;
 
 import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
-import grid.Grid;
 import property.instance.AbstractPropertyInstance;
 import rule.Rule;
-import rule.action.context.api.ActionContext;
-import rule.action.context.impl.ActionContextImpl;
-import simulation.api.EnvironmentsSimulation;
-import termination.Termination;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static utills.helperFunction.Helper.setCurrentSimulation;
-
-public class Simulation implements EnvironmentsSimulation , Serializable {
-    private Map<String, EntityInstanceManager> entityManager;
-    private final Map<String, AbstractPropertyInstance> environments;
-    private final List<Rule> rules;
-    private final Grid grid;
-    private final Termination termination;
-    private String formattedDate;
-    private final int identifyNumber;
-    private String simulationStopCause;
-    public Simulation(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments,Grid grid, List<Rule> rules, Termination termination, int identifyNumber) {
-        this.entityManager = entityManager;
-        this.environments = environments;
-        this.grid = grid;
-        this.rules = rules;
-        this.termination = termination;
-        this.identifyNumber = identifyNumber;
-        this.simulationStopCause = null;
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
-        formattedDate = now.format(formatter);
+public class SimulationRunner implements Serializable, Runnable {
+    private SimulationExecutionDetails simulationExecutionDetails;
+    public SimulationRunner(SimulationExecutionDetails simulationExecutionDetails) {
+        this.simulationExecutionDetails = simulationExecutionDetails;
     }
 
     public String getFormattedDate() {
-        return formattedDate;
+        return simulationExecutionDetails.getFormattedDate();
     }
 
     public int getIdentifyNumber() {
-        return identifyNumber;
+        return simulationExecutionDetails.getIdentifyNumber();
     }
 
     public Map<String, EntityInstanceManager> getEntityManager() {
-        return entityManager;
+        return simulationExecutionDetails.getEntityManager();
     }
 
     public String getSimulationStopCause() {
-        return simulationStopCause;
-    }
-
-    public AbstractPropertyInstance getEnvironment(String environmentName) {
-        return environments.get(environmentName);
+        return simulationExecutionDetails.getSimulationStopCause();
     }
 
     public Map<String, AbstractPropertyInstance> getEnvironments() {
-        return environments;
+        return simulationExecutionDetails.getEnvironments();
     }
 
-    public void runSimulation() {
-        setCurrentSimulation(this); //this is the first thing you do when running the simulation
+    @Override
+    public void run() {
         long startTime = System.currentTimeMillis();
         long maxRuntimeMilliseconds;
-        Integer ticks = termination.getTicks();
-        Integer seconds = termination.getSeconds();
+        Integer ticks = simulationExecutionDetails.getTermination().getTicks();
+        Integer seconds = simulationExecutionDetails.getTermination().getSeconds();
         Integer currTick = 1;
 
 
-        grid.setGrid(new LinkedList<>(entityManager.values()));
+        simulationExecutionDetails.getGrid().setGrid(new LinkedList<>(simulationExecutionDetails.getEntityManager().values()));
 
         if(ticks != null && seconds != null){
             maxRuntimeMilliseconds = seconds * 1000;
 
             for(; currTick <= ticks ; currTick++){
                 if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds) {
-                    simulationStopCause = "Time";
+                    simulationExecutionDetails.setSimulationStopCause("Time");
                     break;
                 }
                 simulationIteration(currTick);
                 if(currTick.equals(ticks)) {
-                    simulationStopCause = "Ticks";
+                    simulationExecutionDetails.setSimulationStopCause("Ticks");
                 }
                 updateTicks();
                 moveEntities();
@@ -97,7 +67,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
             while (!timesUp){
                 if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds) {
                     timesUp = true;
-                    simulationStopCause = "Time";
+                    simulationExecutionDetails.setSimulationStopCause("Time");
                     break;
                 }
                 simulationIteration(currTick);
@@ -109,7 +79,7 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
             for(; currTick <= ticks ; currTick++){
                 simulationIteration(currTick);
                 if(currTick.equals(ticks)) {
-                    simulationStopCause = "Ticks";
+                    simulationExecutionDetails.setSimulationStopCause("Ticks");
                 }
                 updateTicks();
                 moveEntities();
@@ -118,17 +88,17 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
     }
 
     private void moveEntities() {
-        List<EntityInstanceManager> managerList = new ArrayList<>(entityManager.values());
+        List<EntityInstanceManager> managerList = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
 
         for (EntityInstanceManager entityInstanceManager: managerList) {
             for (EntityInstance entityInstance:entityInstanceManager.getEntityInstanceList()) {
-                grid.moveEntity(entityInstance);
+                simulationExecutionDetails.getGrid().moveEntity(entityInstance);
             }
         }
     }
 
     private void updateTicks(){
-        List<EntityInstanceManager> managerList = new ArrayList<>(entityManager.values());
+        List<EntityInstanceManager> managerList = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
 
         for (EntityInstanceManager entityInstanceManager: managerList) {
             for (EntityInstance entityInstance:entityInstanceManager.getEntityInstanceList()) {
@@ -145,9 +115,9 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
     }
 
     private void simulationIteration(Integer currTick) {
-        for (Rule rule : rules) {
+        for (Rule rule : simulationExecutionDetails.getRules()) {
             if(rule.isActivatable(currTick)){
-                rule.activate(entityManager , grid);
+                rule.activate(simulationExecutionDetails.getEntityManager() , simulationExecutionDetails.getGrid());
             }
         }
     }
@@ -156,12 +126,12 @@ public class Simulation implements EnvironmentsSimulation , Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Simulation that = (Simulation) o;
-        return identifyNumber == that.identifyNumber;
+        SimulationRunner that = (SimulationRunner) o;
+        return simulationExecutionDetails.getIdentifyNumber() == that.simulationExecutionDetails.getIdentifyNumber();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(identifyNumber);
+        return Objects.hash(simulationExecutionDetails.getIdentifyNumber());
     }
 }

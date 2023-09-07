@@ -2,7 +2,9 @@ package expression.impl.function;
 
 import entity.instance.EntityInstance;
 import expression.ExpressionType;
+import property.instance.AbstractPropertyInstance;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static utills.helperFunction.Helper.environment;
@@ -21,8 +23,8 @@ public class EnvironmentFunctionExpression extends AbstractFunctionExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
-        String environmentVarValue = environment(environmentName);
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
+        String environmentVarValue = environment(environmentName, environments);
         return environmentVarValue;
     }
 }

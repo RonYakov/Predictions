@@ -97,8 +97,8 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context)));
-        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
+        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments()));
+        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
 
         if(propVal<expVal){
             return ConditionResult.TRUE;
@@ -113,8 +113,8 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context)));
-        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
+        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments()));
+        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
 
         if(propVal>expVal){
             return ConditionResult.TRUE;
@@ -128,8 +128,8 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        String propValue = property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context));
-        String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance());
+        String propValue = property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments());
+        String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments());
 
 
         if(isANumberProp(context) && isANumberExp()){

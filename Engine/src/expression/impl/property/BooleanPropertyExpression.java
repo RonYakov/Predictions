@@ -5,13 +5,15 @@ import exception.PropertyNotFoundException;
 import expression.ExpressionType;
 import property.instance.AbstractPropertyInstance;
 
+import java.util.Map;
+
 public class BooleanPropertyExpression extends AbstractPropertyExpression {
     public BooleanPropertyExpression(String value) {
         super(value, ExpressionType.BOOLEAN);
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity){
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments){
         String res = primaryEntity.getSpecificPropertyValue(getValue());
         if(res == null) {
             if (secondaryEntity != null) {

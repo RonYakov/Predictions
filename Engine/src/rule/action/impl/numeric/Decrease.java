@@ -46,14 +46,14 @@ public class Decrease extends AbstractNumericAction {
 
         if(by.getType() == ExpressionType.INT) {
             if(isDecimal(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.intValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.intValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             } else {
-                newPropertyValue = newPropertyValue.floatValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.floatValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             }
         }
         else if (by.getType() == ExpressionType.FLOAT) {
             if(isFloat(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.floatValue() - Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.floatValue() - Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             }
             else {
                throw new TryToPreformFloatActionOnDecimalPropertyException("Float subtraction from Decimal property is not allowed. Error occurred in"

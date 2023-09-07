@@ -45,10 +45,10 @@ public class Increase extends AbstractNumericAction {
 
         if(by.getType() == ExpressionType.INT) {
             if(isDecimal(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.intValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.intValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             }
             else {
-                newPropertyValue = newPropertyValue.floatValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.floatValue() + Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             }
         }
         else if (by.getType() == ExpressionType.FLOAT) {
@@ -57,7 +57,7 @@ public class Increase extends AbstractNumericAction {
                         + this.getClass());
             }
             else {
-                newPropertyValue = newPropertyValue.floatValue() + Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity));
+                newPropertyValue = newPropertyValue.floatValue() + Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
             }
         }
 

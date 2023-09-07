@@ -35,7 +35,7 @@ public class Proximity extends AbstractAction {
 
     @Override
     public void Invoke(ActionContext context) {
-        Integer degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance()));
+        Integer degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
 
         GridIndex source = context.getPrimaryEntityInstance().getGridIndex();
         if(context.getSecondaryEntityInstance() == null){

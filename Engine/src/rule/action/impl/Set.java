@@ -66,7 +66,7 @@ public class Set extends AbstractAction {
         PropertyType propertyType = entityInstance.getProperty(property).getType();
         AbstractPropertyInstance propertyToSet = entityInstance.getProperty(property);
         ExpressionType valueType = value.getType();
-        String newValue = value.GetExplicitValue(entityInstance, otherEntity);
+        String newValue = value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments());
 
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.INT) {
             Integer numberNewValue = Integer.parseInt(newValue);
@@ -79,11 +79,11 @@ public class Set extends AbstractAction {
             return;
         }
         if(propertyType == PropertyType.BOOLEAN && valueType == ExpressionType.BOOLEAN) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity));
+            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments()));
             return;
         }
         if(propertyType == PropertyType.STRING && valueType == ExpressionType.STRING) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity));
+            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments()));
             return;
         }
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.FLOAT) {

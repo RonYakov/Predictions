@@ -17,14 +17,20 @@ public class SimulationDefinition implements Serializable {
     private final Grid grid;
     private final List<Rule> rules;
     private final Termination termination;
+    private Integer numOfThreads;
 
 
-    public SimulationDefinition(Map<String, EntityDefinition> entitiesDef, Map<String, PropertyDefinition> environmentsDef, Grid grid, List<Rule> rules, Termination termination) {
+    public SimulationDefinition(Map<String, EntityDefinition> entitiesDef, Map<String, PropertyDefinition> environmentsDef, Grid grid, List<Rule> rules, Termination termination, Integer numOfThreads) {
         this.entitiesDef = entitiesDef;
         this.environmentsDef = environmentsDef;
         this.grid = grid;
         this.rules = rules;
         this.termination = termination;
+        this.numOfThreads = numOfThreads;
+    }
+
+    public Integer getNumOfThreads() {
+        return numOfThreads;
     }
 
     public Grid getGrid() {

@@ -17,12 +17,22 @@ public class ActionContextImpl implements ActionContext, Serializable {
     private int cols;
     private boolean stopAction;
     private String secondaryEntityName;
+    private Map<String, AbstractPropertyInstance> environments;
 
     public ActionContextImpl() {
         primaryEntity = null;
         secondaryEntity = null;
         entityManager = null;
         stopAction = false;
+    }
+
+    @Override
+    public void setEnvironments(Map<String, AbstractPropertyInstance> environments) {
+        this.environments = environments;
+    }
+    @Override
+    public Map<String, AbstractPropertyInstance> getEnvironments() {
+        return this.environments;
     }
 
     @Override

@@ -17,7 +17,8 @@ import property.definition.PropertyDefinition;
 import property.instance.AbstractPropertyInstance;
 import rule.Rule;
 import rule.action.api.Action;
-import simulation.impl.Simulation;
+import simulation.impl.SimulationExecutionDetails;
+import simulation.impl.SimulationRunner;
 import simulation.definition.SimulationDefinition;
 
 import javax.xml.bind.JAXBException;
@@ -28,14 +29,16 @@ import static factory.instance.FactoryInstance.createSimulation;
 
 public class PredictionManager {
     private SimulationDefinition simulationDefinition;
-    private List<Simulation> simulations;
+    private Map<Integer, SimulationExecutionDetails> simulationExecutionDetailsMap;
+    private Integer numOfThreads;
     private XmlLoader xmlLoader;
+
     private int currIDNum;
 
 
     public PredictionManager() {
         simulationDefinition = null;
-        simulations = new ArrayList<>();
+        simulationExecutionDetailsMap = new HashMap<>();
         xmlLoader = new XmlLoader();
         currIDNum = 1;
     }
@@ -43,7 +46,8 @@ public class PredictionManager {
     public void storeDataToFile(FilePathDTO filePathDTO){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePathDTO.getFilePath()))) {
             outputStream.writeObject(simulationDefinition);
-            outputStream.writeObject(simulations);
+            //outputStream.writeObject(simulationRunners);
+            //todo - check ^
             outputStream.writeObject(currIDNum);
             outputStream.flush();
         } catch (Exception ignore) {
@@ -53,7 +57,8 @@ public class PredictionManager {
     public void loadDataFromFile(FilePathDTO filePathDTO){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filePathDTO.getFilePath()))) {
             simulationDefinition = (SimulationDefinition) inputStream.readObject();
-            simulations = (List<Simulation>) inputStream.readObject();
+            //simulationRunners = (List<SimulationRunner>) inputStream.readObject();
+            //todo - check ^
             currIDNum = (Integer) inputStream.readObject();
         } catch (Exception ignore) {
             throw new FileNotFoundException("file not found, please type a valid file path");
@@ -63,8 +68,9 @@ public class PredictionManager {
     public void loadXmlData(XmlFullPathDTO xmlFullPathDTO) throws JAXBException, IOException {
         SimulationDefinition newSimulationDefinition = xmlLoader.loadXmlData(xmlFullPathDTO.getFullPathXML());
         this.simulationDefinition = newSimulationDefinition;
-        simulations.clear();
+        simulationExecutionDetailsMap.clear();
         currIDNum = 1;
+        numOfThreads = simulationDefinition.getNumOfThreads();
     }
 
 
@@ -93,18 +99,19 @@ public class PredictionManager {
             simulationDefinition.getEntitiesDef().get(entityPopulationDTO.getEntityName()).setPopulation(entityPopulationDTO.getCount());
         }
 
-        Simulation simulation = createSimulation(simulationDefinition, currIDNum);
-        Map<String, AbstractPropertyInstance> environment = simulation.getEnvironments();
+        SimulationExecutionDetails simulationExecutionDetails = createSimulation(simulationDefinition, currIDNum);
+        Map<String, AbstractPropertyInstance> environment = simulationExecutionDetails.getEnvironments();
 
         for (EnvironmentInitDTO environmentInitDTO: environmentInitListDTO){
             environment.get(environmentInitDTO.getName()).setValue(environmentInitDTO.getNewValue());
         }
 
-        simulation.runSimulation();
-        simulations.add(simulation);
+        simulationExecutionDetailsMap.put(currIDNum, simulationExecutionDetails);
+
+        //todo - run simulation
         currIDNum++;
 
-        return new SimulationFinishDTO(simulation.getIdentifyNumber(),simulation.getSimulationStopCause());
+        return new SimulationFinishDTO(simulationExecutionDetails.getIdentifyNumber(), simulationExecutionDetails.getSimulationStopCause());
     }
 
     public SimulationDefinitionDTO showCurrentSimulationData() {
@@ -170,9 +177,10 @@ public class PredictionManager {
 
     public List<PastSimulationInfoDTO> createPastSimulationInfoDTOList(){
         List<PastSimulationInfoDTO> pastSimulationInfoDTOS = new ArrayList<>();
+        List<SimulationExecutionDetails> simulationExecutionDetails = new ArrayList<>(simulationExecutionDetailsMap.values());
 
-        for(Simulation simulation: simulations){
-            pastSimulationInfoDTOS.add(new PastSimulationInfoDTO(simulation.getFormattedDate(),simulation.getIdentifyNumber()));
+        for(SimulationExecutionDetails simulationExecutionDetails1 : simulationExecutionDetails){
+            pastSimulationInfoDTOS.add(new PastSimulationInfoDTO(simulationExecutionDetails1.getFormattedDate(), simulationExecutionDetails1.getIdentifyNumber()));
         }
 
         return pastSimulationInfoDTOS;
@@ -183,8 +191,8 @@ public class PredictionManager {
         List<Integer> end =  new ArrayList<>();
         List<String> names = new ArrayList<>();
 
-        Simulation simulation = simulations.get(simulationDesiredInfoDTO.getIdNum() - 1);
-        List<EntityInstanceManager> entityInstanceList = new ArrayList<>(simulation.getEntityManager().values());
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(simulationDesiredInfoDTO.getIdNum() - 1);
+        List<EntityInstanceManager> entityInstanceList = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
 
         for(EntityInstanceManager entityInstanceManager: entityInstanceList){
             beginning.add(simulationDefinition.getEntitiesDef().get(entityInstanceManager.getName()).getPopulation());
@@ -197,8 +205,8 @@ public class PredictionManager {
     public HistogramAllEntitiesDTO getAllEntitiesDTO(SimulationDesiredInfoDTO simulationDesiredInfoDTO){
         List<String> names = new ArrayList<>();
 
-        Simulation simulation = simulations.get(simulationDesiredInfoDTO.getIdNum() - 1);
-        List<EntityInstanceManager> entityInstanceList = new ArrayList<>(simulation.getEntityManager().values());
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(simulationDesiredInfoDTO.getIdNum() - 1);
+        List<EntityInstanceManager> entityInstanceList = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
 
         for(EntityInstanceManager entityInstanceManager: entityInstanceList){
             names.add(entityInstanceManager.getName());
@@ -221,7 +229,8 @@ public class PredictionManager {
     }
 
     public HistogramSpecificPropDTO getHistogram(HistogramSinglePropDTO histogramSinglePropDTO, SimulationDesiredInfoDTO simulationDesiredInfoDTO ,HistogramSingleEntityDTO singleEntityDTO){
-        EntityInstanceManager entityInstanceManager = simulations.get(simulationDesiredInfoDTO.getIdNum() - 1).getEntityManager().get(singleEntityDTO.getName());
+        EntityInstanceManager entityInstanceManager = simulationExecutionDetailsMap.get(simulationDesiredInfoDTO.getIdNum() - 1).getEntityManager().get(singleEntityDTO.getName());
+
 
         Map<String,Integer> histogram = new HashMap<>();
 

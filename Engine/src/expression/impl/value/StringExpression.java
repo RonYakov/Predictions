@@ -2,6 +2,9 @@ package expression.impl.value;
 
 import entity.instance.EntityInstance;
 import expression.ExpressionType;
+import property.instance.AbstractPropertyInstance;
+
+import java.util.Map;
 
 public class StringExpression extends AbstractValueExpression {
     public StringExpression(String value) {
@@ -14,7 +17,7 @@ public class StringExpression extends AbstractValueExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
         return getValue();
     }
 }

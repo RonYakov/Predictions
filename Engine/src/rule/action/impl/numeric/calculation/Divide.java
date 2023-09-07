@@ -38,17 +38,17 @@ public class Divide extends AbstractCalculation {
         }
         EntityInstance otherEntity = getOtherEntity(mainEntity, context);
 
-        if((getSecondArgument().GetExplicitValue(mainEntity, otherEntity).equals("0"))) {
+        if((getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()).equals("0"))) {
             throw new RuntimeException("Divide by zero is not allowed! Problem occurred while trying to active Divide method");
         }
 
         if(getFirstArgument().getType() == ExpressionType.FLOAT || getSecondArgument().getType() == ExpressionType.FLOAT){
-            result = convertStringToFloat(getFirstArgument().GetExplicitValue(mainEntity, otherEntity)) /
-                    convertStringToFloat(getSecondArgument().GetExplicitValue(mainEntity, otherEntity));
+            result = convertStringToFloat(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments())) /
+                    convertStringToFloat(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
         }
         else{
-            result = convertStringToInt(getFirstArgument().GetExplicitValue(mainEntity, otherEntity)) /
-                    convertStringToInt(getSecondArgument().GetExplicitValue(mainEntity, otherEntity));
+            result = convertStringToInt(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments())) /
+                    convertStringToInt(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
         }
 
         AbstractPropertyInstance propertyInstance = extractProperty(context);

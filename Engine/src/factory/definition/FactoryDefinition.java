@@ -31,7 +31,8 @@ public abstract class FactoryDefinition {
         Grid grid = createGrid(prdWorld.getPRDGrid());
         Termination termination = createTermination(prdWorld.getPRDTermination());
 
-        return new SimulationDefinition(entityDefinitionMap, environmentsMap, grid, ruleList, termination);
+        Integer numOfThreads = prdWorld.getPRDThreadCount();
+        return new SimulationDefinition(entityDefinitionMap, environmentsMap, grid, ruleList, termination,numOfThreads);
     }
 
     private static Grid createGrid(PRDWorld.PRDGrid prdGrid) {

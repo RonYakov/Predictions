@@ -9,6 +9,7 @@ import rule.action.context.api.ActionContext;
 import rule.action.context.impl.ActionContextImpl;
 import rule.action.impl.condition.enums.ConditionResult;
 import rule.activation.Activation;
+import simulation.impl.SimulationExecutionDetails;
 
 import java.io.Serializable;
 import java.util.*;
@@ -18,12 +19,21 @@ public class Rule implements Serializable {
     private Activation activation;
     private List<Action> actions;
     private ActionContext context;
+    private SimulationExecutionDetails simulationExecutionDetails;
 
     public Rule(String name, Activation activation, List<Action> actions) {
         this.name = name;
         this.activation = activation;
         this.actions = actions;
         context = new ActionContextImpl();
+    }
+
+    public Rule(Rule rule) {
+        name = new String(rule.getName());
+        activation = new Activation(rule.activation);
+        actions = rule.getActions();
+        context = new ActionContextImpl();
+        simulationExecutionDetails = null;
     }
 
     public void activate(Map<String, EntityInstanceManager> entityInstanceManagerMap , Grid grid) {
@@ -38,6 +48,10 @@ public class Rule implements Serializable {
         return activation;
     }
 
+    public void setSimulationExecutionDetails(SimulationExecutionDetails simulationExecutionDetails) {
+        this.simulationExecutionDetails = simulationExecutionDetails;
+    }
+
     private void runAction(Action action , Map<String, EntityInstanceManager> entityInstanceManagerMap , Grid grid) {
         String entityMangerName = action.getPrimaryEntityDefinition().getName();
         EntityInstanceManager primaryEntity =  entityInstanceManagerMap.get(entityMangerName);
@@ -45,6 +59,7 @@ public class Rule implements Serializable {
         context.setEntityManager(primaryEntity);
         context.setRows(grid.getRows());
         context.setCols(grid.getCols());
+        context.setEnvironments(simulationExecutionDetails.getEnvironments());
         List<EntityInstance> secondaryEntitiesFiltered = getFilteredSecondaryEntityList(action, entityInstanceManagerMap);
         Collections.shuffle(secondaryEntitiesFiltered);
 

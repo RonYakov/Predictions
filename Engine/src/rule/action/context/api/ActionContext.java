@@ -6,6 +6,7 @@ import property.instance.AbstractPropertyInstance;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public interface ActionContext {
 
@@ -23,5 +24,7 @@ public interface ActionContext {
     EntityInstance getSecondaryEntityInstance();
     void setEntityManager(EntityInstanceManager entityManager);
     void setPrimaryEntityInstance(EntityInstance entity);
+    void setEnvironments(Map<String, AbstractPropertyInstance> environments);
+    Map<String, AbstractPropertyInstance> getEnvironments();
 
 }

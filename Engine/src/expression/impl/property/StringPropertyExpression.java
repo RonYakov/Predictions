@@ -3,6 +3,9 @@ package expression.impl.property;
 import entity.instance.EntityInstance;
 import exception.PropertyNotFoundException;
 import expression.ExpressionType;
+import property.instance.AbstractPropertyInstance;
+
+import java.util.Map;
 
 public class StringPropertyExpression extends AbstractPropertyExpression {
     public StringPropertyExpression(String value) {
@@ -10,7 +13,7 @@ public class StringPropertyExpression extends AbstractPropertyExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity){
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments){
         String res = primaryEntity.getSpecificPropertyValue(getValue());
         if(res == null) {
             if (secondaryEntity != null) {
