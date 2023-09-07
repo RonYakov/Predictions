@@ -24,6 +24,10 @@ import simulation.definition.SimulationDefinition;
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static factory.instance.FactoryInstance.createSimulation;
 
@@ -32,7 +36,7 @@ public class PredictionManager {
     private Map<Integer, SimulationExecutionDetails> simulationExecutionDetailsMap;
     private Integer numOfThreads;
     private XmlLoader xmlLoader;
-
+    private ExecutorService executorService;
     private int currIDNum;
 
 
@@ -71,6 +75,7 @@ public class PredictionManager {
         simulationExecutionDetailsMap.clear();
         currIDNum = 1;
         numOfThreads = simulationDefinition.getNumOfThreads();
+        executorService = Executors.newFixedThreadPool(numOfThreads);
     }
 
 
@@ -108,7 +113,11 @@ public class PredictionManager {
 
         simulationExecutionDetailsMap.put(currIDNum, simulationExecutionDetails);
 
-        //todo - run simulation
+        SimulationRunner simulationRunner = new SimulationRunner(simulationExecutionDetails);
+
+        // Submit the task to the thread pool
+        executorService.submit(simulationRunner);
+
         currIDNum++;
 
         return new SimulationFinishDTO(simulationExecutionDetails.getIdentifyNumber(), simulationExecutionDetails.getSimulationStopCause());
