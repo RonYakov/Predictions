@@ -45,7 +45,6 @@ public class Rule implements Serializable {
         context.setEntityManager(primaryEntity);
         context.setRows(grid.getRows());
         context.setCols(grid.getCols());
-        context.setStopAction(false);
         List<EntityInstance> secondaryEntitiesFiltered = getFilteredSecondaryEntityList(action, entityInstanceManagerMap);
         Collections.shuffle(secondaryEntitiesFiltered);
 
@@ -61,6 +60,7 @@ public class Rule implements Serializable {
 
             for (EntityInstance entityInstance : primaryEntity.getEntityInstanceList()) {
                 context.setPrimaryEntityInstance(entityInstance);
+                context.setStopAction(false);
                 if(secondaryEntitiesFiltered.size() > 0 ){
                     for(int i  = 0; i < secondaryEntitiesFiltered.size() ; i++){
                         context.setSecondaryEntity(secondaryEntitiesFiltered.get(i));
@@ -72,7 +72,6 @@ public class Rule implements Serializable {
                 } else {
                     action.Invoke(context);
                 }
-
             }
         } else {
             context.setSecondaryEntityName(null);
@@ -109,6 +108,10 @@ public class Rule implements Serializable {
     private List<EntityInstance> getFilteredSecondaryEntityList(Action action, Map<String, EntityInstanceManager> entityInstanceManagerMap) {
         List<EntityInstance> secondaryEntitiesFiltered = new ArrayList<>();
         ActionContext context = new ActionContextImpl();
+
+        if(action.getSecondaryEntity() == null) {
+            return new ArrayList<>();
+        }
 
         EntityInstanceManager secondaryEntityInstance = entityInstanceManagerMap.get(action.getSecondaryEntity().getEntityName());
 

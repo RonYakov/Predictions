@@ -53,6 +53,7 @@ public class Proximity extends AbstractAction {
             for (Action action: actionList) {
                 action.Invoke(context);
             }
+            context.setStopAction(true);
         }
     }
 }
