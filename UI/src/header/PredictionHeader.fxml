@@ -49,6 +49,6 @@
          </opaqueInsets>
       </Button>
       <Button fx:id="newExecutionButton" mnemonicParsing="false" onAction="#newExecutionButtonClicked" prefHeight="30.0" prefWidth="164.0" styleClass="HeaderMenuButtons" text="New Execution" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-      <Button fx:id="resultsButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="162.0" styleClass="HeaderMenuButtons" text="Results" GridPane.columnIndex="8" GridPane.rowIndex="3" />
+      <Button fx:id="resultsButton" mnemonicParsing="false" onAction="#resultsButtonClicked" prefHeight="30.0" prefWidth="162.0" styleClass="HeaderMenuButtons" text="Results" GridPane.columnIndex="8" GridPane.rowIndex="3" />
    </children>
 </GridPane>

@@ -36,6 +36,7 @@ public class SimulationRunner implements Serializable, Runnable {
 
     @Override
     public void run() {
+        System.out.println("running thread: " + Thread.currentThread().getName());
         long startTime = System.currentTimeMillis();
         long maxRuntimeMilliseconds;
         Integer ticks = simulationExecutionDetails.getTermination().getTicks();
@@ -59,6 +60,8 @@ public class SimulationRunner implements Serializable, Runnable {
                 }
                 updateTicks();
                 moveEntities();
+                simulationExecutionDetails.setCurrTicks(currTick);
+                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
         } else if (ticks == null && seconds !=null) {
             boolean timesUp = false;
@@ -74,6 +77,8 @@ public class SimulationRunner implements Serializable, Runnable {
                 currTick++;
                 updateTicks();
                 moveEntities();
+                simulationExecutionDetails.setCurrTicks(currTick);
+                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
         }else {
             for(; currTick <= ticks ; currTick++){
@@ -83,6 +88,8 @@ public class SimulationRunner implements Serializable, Runnable {
                 }
                 updateTicks();
                 moveEntities();
+                simulationExecutionDetails.setCurrTicks(currTick);
+                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
         }
     }

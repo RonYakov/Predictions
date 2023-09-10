@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.Random;
 
 public abstract class Helper {
+
+    //todo synchronize the methods with parameters (like random)
     public static Integer random(int value){
         Random random = new Random();
 
         return random.nextInt(value + 1);
     }
-
 
     public static String environment(String name, Map<String, AbstractPropertyInstance> environments){
         AbstractPropertyInstance environmentVariable = environments.get(name);

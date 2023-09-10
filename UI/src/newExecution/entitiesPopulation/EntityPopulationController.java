@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.entityCount.EntityCountController;
 import newExecution.entitiesPopulation.entityCount.PopulationCountListener;
-import newExecution.listener.StartButtonClickedListener;
+import newExecution.listener.ClearButtonClickedListener;
 import option2.EntityDefinitionDTO;
 
 import java.io.IOException;
@@ -32,6 +32,7 @@ public class EntityPopulationController {
     @FXML
     public void initialize(){
         currentCountLable.setText("0");
+        populationCountListeners.clear();
     }
 
     public void setNewExecutionController(NewExecutionController newExecutionController) {
@@ -43,6 +44,7 @@ public class EntityPopulationController {
     }
 
     public void setEntities(List<EntityDefinitionDTO> entityDefinitionDTOList) {
+        entitiesPopulation.getChildren().clear();
         for(EntityDefinitionDTO entityDefinitionDTO : entityDefinitionDTOList) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/newExecution/entitiesPopulation/entityCount/EntityCount.fxml"));

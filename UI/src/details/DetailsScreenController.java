@@ -22,7 +22,7 @@ public class DetailsScreenController {
     @FXML
     private SimulationBreakdownController simulationBreakdownController;
     @FXML
-    SplitPane root;
+    private SplitPane root;
     private MainScreenController mainScreenController;
     private Double originalDividerPosition;
 

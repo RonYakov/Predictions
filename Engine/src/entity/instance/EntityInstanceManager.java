@@ -38,6 +38,10 @@ public class EntityInstanceManager implements Serializable {
         return entityDefinition;
     }
 
+    public Integer getPopulation() {
+        return entityInstanceList.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

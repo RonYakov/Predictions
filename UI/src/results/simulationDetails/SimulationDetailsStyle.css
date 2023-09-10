@@ -1,0 +1,11 @@
+.buttons {
+    -fx-font-size: 20px;
+    -fx-pref-width: 150px;
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-weight: BOLD;
+}
+
+.buttons:hover {
+    -fx-background-color: #158A19;
+}

@@ -4,13 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import newExecution.NewExecutionController;
+import newExecution.listener.ClearButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeBooleanController implements StartButtonClickedListener {
+public class EnvTypeBooleanController implements StartButtonClickedListener, ClearButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -31,6 +32,7 @@ public class EnvTypeBooleanController implements StartButtonClickedListener {
     public void setNewExecutionController(NewExecutionController newExecutionController) {
         this.newExecutionController = newExecutionController;
         newExecutionController.addListenerToStartButton(this);
+        newExecutionController.addListenerToClearButton(this);
     }
 
     @Override
@@ -45,6 +47,12 @@ public class EnvTypeBooleanController implements StartButtonClickedListener {
         }
 
         newExecutionController.addEnvironmentToList(new EnvironmentInitDTO(nameLabel.getText(), value));
+    }
+
+    @Override
+    public void clearOnClicked() {
+        userChoice.setValue(null);
+        isValueSet = false;
     }
 
     public void setData(EnvironmentDefinitionDTO environmentDefinitionDTO) {

@@ -77,5 +77,4 @@ public abstract class AbstractNumericAction extends AbstractAction {
 //        return propertyVal.matches("-?\\d+(\\.\\d+)?");
 //
 //    }
-
 }

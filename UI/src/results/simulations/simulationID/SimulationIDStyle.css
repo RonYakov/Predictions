@@ -1,0 +1,14 @@
+.labels {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+#showButton {
+    -fx-font-size: 15px;
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-text-fill: white; /* White text color */
+    -fx-font-weight: BOLD;
+}
+
+#showButton:hover {
+    -fx-background-color: #158A19;
+}

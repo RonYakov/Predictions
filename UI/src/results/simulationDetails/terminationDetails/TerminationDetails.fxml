@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" stylesheets="@TerminationDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationDetails.terminationDetails.TerminationDetailsController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="300.0" spacing="10.0">
+         <children>
+            <Label styleClass="bodyLabels" text="Ticks: " />
+            <Label fx:id="ticksCount" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="220.0" styleClass="bodyLabels" text="Label" />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="300.0" spacing="10.0">
+         <children>
+            <Label styleClass="bodyLabels" text="Seconds:  " />
+            <Label fx:id="secondsCount" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="192.0" styleClass="bodyLabels" text="Label" />
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

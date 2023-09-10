@@ -9,6 +9,7 @@ import manager.PredictionManager;
 import managerFX.MainScreenController;
 import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.environmentInputs.EnvironmentInputsController;
+import newExecution.listener.ClearButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
 import option3.EntityPopulationDTO;
@@ -38,6 +39,7 @@ public class NewExecutionController {
     private MainScreenController mainScreenController;
     private Double originalDividerPosition;
     private List<StartButtonClickedListener> startListener;
+    private List<ClearButtonClickedListener> clearListener;
     private List<EnvironmentInitDTO> environmentInitDTOList= new ArrayList<>();
     private List<EntityPopulationDTO>entityPopulationDTOList = new ArrayList<>();
     private PredictionManager predictionManager;
@@ -47,6 +49,7 @@ public class NewExecutionController {
     @FXML
     public void initialize() {
         startListener = new LinkedList<>();
+        clearListener = new LinkedList<>();
         originalDividerPosition = 0.41; // Store your original value here
         setDivider();
         environmentInputsController.setNewExecutionController(this);
@@ -91,10 +94,19 @@ public class NewExecutionController {
     public void addListenerToStartButton(StartButtonClickedListener listener) {
         startListener.add(listener);
     }
+    public void addListenerToClearButton(ClearButtonClickedListener listener) {
+        clearListener.add(listener);
+    }
 
     @FXML
     private void clearButtonClicked(ActionEvent event) {
+        for(ClearButtonClickedListener listener : clearListener) {
+            listener.clearOnClicked();
+        }
 
+        entityPopulationController.initialize();
+        setEntitiesData(predictionManager.showCurrentSimulationData().getEntityDefinitionDTOList(),
+                predictionManager.showCurrentSimulationData().getGridCols() * predictionManager.showCurrentSimulationData().getGridRows());
     }
 
     @FXML
@@ -105,6 +117,7 @@ public class NewExecutionController {
         }
 
         predictionManager.runSimulationStep2(environmentInitDTOList, entityPopulationDTOList);
+        mainScreenController.resultsScreen();
     }
 
 }

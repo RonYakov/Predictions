@@ -3,6 +3,8 @@ package manager;
 import entity.definition.EntityDefinition;
 import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
+import ex2DTO.EntityCountDTO;
+import ex2DTO.SimulationDetailsDTO;
 import exception.FileNotFoundException;
 import option1.XmlFullPathDTO;
 import option2.*;
@@ -131,10 +133,6 @@ public class PredictionManager {
         return new SimulationDefinitionDTO(entityDefinitionDTOList, rulesDTOList,terminationDTO, simulationDefinition.getGrid().getRows(), simulationDefinition.getGrid().getCols());
     }
 
-    public SimulationDefinition getSimulationDefinition() {
-        return simulationDefinition;
-    }
-
     private List<RulesDTO> createRulesDTOList(){
         List<RulesDTO> rulesDTOList = new ArrayList<>();
 
@@ -254,5 +252,23 @@ public class PredictionManager {
         }
 
         return new HistogramSpecificPropDTO(histogramSinglePropDTO.getName(), histogram);
+    }
+
+    public List<EntityCountDTO> getEntitiesCountDTO(Integer id){
+        List<EntityCountDTO>res = new ArrayList<>();
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(id);
+
+        List<EntityInstanceManager> entityInstanceManagers = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
+        for(EntityInstanceManager entityInstanceManager : entityInstanceManagers) {
+            res.add(new EntityCountDTO(entityInstanceManager.getName(), entityInstanceManager.getPopulation()));
+        }
+
+        return res;
+    }
+
+    public SimulationDetailsDTO simulationDetailsDTO(Integer id) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(id);
+        TerminationDTO terminationDTO = new TerminationDTO(simulationExecutionDetails.getCurrTicks(),simulationExecutionDetails.getSeconds());
+        return new SimulationDetailsDTO(getEntitiesCountDTO(id), terminationDTO);
     }
 }

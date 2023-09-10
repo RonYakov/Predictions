@@ -5,13 +5,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import newExecution.NewExecutionController;
+import newExecution.listener.ClearButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeNumberController implements StartButtonClickedListener {
+public class EnvTypeNumberController implements StartButtonClickedListener, ClearButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -21,16 +22,21 @@ public class EnvTypeNumberController implements StartButtonClickedListener {
     private Spinner<Double> userChoice;
     private NewExecutionController newExecutionController;
     private Boolean isValueSet;
+    private Boolean isValueCleared;
     private Double from = new Double(0);
     private Double to = new Double(1000);
 
     @FXML
     public void initialize() {
         isValueSet = false;
-
+        isValueCleared = false;
         userChoice.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue != null){
                 isValueSet = true;
+            }
+            if(isValueCleared) {
+                isValueSet = true;
+                isValueCleared = false;
             }
         });
     }
@@ -38,6 +44,7 @@ public class EnvTypeNumberController implements StartButtonClickedListener {
     public void setNewExecutionController(NewExecutionController newExecutionController) {
         this.newExecutionController = newExecutionController;
         newExecutionController.addListenerToStartButton(this);
+        newExecutionController.addListenerToClearButton(this);
     }
 
     @Override
@@ -52,6 +59,13 @@ public class EnvTypeNumberController implements StartButtonClickedListener {
         }
 
         newExecutionController.addEnvironmentToList(new EnvironmentInitDTO(nameLabel.getText(), value));
+    }
+
+    @Override
+    public void clearOnClicked() {
+        userChoice.getValueFactory().setValue(from);
+        isValueSet = false;
+        isValueCleared = true;
     }
 
     public void setData(EnvironmentDefinitionDTO environmentDefinitionDTO) {

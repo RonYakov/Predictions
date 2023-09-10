@@ -5,13 +5,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import newExecution.NewExecutionController;
+import newExecution.listener.ClearButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeStringController implements StartButtonClickedListener {
+public class EnvTypeStringController implements StartButtonClickedListener, ClearButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -20,6 +21,7 @@ public class EnvTypeStringController implements StartButtonClickedListener {
     private NewExecutionController newExecutionController;
     private boolean firstClick = true;
     private Boolean isValueSet = false;
+    private Boolean isValueCleared = false;
 
     @FXML
     private void initialize() {
@@ -34,11 +36,16 @@ public class EnvTypeStringController implements StartButtonClickedListener {
             if (newValue != null && !newValue.isEmpty()) {
                 isValueSet = true;
             }
+            if(isValueCleared){
+                isValueSet = true;
+                isValueCleared = false;
+            }
         });
     }
     public void setNewExecutionController(NewExecutionController newExecutionController) {
         this.newExecutionController = newExecutionController;
         newExecutionController.addListenerToStartButton(this);
+        newExecutionController.addListenerToClearButton(this);
     }
 
     @Override
@@ -59,6 +66,14 @@ public class EnvTypeStringController implements StartButtonClickedListener {
             value = randomString.toString();
         }
         newExecutionController.addEnvironmentToList(new EnvironmentInitDTO(nameLabel.getText(), value));
+    }
+
+    @Override
+    public void clearOnClicked() {
+        userInput.setText("Please enter a value");
+        firstClick = true;
+        isValueSet = false;
+        isValueCleared = true;
     }
 
     @FXML

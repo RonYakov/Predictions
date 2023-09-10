@@ -4,13 +4,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.PredictionManager;
@@ -18,7 +15,6 @@ import managerFX.MainScreenController;
 import option1.XmlFullPathDTO;
 
 import java.io.File;
-import java.io.IOException;
 
 public class PredictionHeaderController {
 
@@ -50,6 +46,7 @@ public class PredictionHeaderController {
     public void initialize() {
         detailsButton.disableProperty().bind(buttonsDisabledProperty());
         newExecutionButton.disableProperty().bind(buttonsDisabledProperty());
+        resultsButton.disableProperty().bind(buttonsDisabledProperty());
     }
 
     public void setPredictionManager(PredictionManager predictionManager) {
@@ -85,7 +82,6 @@ public class PredictionHeaderController {
             predictionManager.loadXmlData(xmlFullPathDTO);
             currentFileLabel.setText(selectedFile.getAbsolutePath());
             setButtonsDisabled(false);
-            mainScreenController.setDetailsSet(false);
         }catch (Exception ignore) {
         }
     }
@@ -98,6 +94,10 @@ public class PredictionHeaderController {
     @FXML
     void newExecutionButtonClicked(ActionEvent event) {
         mainScreenController.newExecutionScreen();
+    }
+    @FXML
+    void resultsButtonClicked(ActionEvent event) {
+        mainScreenController.resultsScreen();
     }
 
 }
