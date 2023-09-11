@@ -87,6 +87,10 @@ public class Grid {
         return i;
     }
 
+    public EntityInstance getEntity(GridIndex gridIndex) {
+        return grid[gridIndex.getRow()][gridIndex.getCol()];
+    }
+
     private void checkForEmptySpaces(EntityInstance entityInstance , List<Directions> openDirections) {
         GridIndex index = entityInstance.getGridIndex();
 

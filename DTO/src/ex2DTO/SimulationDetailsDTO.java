@@ -8,9 +8,16 @@ public class SimulationDetailsDTO {
     List<EntityCountDTO> entityCountDTOList;
     TerminationDTO terminationDTO;
 
-    public SimulationDetailsDTO(List<EntityCountDTO> entityCountDTOList, TerminationDTO terminationDTO) {
+    String simulationState;
+
+    public SimulationDetailsDTO(List<EntityCountDTO> entityCountDTOList, TerminationDTO terminationDTO, String simulationState) {
         this.entityCountDTOList = entityCountDTOList;
         this.terminationDTO = terminationDTO;
+        this.simulationState = simulationState;
+    }
+
+    public String getSimulationState() {
+        return simulationState;
     }
 
     public List<EntityCountDTO> getEntityCountDTOList() {

@@ -23,10 +23,17 @@ public class SimulationIDController {
         this.showButtonListener = showButtonListener;
     }
 
+    public void simulationStopped() {
+        showButton.setStyle("-fx-background-color: #d22732;");
+    }
+
     public void setShowButton(Button showButton) {
         this.showButton = showButton;
     }
 
+    public Integer getID(){
+        return Integer.parseInt(simulationID.getText());
+    }
     @FXML
     public void showButtonClicked(ActionEvent event) {
         showButtonListener.onShowClicked(Integer.parseInt(simulationID.getText()));

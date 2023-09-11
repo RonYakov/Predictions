@@ -56,6 +56,7 @@ public class Rule implements Serializable {
         String entityMangerName = action.getPrimaryEntityDefinition().getName();
         EntityInstanceManager primaryEntity =  entityInstanceManagerMap.get(entityMangerName);
         Integer count;
+        context.setPrimaryEntityInstance(null);
         context.setEntityManager(primaryEntity);
         context.setRows(grid.getRows());
         context.setCols(grid.getCols());
@@ -68,7 +69,12 @@ public class Rule implements Serializable {
                 count = secondaryEntitiesFiltered.size();
             }
             else {
-                count = action.getSecondaryEntity().getCount();
+                if(secondaryEntitiesFiltered.size() < action.getSecondaryEntity().getCount()) {
+                    count = secondaryEntitiesFiltered.size();
+                }
+                else {
+                    count = action.getSecondaryEntity().getCount();
+                }
             }
 
             context.setSecondaryEntityName(action.getSecondaryEntity().getEntityName());
@@ -77,7 +83,7 @@ public class Rule implements Serializable {
                 context.setPrimaryEntityInstance(entityInstance);
                 context.setStopAction(false);
                 if(secondaryEntitiesFiltered.size() > 0 ){
-                    for(int i  = 0; i < secondaryEntitiesFiltered.size() ; i++){
+                    for(int i  = 0; i < count ; i++){
                         context.setSecondaryEntity(secondaryEntitiesFiltered.get(i));
                         if(context.getStopAction()){
                             break;
@@ -97,9 +103,11 @@ public class Rule implements Serializable {
             }
         }
 
-        entityReplacement(action,context, entityInstanceManagerMap, grid);
+        if(context.getPrimaryEntityInstance() != null) {
+            entityReplacement(action,context, entityInstanceManagerMap, grid);
 
-        entityKiller(primaryEntity);
+            entityKiller(primaryEntity);
+        }
     }
 
     private void entityReplacement(Action action ,ActionContext context, Map<String, EntityInstanceManager> entityInstanceManagerMap, Grid grid) {
@@ -110,14 +118,15 @@ public class Rule implements Serializable {
             if(entityInstance.getState() != EntityState.REPLACE) {
                 primary.add(entityInstance);
             }else {
-                EntityInstance newOne = entityInstance.replaceMe(entityInstanceManagerMap.get(context.getSecondaryEntityInstance().getEntType()));
-                entityInstanceManagerMap.get(context.getSecondaryEntityName()).getEntityInstanceList().add(newOne);
-                grid.replaceEntities(newOne, entityInstance.getGridIndex());
+                if(grid.getEntity(entityInstance.getGridIndex()) == entityInstance) {
+                    EntityInstance newOne = entityInstance.replaceMe(entityInstanceManagerMap.get(context.getSecondaryEntityInstance().getEntType()));
+                    entityInstanceManagerMap.get(context.getSecondaryEntityName()).getEntityInstanceList().add(newOne);
+                    grid.replaceEntities(newOne, entityInstance.getGridIndex());
+                }
             }
         }
 
         entityInstanceManagerMap.get(context.getPrimaryEntityInstance().getEntType()).setEntityInstanceList(primary);
-
     }
 
     private List<EntityInstance> getFilteredSecondaryEntityList(Action action, Map<String, EntityInstanceManager> entityInstanceManagerMap) {

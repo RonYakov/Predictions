@@ -97,8 +97,15 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments()));
-        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
+        EntityInstance otherEntity = getOtherEntity(entityToCondition, context);
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
+        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments(), isSeconderyShouldExist));
+        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), isSeconderyShouldExist));
 
         if(propVal<expVal){
             return ConditionResult.TRUE;
@@ -113,8 +120,15 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments()));
-        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
+        EntityInstance otherEntity = getOtherEntity(entityToCondition, context);
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
+        float propVal = convertStringToFloat(property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments(), isSeconderyShouldExist));
+        float expVal = convertStringToFloat(value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), isSeconderyShouldExist));
 
         if(propVal>expVal){
             return ConditionResult.TRUE;
@@ -128,8 +142,15 @@ public class SingleCondition extends AbstractCondition {
         if(entityToCondition == null){
             return ConditionResult.IGNORE;
         }
-        String propValue = property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments());
-        String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments());
+        EntityInstance otherEntity = getOtherEntity(entityToCondition, context);
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
+        String propValue = property.GetExplicitValue(entityToCondition, getOtherEntity(entityToCondition, context), context.getEnvironments(), isSeconderyShouldExist);
+        String expValue = value.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), isSeconderyShouldExist);
 
 
         if(isANumberProp(context) && isANumberExp()){

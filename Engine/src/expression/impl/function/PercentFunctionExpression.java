@@ -28,8 +28,8 @@ public class PercentFunctionExpression extends AbstractFunctionExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
-        return percent(Double.parseDouble(num1.GetExplicitValue(primaryEntity,secondaryEntity, environments)),
-                Double.parseDouble(num2.GetExplicitValue(primaryEntity, secondaryEntity, environments))).toString();
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments, Boolean isSeconderyShouldExist) {
+        return percent(Double.parseDouble(num1.GetExplicitValue(primaryEntity,secondaryEntity, environments, isSeconderyShouldExist)),
+                Double.parseDouble(num2.GetExplicitValue(primaryEntity, secondaryEntity, environments, isSeconderyShouldExist))).toString();
     }
 }

@@ -4,9 +4,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane prefHeight="495.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/20.0.1" stylesheets="@SimulationsStyle.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulations.SimulationsController">
+<ScrollPane prefHeight="495.0" prefWidth="200.0" styleClass="component-container" stylesheets="@SimulationsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulations.SimulationsController">
    <content>
-      <VBox fx:id="simulationHbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="493.0" prefWidth="198.0">
+      <VBox fx:id="simulationHbox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="175.0">
          <children>
             <Label id="SimulationLabel" alignment="CENTER" prefHeight="39.0" prefWidth="198.0" text="Simulations:" />
          </children>

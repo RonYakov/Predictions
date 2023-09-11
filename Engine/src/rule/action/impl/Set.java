@@ -2,6 +2,7 @@ package rule.action.impl;
 
 import entity.definition.EntityDefinition;
 import entity.instance.EntityInstance;
+import exception.SecondEntityIgnoreException;
 import exception.TypeUnmatchedException;
 import expression.ExpressionType;
 import expression.api.Expression;
@@ -57,34 +58,43 @@ public class Set extends AbstractAction {
     @Override
     public void Invoke(ActionContext context) {
         EntityInstance entityInstance = getEntityForInvoke(context);
-
         if(entityInstance == null){
             return;
         }
 
         EntityInstance otherEntity = getOtherEntity(entityInstance, context);
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
         PropertyType propertyType = entityInstance.getProperty(property).getType();
         AbstractPropertyInstance propertyToSet = entityInstance.getProperty(property);
         ExpressionType valueType = value.getType();
-        String newValue = value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments());
 
-        if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.INT) {
-            Integer numberNewValue = Integer.parseInt(newValue);
-            propertyToSet.setValue(checkIfActionResultIsInRange(numberNewValue, propertyToSet).toString());
-            return;
-        }
-        if(propertyType == PropertyType.FLOAT && (valueType == ExpressionType.INT || valueType == ExpressionType.FLOAT)) {
-            Float numberNewValue = Float.parseFloat(newValue);
-            propertyToSet.setValue(checkIfActionResultIsInRange(numberNewValue, propertyToSet).toString());
-            return;
-        }
-        if(propertyType == PropertyType.BOOLEAN && valueType == ExpressionType.BOOLEAN) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments()));
-            return;
-        }
-        if(propertyType == PropertyType.STRING && valueType == ExpressionType.STRING) {
-            context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments()));
-            return;
+        try {
+            String newValue = value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments(), isSeconderyShouldExist);
+
+            if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.INT) {
+                Integer numberNewValue = Integer.parseInt(newValue);
+                propertyToSet.setValue(checkIfActionResultIsInRange(numberNewValue, propertyToSet).toString());
+                return;
+            }
+            if(propertyType == PropertyType.FLOAT && (valueType == ExpressionType.INT || valueType == ExpressionType.FLOAT)) {
+                Float numberNewValue = Float.parseFloat(newValue);
+                propertyToSet.setValue(checkIfActionResultIsInRange(numberNewValue, propertyToSet).toString());
+                return;
+            }
+            if(propertyType == PropertyType.BOOLEAN && valueType == ExpressionType.BOOLEAN) {
+                context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
+                return;
+            }
+            if(propertyType == PropertyType.STRING && valueType == ExpressionType.STRING) {
+                context.getPrimaryEntityInstance().getProperty(property).setValue(value.GetExplicitValue(entityInstance, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
+                return;
+            }
+        } catch(SecondEntityIgnoreException ignore) {
         }
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.FLOAT) {
             throw new TypeUnmatchedException("TypeUnmatchedException: can not set the property '" + property + "' with expression: " + value.GetSimpleValue() + ".\n" +

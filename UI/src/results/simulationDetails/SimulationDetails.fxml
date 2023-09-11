@@ -7,24 +7,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="900.0" stylesheets="@SimulationDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationDetails.SimulationDetailsController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="900.0" spacing="5.0" stylesheets="@SimulationDetailsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationDetails.SimulationDetailsController">
    <children>
-      <Pane prefHeight="200.0" prefWidth="300.0">
+      <Pane prefHeight="200.0" prefWidth="300.0" styleClass="component-container">
          <children>
             <fx:include fx:id="terminationsDetails" source="terminationDetails/TerminationDetails.fxml" />
          </children></Pane>
-      <ScrollPane prefHeight="207.0" prefWidth="434.0">
+      <ScrollPane prefHeight="207.0" prefWidth="434.0" styleClass="component-container">
          <content>
-            <VBox fx:id="entitiesDetails" prefHeight="218.0" prefWidth="430.0">
+            <VBox fx:id="entitiesDetails" prefHeight="196.0" prefWidth="404.0">
                <padding>
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </VBox>
          </content>
       </ScrollPane>
-      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="170.0" spacing="10.0">
+      <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="170.0" spacing="10.0" styleClass="component-container">
          <children>
-            <Button fx:id="stopButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Stop" />
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#OnStopClicked" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Stop" />
             <Button fx:id="pauseButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Pause" />
             <Button fx:id="resumeButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Resume" />
          </children>

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface Expression {
     String GetSimpleValue();
 
-    String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments);
+    String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments, Boolean isSeconderyShouldExist);
     ExpressionType getType();
     String getEntityName();
 }

@@ -12,6 +12,7 @@ import newExecution.NewExecutionController;
 import option2.SimulationDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
 import results.ResultsController;
+import results.simulationDetails.SimulationDetailsController;
 
 import java.io.IOException;
 
@@ -29,11 +30,16 @@ public class MainScreenController {
     private Boolean isDetailsPresent = false;
     private Boolean isNewExecutionPresent = false;
     private Boolean isResultsPresent = false;
+    private SimulationDetailsController simulationDetailsController = null;
 
     @FXML
     public void initialize() {
        headerController.setMainScreenController(this);
        headerController.setPredictionManager(predictionManager);
+    }
+
+    public void setSimulationDetailsController(SimulationDetailsController simulationDetailsController) {
+        this.simulationDetailsController = simulationDetailsController;
     }
 
     public void loadDetailsScreen() {
@@ -47,6 +53,10 @@ public class MainScreenController {
                 detailsController.setMainScreenController(this);
                 detailsController.initializeDetailsData(simulationDefinitionDTO);
                 mainBorderPane.setCenter(detailsContent);
+
+                if(simulationDetailsController != null) {
+                    simulationDetailsController.stopThread();
+                }
                 isDetailsPresent = true;
                 isResultsPresent = false;
                 isNewExecutionPresent = false;
@@ -71,6 +81,10 @@ public class MainScreenController {
 
                 EnvironmentDefinitionListDTO environmentDefinitionListDTO = predictionManager.runSimulationStep1();
                 newExecutionController.setEnvironmentData(environmentDefinitionListDTO);
+
+                if(simulationDetailsController != null) {
+                    simulationDetailsController.stopThread();
+                }
                 isNewExecutionPresent = true;
                 isDetailsPresent = false;
                 isResultsPresent = false;

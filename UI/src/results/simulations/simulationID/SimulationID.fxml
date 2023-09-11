@@ -5,10 +5,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="190.0" spacing="5.0" stylesheets="@SimulationIDStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulations.simulationID.SimulationIDController">
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="175.0" spacing="5.0" stylesheets="@SimulationIDStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulations.simulationID.SimulationIDController">
    <children>
       <Label prefHeight="21.0" prefWidth="27.0" styleClass="labels" text="ID: " />
-      <Label fx:id="simulationID" prefHeight="21.0" prefWidth="84.0" styleClass="labels" text="Label" />
+      <Label fx:id="simulationID" prefHeight="21.0" prefWidth="71.0" styleClass="labels" text="Label" />
       <Button id="showButton" fx:id="showButton" mnemonicParsing="false" onAction="#showButtonClicked" prefHeight="32.0" prefWidth="59.0" text="Show" />
    </children>
    <padding>

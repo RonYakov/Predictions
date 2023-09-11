@@ -5,6 +5,7 @@ import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
 import ex2DTO.EntityCountDTO;
 import ex2DTO.SimulationDetailsDTO;
+import ex2DTO.StopDTO;
 import exception.FileNotFoundException;
 import option1.XmlFullPathDTO;
 import option2.*;
@@ -22,6 +23,7 @@ import rule.action.api.Action;
 import simulation.impl.SimulationExecutionDetails;
 import simulation.impl.SimulationRunner;
 import simulation.definition.SimulationDefinition;
+import simulation.impl.SimulationState;
 
 import javax.xml.bind.JAXBException;
 import java.io.*;
@@ -269,6 +271,11 @@ public class PredictionManager {
     public SimulationDetailsDTO simulationDetailsDTO(Integer id) {
         SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(id);
         TerminationDTO terminationDTO = new TerminationDTO(simulationExecutionDetails.getCurrTicks(),simulationExecutionDetails.getSeconds());
-        return new SimulationDetailsDTO(getEntitiesCountDTO(id), terminationDTO);
+        return new SimulationDetailsDTO(getEntitiesCountDTO(id), terminationDTO, simulationExecutionDetails.getSimulationState().toString());
+    }
+
+    public void stopSimulation(StopDTO stopDTO) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(stopDTO.getId());
+        simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
     }
 }

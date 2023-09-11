@@ -4,12 +4,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.ResultsController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1110.0" spacing="5.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.ResultsController">
    <children>
       <Pane prefHeight="495.0" prefWidth="200.0">
          <children>
             <fx:include fx:id="simulationsList" source="simulations/Simulations.fxml" />
-         </children></Pane>
+         </children>
+      </Pane>
       <VBox prefHeight="495.0" prefWidth="900.0">
          <children>
             <Pane fx:id="simulationDetails" prefHeight="220.0" prefWidth="900.0" />

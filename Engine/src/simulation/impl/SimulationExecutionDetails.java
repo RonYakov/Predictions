@@ -22,6 +22,7 @@ public class SimulationExecutionDetails {
     private String simulationStopCause;
     private Integer currTicks;
     private Integer seconds;
+    private SimulationState simulationState;
 
     public SimulationExecutionDetails(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments,Grid grid, List<Rule> rules, Termination termination, int identifyNumber) {
         this.entityManager = entityManager;
@@ -31,7 +32,7 @@ public class SimulationExecutionDetails {
         this.termination = termination;
         this.identifyNumber = identifyNumber;
         this.simulationStopCause = null;
-
+        this.simulationState = null;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
         formattedDate = now.format(formatter);
@@ -47,6 +48,14 @@ public class SimulationExecutionDetails {
 
     public Integer getSeconds() {
         return seconds;
+    }
+
+    public SimulationState getSimulationState() {
+        return simulationState;
+    }
+
+    public void setSimulationState(SimulationState simulationState) {
+        this.simulationState = simulationState;
     }
 
     public void setCurrTicks(Integer currTicks) {

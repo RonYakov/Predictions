@@ -2,6 +2,9 @@ package results.simulationDetails;
 
 import ex2DTO.EntityCountDTO;
 import ex2DTO.SimulationDetailsDTO;
+import ex2DTO.StopDTO;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,6 +35,8 @@ public class SimulationDetailsController {
     private List<EntityDetailsController> entityDetailsControllers = new ArrayList<>();
     private PredictionManager predictionManager;
     private Integer id;
+    private Thread thread;
+    private Boolean stopSimulation;
 
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
@@ -43,29 +48,47 @@ public class SimulationDetailsController {
 
     public void setValues() {
         setEntities();
+        stopSimulation = false;
 
-        Thread thread = new Thread(() -> {
+        thread = new Thread(() -> {
             Boolean stop = false;
 
-            //todo how we stop the thread
-            while (!stop) {
+            String simulationState = "RUNNING";
+            System.out.println(thread.getName());
+            while (!stop && !simulationState.equals("STOPPED")) {
                 try {
                     SimulationDetailsDTO simulationDetailsDTO = predictionManager.simulationDetailsDTO(id);
-                    int i = 0;
-                    for(EntityDetailsController entityDetailsController: entityDetailsControllers){
-                        entityDetailsController.setEntityCount(simulationDetailsDTO.getEntityCountDTOList().get(i).getCount().toString());
-                        i++;
-                    }
-                    terminationsDetailsController.setSecondsCount(simulationDetailsDTO.getTerminationDTO().getSeconds().toString());
-                    terminationsDetailsController.setTicksCount(simulationDetailsDTO.getTerminationDTO().getTicks().toString());
+                    Platform.runLater( () -> {
+                        int i = 0;
+                        for(EntityDetailsController entityDetailsController: entityDetailsControllers){
+                            entityDetailsController.setEntityCount(simulationDetailsDTO.getEntityCountDTOList().get(i).getCount().toString());
+                            i++;
+                        }
+                        terminationsDetailsController.setSecondsCount(simulationDetailsDTO.getTerminationDTO().getSeconds().toString());
+                        terminationsDetailsController.setTicksCount(simulationDetailsDTO.getTerminationDTO().getTicks().toString());
+                    });
+                    simulationState = simulationDetailsDTO.getSimulationState();
 
+                    if(stopSimulation) {
+                        stop = true;
+                        predictionManager.stopSimulation(new StopDTO(id));
+                    }
                     Thread.sleep(200);
+
                 } catch (InterruptedException ignore) {
+                   stop = true;
                 }
             }
         });
 
         thread.start();
+    }
+
+    public void stopThread() {
+        if (thread != null) {
+            System.out.println(thread.getName());
+            thread.interrupt(); // Signal the thread to stop
+        }
     }
 
     private void setEntities() {
@@ -84,5 +107,10 @@ public class SimulationDetailsController {
             } catch (IOException e) {
             }
         }
+    }
+
+    @FXML
+    void OnStopClicked(ActionEvent event){
+        stopSimulation = true;
     }
 }

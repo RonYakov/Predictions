@@ -1,6 +1,7 @@
 package expression.impl.function;
 
 import entity.instance.EntityInstance;
+import exception.SecondEntityIgnoreException;
 import expression.ExpressionType;
 import property.instance.AbstractPropertyInstance;
 import utills.helperFunction.EvaluateInfo;
@@ -31,20 +32,24 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments, Boolean isSeconderyShouldExist) {
         EvaluateInfo res;
 
         if(entityName.equals(primaryEntity.getEntType())){
             res = evaluate(primaryEntity,propertyName);
-        }else if(secondaryEntity != null){
+        }
+        else if(secondaryEntity != null){
             if(entityName.equals(secondaryEntity.getEntType())){
                res = evaluate(secondaryEntity,propertyName);
             }else {
                 throw new RuntimeException(); //todo
             }
         }
+        else if (isSeconderyShouldExist) {
+            throw new SecondEntityIgnoreException();
+        }
         else {
-            throw new RuntimeException();
+            throw new RuntimeException();//todo
         }
 
         this.setType(res.getType());

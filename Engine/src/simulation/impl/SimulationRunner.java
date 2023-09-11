@@ -36,6 +36,7 @@ public class SimulationRunner implements Serializable, Runnable {
 
     @Override
     public void run() {
+        simulationExecutionDetails.setSimulationState(SimulationState.RUNNING);
         System.out.println("running thread: " + Thread.currentThread().getName());
         long startTime = System.currentTimeMillis();
         long maxRuntimeMilliseconds;
@@ -50,8 +51,9 @@ public class SimulationRunner implements Serializable, Runnable {
             maxRuntimeMilliseconds = seconds * 1000;
 
             for(; currTick <= ticks ; currTick++){
-                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds) {
+                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                     simulationExecutionDetails.setSimulationStopCause("Time");
+                    //todo
                     break;
                 }
                 simulationIteration(currTick);
@@ -68,7 +70,7 @@ public class SimulationRunner implements Serializable, Runnable {
             maxRuntimeMilliseconds = seconds * 1000;
 
             while (!timesUp){
-                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds) {
+                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                     timesUp = true;
                     simulationExecutionDetails.setSimulationStopCause("Time");
                     break;
@@ -81,7 +83,7 @@ public class SimulationRunner implements Serializable, Runnable {
                 simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
         }else {
-            for(; currTick <= ticks ; currTick++){
+            for(; currTick <= ticks && !(simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)); currTick++){
                 simulationIteration(currTick);
                 if(currTick.equals(ticks)) {
                     simulationExecutionDetails.setSimulationStopCause("Ticks");
@@ -92,6 +94,8 @@ public class SimulationRunner implements Serializable, Runnable {
                 simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
         }
+
+        simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
     }
 
     private void moveEntities() {

@@ -1,6 +1,7 @@
 package expression.impl.function;
 
 import entity.instance.EntityInstance;
+import exception.SecondEntityIgnoreException;
 import expression.ExpressionType;
 import property.instance.AbstractPropertyInstance;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 import static utills.helperFunction.Helper.ticks;
 
-public class TicksFunctionExpression extends AbstractFunctionExpression{
+public class TicksFunctionExpression extends AbstractFunctionExpression {
     String entityName;
     String propertyName;
 
@@ -30,13 +31,24 @@ public class TicksFunctionExpression extends AbstractFunctionExpression{
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments) {
-        if(entityName.equals(primaryEntity.getEntType())){
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments, Boolean isSeconderyShouldExist) {
+        if (entityName.equals(primaryEntity.getEntType())) {
             return ticks(primaryEntity, propertyName).toString();
-        } else if (entityName.equals(secondaryEntity.getEntType())) {
-            return ticks(secondaryEntity, propertyName).toString();
-        } else {
+        }
+        else if (secondaryEntity != null) {
+            if (entityName.equals(secondaryEntity.getEntType())) {
+                return ticks(secondaryEntity, propertyName).toString();
+            }
+            else {
+                throw new RuntimeException(); //todo
+            }
+        }
+        else if (isSeconderyShouldExist) {
+            throw new SecondEntityIgnoreException();
+        }
+        else {
             throw new RuntimeException(); //todo
         }
     }
 }
+

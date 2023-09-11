@@ -9,3 +9,12 @@
 .buttons:hover {
     -fx-background-color: #158A19;
 }
+.component-container {
+    -fx-border-color: #696969; /* Border color */
+    -fx-border-width: 2px;     /* Border width */
+    -fx-border-style: solid;   /* Border style (solid, dashed, etc.) */
+    -fx-border-radius: 5px;    /* Border corner radius for a rounded appearance */
+    -fx-padding: 10px;         /* Padding inside the border */
+    -fx-background-color: #f2f2f2; /* Background color */
+    -fx-background-radius: 5px;  /* Background corner radius */
+}

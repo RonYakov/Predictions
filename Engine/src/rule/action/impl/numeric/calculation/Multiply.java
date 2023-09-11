@@ -37,15 +37,20 @@ public class Multiply extends AbstractCalculation {
             return;
         }
         EntityInstance otherEntity = getOtherEntity(mainEntity, context);
-
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
 
         if(getFirstArgument().getType() == ExpressionType.FLOAT || getSecondArgument().getType() == ExpressionType.FLOAT){
-            result = convertStringToFloat(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments())) *
-                    convertStringToFloat(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
+            result = convertStringToFloat(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist)) *
+                    convertStringToFloat(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
         }
         else{
-            result = convertStringToInt(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments())) *
-                    convertStringToInt(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
+            result = convertStringToInt(getFirstArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist)) *
+                    convertStringToInt(getSecondArgument().GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
         }
 
         AbstractPropertyInstance propertyInstance = extractProperty(context);

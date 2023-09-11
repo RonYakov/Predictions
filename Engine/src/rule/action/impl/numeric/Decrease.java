@@ -43,17 +43,23 @@ public class Decrease extends AbstractNumericAction {
             return;
         }
         EntityInstance otherEntity = getOtherEntity(mainEntity, context);
+        Boolean isSeconderyShouldExist = true;
+        if(otherEntity == null) {
+            if(context.getSecondaryEntityName() == null){
+                isSeconderyShouldExist = false;
+            }
+        }
 
         if(by.getType() == ExpressionType.INT) {
             if(isDecimal(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.intValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
+                newPropertyValue = newPropertyValue.intValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
             } else {
-                newPropertyValue = newPropertyValue.floatValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
+                newPropertyValue = newPropertyValue.floatValue() - Integer.parseInt(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
             }
         }
         else if (by.getType() == ExpressionType.FLOAT) {
             if(isFloat(newPropertyValue.toString())) {
-                newPropertyValue = newPropertyValue.floatValue() - Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments()));
+                newPropertyValue = newPropertyValue.floatValue() - Float.parseFloat(by.GetExplicitValue(mainEntity, otherEntity, context.getEnvironments(), isSeconderyShouldExist));
             }
             else {
                throw new TryToPreformFloatActionOnDecimalPropertyException("Float subtraction from Decimal property is not allowed. Error occurred in"

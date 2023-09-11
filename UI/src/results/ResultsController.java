@@ -28,10 +28,12 @@ public class ResultsController implements ShowButtonListener {
     private SimulationsController simulationsListController;
     private MainScreenController mainScreenController;
     private PredictionManager predictionManager;
+    private SimulationDetailsController simulationDetailsController;
 
     @FXML
     public void initialize() {
         simulationsListController.setResultsController(this);
+        simulationsListController.manageSimulationsState();
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -40,6 +42,7 @@ public class ResultsController implements ShowButtonListener {
 
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
+        this.simulationsListController.setPredictionManager(predictionManager);
     }
     public void setSimulationsList() {
         List<PastSimulationInfoDTO> pastSimulationInfoDTOList = predictionManager.createPastSimulationInfoDTOList();
@@ -58,6 +61,14 @@ public class ResultsController implements ShowButtonListener {
             simulationDetailsController.setId(id);
             simulationDetailsController.setPredictionManager(predictionManager);
             simulationDetailsController.setValues();
+
+            if(this.simulationDetailsController != null) {
+                this.simulationDetailsController.stopThread();
+                simulationDetails.getChildren().clear();
+            }
+
+            this.simulationDetailsController = simulationDetailsController;
+            mainScreenController.setSimulationDetailsController(simulationDetailsController);
             simulationDetails.getChildren().add(simulationData);
         } catch (IOException e) {
         }

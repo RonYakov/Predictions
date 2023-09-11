@@ -1,6 +1,7 @@
 package rule.action.impl;
 
 import entity.definition.EntityDefinition;
+import exception.SecondEntityIgnoreException;
 import expression.api.Expression;
 import grid.GridIndex;
 import option2.ActionDTO.ActionDTO;
@@ -35,7 +36,13 @@ public class Proximity extends AbstractAction {
 
     @Override
     public void Invoke(ActionContext context) {
-        Integer degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments()));
+        Integer degree = null;
+
+        try {
+            degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), true));
+        } catch (SecondEntityIgnoreException secondEntityIgnoreException) {
+
+        }
 
         GridIndex source = context.getPrimaryEntityInstance().getGridIndex();
         if(context.getSecondaryEntityInstance() == null){

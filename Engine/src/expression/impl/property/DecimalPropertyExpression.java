@@ -2,6 +2,7 @@ package expression.impl.property;
 
 import entity.instance.EntityInstance;
 import exception.PropertyNotFoundException;
+import exception.SecondEntityIgnoreException;
 import expression.ExpressionType;
 import property.instance.AbstractPropertyInstance;
 
@@ -13,11 +14,14 @@ public class DecimalPropertyExpression extends AbstractPropertyExpression {
     }
 
     @Override
-    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments){
+    public String GetExplicitValue(EntityInstance primaryEntity, EntityInstance secondaryEntity, Map<String, AbstractPropertyInstance> environments, Boolean isSeconderyShouldExist){
         String res = primaryEntity.getSpecificPropertyValue(getValue());
         if(res == null) {
             if (secondaryEntity != null) {
                 res = secondaryEntity.getSpecificPropertyValue(getValue());
+            }
+            else if(isSeconderyShouldExist == true){
+                throw new SecondEntityIgnoreException();
             }
 
             if(res == null) {

@@ -1,7 +1,9 @@
 package expression.impl;
 
+import entity.instance.EntityInstance;
 import expression.ExpressionType;
 import expression.api.Expression;
+import rule.action.context.api.ActionContext;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -31,7 +33,6 @@ public abstract class AbstractExpression implements Expression, Serializable {
     public ExpressionType getType() {
         return type;
     }
-
 
     @Override
     public boolean equals(Object o) {
