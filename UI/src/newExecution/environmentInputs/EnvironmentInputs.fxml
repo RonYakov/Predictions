@@ -11,14 +11,14 @@
       <Label prefHeight="50.0" prefWidth="293.0" styleClass="titleLabel" text="Simulation Environment Inputs" BorderPane.alignment="CENTER" />
    </top>
    <center>
-      <ScrollPane prefHeight="384.0" prefWidth="559.0" BorderPane.alignment="CENTER">
+      <ScrollPane prefHeight="378.0" prefWidth="555.0" BorderPane.alignment="CENTER">
          <content>
-            <VBox fx:id="environmetsVbox" prefHeight="375.0" prefWidth="545.0">
+            <VBox fx:id="environmetsVbox" alignment="TOP_CENTER" prefHeight="367.0" prefWidth="541.0" spacing="10.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <padding>
-                  <Insets left="10.0" />
+                  <Insets top="10.0" />
                </padding>
             </VBox>
          </content>

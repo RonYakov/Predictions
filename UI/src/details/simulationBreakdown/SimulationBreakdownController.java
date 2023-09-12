@@ -4,10 +4,7 @@ import details.DetailsScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import option2.EntityDefinitionDTO;
-import option2.RulesDTO;
-import option2.SimulationDefinitionDTO;
-import option2.TerminationDTO;
+import option2.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,25 +13,18 @@ public class SimulationBreakdownController {
 
     @FXML
     private ChoiceBox<String> choiceBoxEntities;
-
     @FXML
-    private ChoiceBox<String> choiceBoxEnvironment;
-
+    private ChoiceBox<String> choiceBoxEnvironment = new ChoiceBox<>();
     @FXML
-    private ChoiceBox<String> choiceBoxRules = new ChoiceBox<>();
-
+    private ChoiceBox<String> choiceBoxRules;
     @FXML
     private Button showEntites;
-
     @FXML
     private Button showEnvironment;
-
     @FXML
     private Button showGrid;
-
     @FXML
     private Button showRules;
-
     @FXML
     private Button showTermination;
     @FXML
@@ -84,14 +74,31 @@ public class SimulationBreakdownController {
 
     }
     @FXML
+    private void EnvironmentButtonClicked(ActionEvent event) {
+        String newValue = choiceBoxEnvironment.getSelectionModel().getSelectedItem();
+        if (newValue != null) {
+            Optional<PropertyDefinitionDTO> environmentDefinitionDTO = simulationDefinitionDTO.getEnvironmentDefenitionDTOList().stream()
+                    .filter(myObject -> myObject.getName().equals(newValue))
+                    .findFirst();
+            detailsScreenController.environmentShowButtonClicked(environmentDefinitionDTO.get());
+        }
+    }
+    @FXML
     private void TerminationButtonClicked(ActionEvent event) {
         detailsScreenController.terminationShowButtonClicked(simulationDefinitionDTO.getTerminationDTO());
+    }
+
+
+    @FXML
+    private void GridButtonClicked(ActionEvent event) {
+        detailsScreenController.gridShowButtonClicked(simulationDefinitionDTO.getGridRows(), simulationDefinitionDTO.getGridCols());
     }
 
     public void initializeDetailsData(SimulationDefinitionDTO simulationDefinitionDTO) {
         this.simulationDefinitionDTO = simulationDefinitionDTO;
         initializeEntities(simulationDefinitionDTO.getEntityDefinitionDTOList());
         initializeRules(simulationDefinitionDTO.getRulesDTOList());
+        initializeEnvironments(simulationDefinitionDTO.getEnvironmentDefenitionDTOList());
     }
 
     private void initializeRules(List<RulesDTO> rulesDTOList) {
@@ -103,6 +110,11 @@ public class SimulationBreakdownController {
     private void initializeEntities(List<EntityDefinitionDTO> entityDefinitionDTOList) {
         for(EntityDefinitionDTO entityDefinitionDTO : entityDefinitionDTOList) {
             choiceBoxEntities.getItems().add(entityDefinitionDTO.getName());
+        }
+    }
+    private void initializeEnvironments(List<PropertyDefinitionDTO> environmentDefenitionDTOList) {
+        for(PropertyDefinitionDTO environmentDefinitionDTO : environmentDefenitionDTOList) {
+            choiceBoxEnvironment.getItems().add(environmentDefinitionDTO.getName());
         }
     }
 }

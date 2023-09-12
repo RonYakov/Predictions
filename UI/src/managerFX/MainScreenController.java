@@ -5,14 +5,17 @@ import header.PredictionHeaderController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import manager.PredictionManager;
 import newExecution.NewExecutionController;
 import option2.SimulationDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
 import results.ResultsController;
 import results.simulationDetails.SimulationDetailsController;
+
 
 import java.io.IOException;
 
@@ -27,6 +30,8 @@ public class MainScreenController {
     private ResultsController resultsController;
     @FXML
     private BorderPane mainBorderPane;
+    @FXML
+    private ScrollPane scrollPane;
     private Boolean isDetailsPresent = false;
     private Boolean isNewExecutionPresent = false;
     private Boolean isResultsPresent = false;
@@ -36,6 +41,13 @@ public class MainScreenController {
     public void initialize() {
        headerController.setMainScreenController(this);
        headerController.setPredictionManager(predictionManager);
+
+        StackPane stackPane = new StackPane(mainBorderPane);
+
+        scrollPane.setContent(stackPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+
     }
 
     public void setSimulationDetailsController(SimulationDetailsController simulationDetailsController) {

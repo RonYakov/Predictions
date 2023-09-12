@@ -11,7 +11,6 @@ import java.util.Random;
 
 public abstract class Helper {
 
-    //todo synchronize the methods with parameters (like random)
     public static Integer random(int value){
         Random random = new Random();
 
@@ -61,7 +60,7 @@ public abstract class Helper {
 
     public static EvaluateInfo evaluate(EntityInstance entityInstance, String propertyName){
         if(entityInstance.getProperty(propertyName) == null){
-            throw new RuntimeException(); //todo
+            throw new RuntimeException("Evaluate Exception! Cannot evaluate the property: " + propertyName + " from entity: " + entityInstance.getEntType());
         }
 
         ExpressionType expressionType;

@@ -49,7 +49,7 @@
             <HBox layoutX="7.0" layoutY="32.0" prefHeight="18.0" prefWidth="248.0" spacing="10.0">
                <children>
                      <ChoiceBox fx:id="choiceBoxEnvironment" prefHeight="25.0" prefWidth="165.0" />
-                  <Button fx:id="showEnvironment" mnemonicParsing="false" text="Show" />
+                  <Button fx:id="showEnvironment" mnemonicParsing="false" onAction="#EnvironmentButtonClicked" text="Show" />
                </children>
             </HBox>
             <HBox layoutX="7.0" layoutY="108.0" prefHeight="25.0" prefWidth="248.0" spacing="10.0">
@@ -66,7 +66,7 @@
             </HBox>
             <HBox layoutX="7.0" layoutY="263.0" prefHeight="25.0" prefWidth="248.0" spacing="10.0">
                <children>
-                  <Button fx:id="showGrid" mnemonicParsing="false" text="Show" />
+                  <Button fx:id="showGrid" mnemonicParsing="false" onAction="#GridButtonClicked" text="Show" />
                </children>
             </HBox>
             <HBox layoutX="7.0" layoutY="344.0" prefHeight="25.0" prefWidth="248.0">

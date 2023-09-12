@@ -9,14 +9,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1100.0" stylesheets="@NewExecutionStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.NewExecutionController">
    <center>
-      <SplitPane fx:id="mainSplitPane" dividerPositions="0.41" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane fx:id="mainSplitPane" dividerPositions="0.4199" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="446.0" prefWidth="753.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="446.0" prefWidth="480.0">
                <children>
                   <fx:include fx:id="entityPopulation" source="entitiesPopulation/EntityPopulation.fxml" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="446.0" prefWidth="604.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="446.0" prefWidth="620.0">
                <children>
                   <fx:include fx:id="environmentInputs" source="environmentInputs/EnvironmentInputs.fxml" />
                </children>

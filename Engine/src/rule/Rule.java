@@ -37,7 +37,7 @@ public class Rule implements Serializable {
     }
 
     public void activate(Map<String, EntityInstanceManager> entityInstanceManagerMap , Grid grid) {
-        actions.forEach(action -> runAction(action, entityInstanceManagerMap , grid)); //todo
+        actions.forEach(action -> runAction(action, entityInstanceManagerMap , grid));
     }
 
     public String getName() {

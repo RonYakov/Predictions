@@ -25,7 +25,6 @@ public class NewExecutionController {
     private BorderPane environmentInputs;
     @FXML
     private EnvironmentInputsController environmentInputsController;
-
     @FXML
     private BorderPane entityPopulation;
     @FXML
@@ -50,7 +49,7 @@ public class NewExecutionController {
     public void initialize() {
         startListener = new LinkedList<>();
         clearListener = new LinkedList<>();
-        originalDividerPosition = 0.41; // Store your original value here
+        originalDividerPosition = 0.4199; // Store your original value here
         setDivider();
         environmentInputsController.setNewExecutionController(this);
         environmentInitDTOList = new ArrayList<>();
@@ -120,4 +119,7 @@ public class NewExecutionController {
         mainScreenController.resultsScreen();
     }
 
+    public void onRerun(Integer id) {
+        //todo - need to set the value to all components, need to add the components to here for that
+    }
 }

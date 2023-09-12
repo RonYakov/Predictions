@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managerFX.MainScreenController">
-   <top>
-      <fx:include fx:id="header" source="../header/PredictionHeader.fxml" BorderPane.alignment="CENTER" />
-   </top>
-   <padding>
-      <Insets left="10.0" right="10.0" />
-   </padding>
-</BorderPane>
+
+<ScrollPane fx:id="scrollPane" prefHeight="660.0" prefWidth="1310.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managerFX.MainScreenController">
+   <content>
+      <BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0">
+         <top>
+            <fx:include fx:id="header" source="../header/PredictionHeader.fxml" BorderPane.alignment="CENTER" />
+         </top>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </BorderPane>
+   </content>
+</ScrollPane>

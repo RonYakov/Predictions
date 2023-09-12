@@ -33,7 +33,6 @@ public class SingleCondition extends AbstractCondition {
         this.operator = operator;
     }
 
-    //todo check the condition considering the new operatedEntityName.
     @Override
     public ActionDTO createDTO() {
         if(getSecondaryEntity() == null) {

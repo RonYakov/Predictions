@@ -12,15 +12,15 @@
       <Insets right="15.0" />
    </padding>
    <center>
-      <VBox BorderPane.alignment="CENTER_LEFT">
+      <VBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER_LEFT">
          <BorderPane.margin>
-            <Insets left="10.0" top="10.0" />
+            <Insets left="10.0" />
          </BorderPane.margin>
          <children>
             <HBox prefHeight="24.0" prefWidth="406.0" spacing="12.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="44.0" styleClass="valueLabels" text="Name:" />
-                  <Label fx:id="nameLabel" prefHeight="17.0" prefWidth="343.0" styleClass="valueLabels" />
+                  <Label prefHeight="17.0" prefWidth="60.0" styleClass="valueLabels" text="Name:" />
+                  <Label fx:id="nameLabel" prefHeight="20.0" prefWidth="318.0" styleClass="valueLabels" />
                </children>
                <VBox.margin>
                   <Insets />
@@ -28,7 +28,7 @@
             </HBox>
             <HBox prefHeight="28.0" prefWidth="452.0" spacing="12.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="45.0" styleClass="valueLabels" text="Range:" />
+                  <Label prefHeight="17.0" prefWidth="60.0" styleClass="valueLabels" text="Range:" />
                   <Label fx:id="rangeLabel" prefHeight="17.0" prefWidth="319.0" styleClass="valueLabels" />
                </children>
                <VBox.margin>

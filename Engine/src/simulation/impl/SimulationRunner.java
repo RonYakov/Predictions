@@ -53,7 +53,7 @@ public class SimulationRunner implements Serializable, Runnable {
             for(; currTick <= ticks ; currTick++){
                 if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                     simulationExecutionDetails.setSimulationStopCause("Time");
-                    //todo
+                    //todo stop cause
                     break;
                 }
                 simulationIteration(currTick);
@@ -65,7 +65,7 @@ public class SimulationRunner implements Serializable, Runnable {
                 simulationExecutionDetails.setCurrTicks(currTick);
                 simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
-        } else if (ticks == null && seconds !=null) {
+        } else if (ticks == null && seconds != null) {
             boolean timesUp = false;
             maxRuntimeMilliseconds = seconds * 1000;
 
@@ -93,6 +93,7 @@ public class SimulationRunner implements Serializable, Runnable {
                 simulationExecutionDetails.setCurrTicks(currTick);
                 simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
             }
+            //todo need to add another loop for null in both ticks and seconds
         }
 
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);

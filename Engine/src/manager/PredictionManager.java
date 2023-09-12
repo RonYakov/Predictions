@@ -54,8 +54,6 @@ public class PredictionManager {
     public void storeDataToFile(FilePathDTO filePathDTO){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePathDTO.getFilePath()))) {
             outputStream.writeObject(simulationDefinition);
-            //outputStream.writeObject(simulationRunners);
-            //todo - check ^
             outputStream.writeObject(currIDNum);
             outputStream.flush();
         } catch (Exception ignore) {
@@ -65,8 +63,6 @@ public class PredictionManager {
     public void loadDataFromFile(FilePathDTO filePathDTO){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filePathDTO.getFilePath()))) {
             simulationDefinition = (SimulationDefinition) inputStream.readObject();
-            //simulationRunners = (List<SimulationRunner>) inputStream.readObject();
-            //todo - check ^
             currIDNum = (Integer) inputStream.readObject();
         } catch (Exception ignore) {
             throw new FileNotFoundException("file not found, please type a valid file path");
@@ -131,8 +127,10 @@ public class PredictionManager {
         TerminationDTO terminationDTO = new TerminationDTO(simulationDefinition.getTermination().getTicks(), simulationDefinition.getTermination().getSeconds());
         List<RulesDTO> rulesDTOList = createRulesDTOList();
         List<EntityDefinitionDTO> entityDefinitionDTOList = createEntityDTOlist();
+        List<PropertyDefinition> environmentDefenitionList = new ArrayList<>(simulationDefinition.getEnvironmentsDef().values());
+        List<PropertyDefinitionDTO> environmentDefenitionDTOList = createPropertyDTOlist(environmentDefenitionList);
 
-        return new SimulationDefinitionDTO(entityDefinitionDTOList, rulesDTOList,terminationDTO, simulationDefinition.getGrid().getRows(), simulationDefinition.getGrid().getCols());
+        return new SimulationDefinitionDTO(entityDefinitionDTOList, rulesDTOList, environmentDefenitionDTOList, terminationDTO, simulationDefinition.getGrid().getRows(), simulationDefinition.getGrid().getCols());
     }
 
     private List<RulesDTO> createRulesDTOList(){
@@ -170,14 +168,27 @@ public class PredictionManager {
 
         for(PropertyDefinition propertyDefinition: propertyDefinitions){
             if(propertyDefinition.getRange() != null) {
-                propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
-                        propertyDefinition.getRange().getFrom(), propertyDefinition.getRange().getTo(),
-                        propertyDefinition.getValue().isRandomInitialize()));
+                if(propertyDefinition.getValue() != null) {
+                    propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
+                            propertyDefinition.getRange().getFrom(), propertyDefinition.getRange().getTo(),
+                            propertyDefinition.getValue().isRandomInitialize()));
+                }
+                else {
+                    propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
+                            propertyDefinition.getRange().getFrom(), propertyDefinition.getRange().getTo(),
+                            null));
+                }
             }
             else {
-                propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
-                        null, null,
-                        propertyDefinition.getValue().isRandomInitialize()));
+                if(propertyDefinition.getValue() != null) {
+                    propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
+                            null, null,
+                            propertyDefinition.getValue().isRandomInitialize()));
+                }
+                else {
+                    propertyDefinitionDTOList.add(new PropertyDefinitionDTO(propertyDefinition.getName(),propertyDefinition.getType().toString(),
+                            null, null, null));
+                }
             }
         }
 
