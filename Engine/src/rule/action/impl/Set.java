@@ -37,13 +37,15 @@ public class Set extends AbstractAction {
             return context.getPrimaryEntityInstance();
         }
         else if(context.getSecondaryEntityName() == null) {
-            throw new RuntimeException(); //todo think later
+            throw new RuntimeException("Entity exception! The entity: " + getPrimaryEntityDefinition().getName() + " in function Set is not valid.\n" +
+                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType());
         } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getSecondaryEntityInstance();
         } else if (context.getSecondaryEntityInstance() == null) {
             return null;
         } else {
-            throw new RuntimeException(); //todo think later
+            throw new RuntimeException("Entity exception! The entity: " + getPrimaryEntityDefinition().getName() + " in function Set is not valid.\n" +
+                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType() + " or: " + context.getSecondaryEntityInstance().getEntType());
         }
     }
     private EntityInstance getOtherEntity(EntityInstance entityInstance, ActionContext context) {

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class SimulationRunner implements Serializable, Runnable {
+    private int pausingTime = 0;
     private SimulationExecutionDetails simulationExecutionDetails;
     public SimulationRunner(SimulationExecutionDetails simulationExecutionDetails) {
         this.simulationExecutionDetails = simulationExecutionDetails;
@@ -34,10 +35,15 @@ public class SimulationRunner implements Serializable, Runnable {
         return simulationExecutionDetails.getEnvironments();
     }
 
+
     @Override
     public void run() {
         simulationExecutionDetails.setSimulationState(SimulationState.RUNNING);
-        System.out.println("running thread: " + Thread.currentThread().getName());
+        Thread thread = Thread.currentThread();
+        thread.setName(simulationExecutionDetails.getIdentifyNumber().toString());
+        System.out.println("running thread: " + thread.getName());
+        simulationExecutionDetails.getPredictionManager().addOrRemoveTreadToMap(thread, thread.getName(), "add");
+
         long startTime = System.currentTimeMillis();
         long maxRuntimeMilliseconds;
         Integer ticks = simulationExecutionDetails.getTermination().getTicks();
@@ -47,56 +53,61 @@ public class SimulationRunner implements Serializable, Runnable {
 
         simulationExecutionDetails.getGrid().setGrid(new LinkedList<>(simulationExecutionDetails.getEntityManager().values()));
 
-        if(ticks != null && seconds != null){
-            maxRuntimeMilliseconds = seconds * 1000;
+        try {
+            if (ticks != null && seconds != null) {
+                maxRuntimeMilliseconds = seconds * 1000;
 
-            for(; currTick <= ticks ; currTick++){
-                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
-                    simulationExecutionDetails.setSimulationStopCause("Time");
-                    //todo stop cause
-                    break;
+                for (; currTick <= ticks; currTick++) {
+                    if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
+                        simulationExecutionDetails.setSimulationStopCause("Time");
+                        //todo - stop cause
+                        break;
+                    }
+                    simulationIteration(currTick);
+                    if (currTick.equals(ticks)) {
+                        simulationExecutionDetails.setSimulationStopCause("Ticks");
+                    }
+                    updateTicks();
+                    moveEntities();
+                    simulationExecutionDetails.setCurrTicks(currTick);
+                    simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
                 }
-                simulationIteration(currTick);
-                if(currTick.equals(ticks)) {
-                    simulationExecutionDetails.setSimulationStopCause("Ticks");
-                }
-                updateTicks();
-                moveEntities();
-                simulationExecutionDetails.setCurrTicks(currTick);
-                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
-            }
-        } else if (ticks == null && seconds != null) {
-            boolean timesUp = false;
-            maxRuntimeMilliseconds = seconds * 1000;
+            } else if (ticks == null && seconds != null) {
+                boolean timesUp = false;
+                maxRuntimeMilliseconds = seconds * 1000;
 
-            while (!timesUp){
-                if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
-                    timesUp = true;
-                    simulationExecutionDetails.setSimulationStopCause("Time");
-                    break;
+                while (!timesUp) {
+                    if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
+                        timesUp = true;
+                        simulationExecutionDetails.setSimulationStopCause("Time");
+                        break;
+                    }
+                    simulationIteration(currTick);
+                    currTick++;
+                    updateTicks();
+                    moveEntities();
+                    simulationExecutionDetails.setCurrTicks(currTick);
+                    simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
                 }
-                simulationIteration(currTick);
-                currTick++;
-                updateTicks();
-                moveEntities();
-                simulationExecutionDetails.setCurrTicks(currTick);
-                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
-            }
-        }else {
-            for(; currTick <= ticks && !(simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)); currTick++){
-                simulationIteration(currTick);
-                if(currTick.equals(ticks)) {
-                    simulationExecutionDetails.setSimulationStopCause("Ticks");
+            } else {
+                for (; currTick <= ticks && !(simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)); currTick++) {
+                    simulationIteration(currTick);
+                    if (currTick.equals(ticks)) {
+                        simulationExecutionDetails.setSimulationStopCause("Ticks");
+                    }
+                    updateTicks();
+                    moveEntities();
+                    simulationExecutionDetails.setCurrTicks(currTick);
+                    simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
                 }
-                updateTicks();
-                moveEntities();
-                simulationExecutionDetails.setCurrTicks(currTick);
-                simulationExecutionDetails.setSeconds((int)((System.currentTimeMillis() - startTime) / 1000));
+                //todo need to add another loop for null in both ticks and seconds
             }
-            //todo need to add another loop for null in both ticks and seconds
+        } catch (RuntimeException runtimeException) {
+            simulationExecutionDetails.setSimulationState(SimulationState.FAILED);
+            throw runtimeException;
         }
-
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
+        simulationExecutionDetails.getPredictionManager().addOrRemoveTreadToMap(thread, thread.getName(), "remove");
     }
 
     private void moveEntities() {
@@ -130,6 +141,23 @@ public class SimulationRunner implements Serializable, Runnable {
         for (Rule rule : simulationExecutionDetails.getRules()) {
             if(rule.isActivatable(currTick)){
                 rule.activate(simulationExecutionDetails.getEntityManager() , simulationExecutionDetails.getGrid());
+            }
+        }
+        synchronized (simulationExecutionDetails) {
+            long startTime = System.currentTimeMillis();
+            while (!simulationExecutionDetails.isRunning()) {
+                try {
+                    simulationExecutionDetails.wait();
+                } catch (Exception ignore) {
+
+                }
+            }
+            pausingTime = pausingTime + (int)((System.currentTimeMillis() - startTime) / 1000);
+        }
+        if(currTick % 5000 == 0 || currTick == 1) {
+            List<EntityInstanceManager> entityInstanceManagers = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
+            for(EntityInstanceManager entityInstanceManager: entityInstanceManagers) {
+                entityInstanceManager.addPopulationToHistory();
             }
         }
     }

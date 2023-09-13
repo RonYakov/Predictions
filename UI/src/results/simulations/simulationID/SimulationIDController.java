@@ -26,6 +26,9 @@ public class SimulationIDController {
     public void simulationStopped() {
         showButton.setStyle("-fx-background-color: #d22732;");
     }
+    public void simulationFailed() {
+        showButton.setStyle("-fx-background-color: #000000;");
+    }
 
     public void setShowButton(Button showButton) {
         this.showButton = showButton;

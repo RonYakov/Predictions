@@ -2,6 +2,7 @@ package simulation.impl;
 
 import entity.instance.EntityInstanceManager;
 import grid.Grid;
+import manager.PredictionManager;
 import property.instance.AbstractPropertyInstance;
 import rule.Rule;
 import termination.Termination;
@@ -23,6 +24,8 @@ public class SimulationExecutionDetails {
     private Integer currTicks;
     private Integer seconds;
     private SimulationState simulationState;
+    private volatile boolean isRunning = true;
+    private PredictionManager predictionManager;
 
     public SimulationExecutionDetails(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments,Grid grid, List<Rule> rules, Termination termination, int identifyNumber) {
         this.entityManager = entityManager;
@@ -40,6 +43,22 @@ public class SimulationExecutionDetails {
         for (Rule rule: rules) {
             rule.setSimulationExecutionDetails(this);
         }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
+    public void setPredictionManager(PredictionManager predictionManager) {
+        this.predictionManager = predictionManager;
+    }
+
+    public PredictionManager getPredictionManager() {
+        return predictionManager;
     }
 
     public Integer getCurrTicks() {
@@ -90,7 +109,7 @@ public class SimulationExecutionDetails {
         return formattedDate;
     }
 
-    public int getIdentifyNumber() {
+    public Integer getIdentifyNumber() {
         return identifyNumber;
     }
 

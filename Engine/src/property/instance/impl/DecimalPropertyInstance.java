@@ -29,6 +29,7 @@ public class DecimalPropertyInstance extends AbstractPropertyInstance {
 
         try {
             newValue = convertStringToInt(value);
+            addToUnchangedSum();
             setTicks(0);
             setModified(true);
         }

@@ -1,8 +1,7 @@
 package results.simulationDetails;
 
-import ex2DTO.EntityCountDTO;
-import ex2DTO.SimulationDetailsDTO;
-import ex2DTO.StopDTO;
+import com.sun.xml.internal.ws.api.FeatureConstructor;
+import ex2DTO.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,8 +37,21 @@ public class SimulationDetailsController {
     private Thread thread;
     private Boolean stopSimulation;
 
+    @FXML
+    public void initialize() {
+        resumeButton.setDisable(true);
+    }
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
+        if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("STOPPED") ||
+                predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("FAILED")){
+            pauseButton.setDisable(true);
+            stopButton.setDisable(true);
+        }
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public void setId(Integer id) {
@@ -55,7 +67,7 @@ public class SimulationDetailsController {
 
             String simulationState = "RUNNING";
             System.out.println(thread.getName());
-            while (!stop && !simulationState.equals("STOPPED")) {
+            while (!stop && !simulationState.equals("STOPPED") && !simulationState.equals("FAILED")) {
                 try {
                     SimulationDetailsDTO simulationDetailsDTO = predictionManager.simulationDetailsDTO(id);
                     Platform.runLater( () -> {
@@ -112,5 +124,20 @@ public class SimulationDetailsController {
     @FXML
     void OnStopClicked(ActionEvent event){
         stopSimulation = true;
+        resumeButton.setDisable(true);
+        pauseButton.setDisable(true);
+        stopButton.setDisable(true);
+    }
+    @FXML
+    void OnPauseClicked(ActionEvent event){
+        predictionManager.pauseSimulation(new PauseAndResumeSimulationDTO(id));
+        pauseButton.setDisable(true);
+        resumeButton.setDisable(false);
+    }
+    @FXML
+    void OnResumeClicked(ActionEvent event){
+        predictionManager.resumeSimulation(new PauseAndResumeSimulationDTO(id));
+        pauseButton.setDisable(false);
+        resumeButton.setDisable(true);
     }
 }

@@ -1,5 +1,6 @@
 package results;
 
+import ex2DTO.SimulationIDDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,6 +10,7 @@ import manager.PredictionManager;
 import managerFX.MainScreenController;
 import option4.PastSimulationInfoDTO;
 import results.simulationDetails.SimulationDetailsController;
+import results.simulationResult.SimulationResultController;
 import results.simulations.SimulationsController;
 import results.simulations.listener.ShowButtonListener;
 import results.simulations.simulationID.SimulationIDController;
@@ -67,9 +69,34 @@ public class ResultsController implements ShowButtonListener {
                 simulationDetails.getChildren().clear();
             }
 
+            if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("STOPPED") ||
+                    predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("FAILED")) {
+                showResult(id);
+            }
+
             this.simulationDetailsController = simulationDetailsController;
             mainScreenController.setSimulationDetailsController(simulationDetailsController);
             simulationDetails.getChildren().add(simulationData);
+        } catch (IOException e) {
+        }
+    }
+    public void tryToShowResult(Integer id) {
+        if(simulationDetailsController != null) {
+            if(simulationDetailsController.getId().equals(id)) {
+                showResult(id);
+            }
+        }
+    }
+    public void showResult(Integer id) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/results/simulationResult/SimulationResult.fxml"));
+            Parent simulationData = loader.load();
+            SimulationResultController simulationResultController = loader.getController();
+
+            simulationResult.getChildren().add(simulationData);
+            simulationResultController.setId(id);
+            simulationResultController.setPredictionManager(predictionManager);
+
         } catch (IOException e) {
         }
     }

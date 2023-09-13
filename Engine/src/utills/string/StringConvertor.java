@@ -1,7 +1,7 @@
 package utills.string;
 
 public abstract class StringConvertor {
-    public static int convertStringToInt(String valueToConvert)
+    public synchronized static int convertStringToInt(String valueToConvert)
     {
         try {
             return Integer.parseInt(valueToConvert);
@@ -11,7 +11,7 @@ public abstract class StringConvertor {
         }
     }
 
-    public static boolean isStringInt(String valueToCheck) {
+    public synchronized static boolean isStringInt(String valueToCheck) {
         try {
             int ingore = Integer.parseInt(valueToCheck);
             return true;
@@ -21,7 +21,7 @@ public abstract class StringConvertor {
         }
     }
 
-    public static float convertStringToFloat(String valueToConvert) {
+    public synchronized static float convertStringToFloat(String valueToConvert) {
         try {
             return Float.parseFloat(valueToConvert);
         }
@@ -30,7 +30,7 @@ public abstract class StringConvertor {
         }
     }
 
-    public static boolean isStringFloat(String valueToCheck) {
+    public synchronized static boolean isStringFloat(String valueToCheck) {
         try {
             float ingore = Float.parseFloat(valueToCheck);
             return true;
@@ -40,7 +40,7 @@ public abstract class StringConvertor {
         }
     }
 
-    public static boolean convertStringToBool(String valueToConvert)
+    public synchronized static boolean convertStringToBool(String valueToConvert)
     {
         boolean res;
 
@@ -54,7 +54,7 @@ public abstract class StringConvertor {
         }
     }
 
-    public static boolean isStringBoolean(String valueToCheck) {
+    public synchronized static boolean isStringBoolean(String valueToCheck) {
         if(valueToCheck.equals("true") || valueToCheck.equals("false")) {
             return true;
         }

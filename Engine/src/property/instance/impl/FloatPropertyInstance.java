@@ -29,6 +29,7 @@ public class FloatPropertyInstance extends AbstractPropertyInstance {
 
         try {
             newValue = convertStringToFloat(value);
+            addToUnchangedSum();
             setTicks(0);
             setModified(true);
         }

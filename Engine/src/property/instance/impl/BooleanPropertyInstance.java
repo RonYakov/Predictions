@@ -27,6 +27,7 @@ public class BooleanPropertyInstance extends AbstractPropertyInstance {
     public void setValue(String value) {
         try {
             this.value = convertStringToBool(value);
+            addToUnchangedSum();
             setTicks(0);
             setModified(true);
         }

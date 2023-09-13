@@ -3,9 +3,7 @@ package manager;
 import entity.definition.EntityDefinition;
 import entity.instance.EntityInstance;
 import entity.instance.EntityInstanceManager;
-import ex2DTO.EntityCountDTO;
-import ex2DTO.SimulationDetailsDTO;
-import ex2DTO.StopDTO;
+import ex2DTO.*;
 import exception.FileNotFoundException;
 import option1.XmlFullPathDTO;
 import option2.*;
@@ -28,16 +26,15 @@ import simulation.impl.SimulationState;
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static factory.instance.FactoryInstance.createSimulation;
 
 public class PredictionManager {
     private SimulationDefinition simulationDefinition;
     private Map<Integer, SimulationExecutionDetails> simulationExecutionDetailsMap;
+    private Map<String, Thread> runningSimThreads = new HashMap<>();
     private Integer numOfThreads;
     private XmlLoader xmlLoader;
     private ExecutorService executorService;
@@ -115,6 +112,7 @@ public class PredictionManager {
 
         SimulationRunner simulationRunner = new SimulationRunner(simulationExecutionDetails);
 
+        simulationExecutionDetails.setPredictionManager(this);
         // Submit the task to the thread pool
         executorService.submit(simulationRunner);
 
@@ -288,5 +286,35 @@ public class PredictionManager {
     public void stopSimulation(StopDTO stopDTO) {
         SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(stopDTO.getId());
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
+    }
+
+    public StopCauseResDTO stopCause(StopCauseReqDTO id) {
+        return new StopCauseResDTO(simulationExecutionDetailsMap.get(id.getId()).getSimulationState().toString());
+    }
+
+    public void pauseSimulation(PauseAndResumeSimulationDTO id){
+        simulationExecutionDetailsMap.get(id.getId()).setRunning(false);
+        synchronized (simulationExecutionDetailsMap.get(id.getId())) {
+            simulationExecutionDetailsMap.get(id.getId()).notify();
+        }
+    }
+
+    public void resumeSimulation(PauseAndResumeSimulationDTO id){
+        simulationExecutionDetailsMap.get(id.getId()).setRunning(true);
+        synchronized (simulationExecutionDetailsMap.get(id.getId())) {
+            simulationExecutionDetailsMap.get(id.getId()).notify();
+        }
+    }
+
+    public synchronized void addOrRemoveTreadToMap(Thread thread, String id, String action) {
+        if(action.equals("add"))
+        runningSimThreads.put(id, thread);
+        else{
+            runningSimThreads.remove(id, thread);
+        }
+    }
+
+    public SimulationStateDTO getSimulationState(SimulationIDDTO simulationIDDTO) {
+        return new SimulationStateDTO(simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getSimulationState().toString());
     }
 }

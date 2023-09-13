@@ -13,8 +13,19 @@ public abstract class AbstractPropertyInstance implements Serializable {
     private int ticks = 0;
     private boolean modified = false;
 
+    private Integer unchangedSum = 0;
+    private Integer changesCounter = 0;
+
     public String getName() {
         return name;
+    }
+
+    public Integer getUnchangedSum() {
+        return unchangedSum;
+    }
+
+    public Integer getChangesCounter() {
+        return changesCounter;
     }
 
     public AbstractPropertyInstance(String name , PropertyType type) {
@@ -35,7 +46,10 @@ public abstract class AbstractPropertyInstance implements Serializable {
         this.ticks = ticks;
     }
 
-
+    protected void addToUnchangedSum() {
+        unchangedSum += ticks;
+        changesCounter++;
+    }
 
     public void setModified(boolean modified) {
         this.modified = modified;

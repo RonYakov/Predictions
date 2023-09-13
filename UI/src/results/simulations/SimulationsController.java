@@ -1,5 +1,7 @@
 package results.simulations;
 
+import ex2DTO.StopCauseReqDTO;
+import ex2DTO.StopCauseResDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,8 +45,20 @@ public class SimulationsController {
 
                         while (simulationIDControllerStopped != null) {
                             SimulationIDController finalSimulationIDControllerStopped = simulationIDControllerStopped;
-                            Platform.runLater(finalSimulationIDControllerStopped::simulationStopped);
-
+                            StopCauseResDTO stopCauseResDTO = predictionManager.stopCause(new StopCauseReqDTO(finalSimulationIDControllerStopped.getID()));
+                            Integer id = simulationIDControllerStopped.getID();
+                            if(stopCauseResDTO.getState().equals("STOPPED")) {
+                                Platform.runLater( () -> {
+                                    finalSimulationIDControllerStopped.simulationStopped();
+                                    resultsController.tryToShowResult(id);
+                                });
+                            }
+                            else {
+                                Platform.runLater( () -> {
+                                    finalSimulationIDControllerStopped.simulationFailed();
+                                    resultsController.tryToShowResult(id);
+                                });
+                            }
                             simulationIDControllerStopped = simulationsListMethods(ListAction.SEARCH, null);
                         }
                     }
@@ -73,7 +87,7 @@ public class SimulationsController {
             default:
                 for (SimulationIDController simulationIDController1 : simulationIDControllerList) {
                     Integer searchID = simulationIDController1.getID();
-                    if (predictionManager.simulationDetailsDTO(searchID).getSimulationState().equals("STOPPED")) {
+                    if (predictionManager.simulationDetailsDTO(searchID).getSimulationState().equals("STOPPED") || predictionManager.simulationDetailsDTO(searchID).getSimulationState().equals("FAILED")) {
                         simulationIDControllerList.remove(simulationIDController1);
                         return simulationIDController1;
                     }

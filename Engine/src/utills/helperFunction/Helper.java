@@ -11,13 +11,13 @@ import java.util.Random;
 
 public abstract class Helper {
 
-    public static Integer random(int value){
+    public synchronized static Integer random(int value){
         Random random = new Random();
 
         return random.nextInt(value + 1);
     }
 
-    public static String environment(String name, Map<String, AbstractPropertyInstance> environments){
+    public synchronized static String environment(String name, Map<String, AbstractPropertyInstance> environments){
         AbstractPropertyInstance environmentVariable = environments.get(name);
 
         if(environmentVariable == null){
@@ -27,7 +27,7 @@ public abstract class Helper {
         return environmentVariable.getValue();
     }
 
-    public static Boolean isDecimal(String toCheck) {
+    public synchronized static Boolean isDecimal(String toCheck) {
         try{
             Integer.parseInt(toCheck);
             return true;
@@ -35,7 +35,7 @@ public abstract class Helper {
             return false;
         }
     }
-    public static Boolean isFloat(String toCheck) {
+    public synchronized static Boolean isFloat(String toCheck) {
         try{
             Float.parseFloat(toCheck);
             return true;
@@ -44,7 +44,7 @@ public abstract class Helper {
         }
     }
 
-    public static Double percent(Double whole, Double percentFromWhole){
+    public synchronized static Double percent(Double whole, Double percentFromWhole){
         if (percentFromWhole < 0 || percentFromWhole > 100) {
             throw new IllegalArgumentException("Percentage should be between 0 and 100.");
         }
@@ -52,13 +52,13 @@ public abstract class Helper {
         return (percentFromWhole / 100) * whole;
     }
 
-    public static Integer ticks(EntityInstance entityInstance, String propertyName){
+    public synchronized static Integer ticks(EntityInstance entityInstance, String propertyName){
         AbstractPropertyInstance abstractPropertyInstance = entityInstance.getProperty(propertyName);
 
         return abstractPropertyInstance.getTicks();
     }
 
-    public static EvaluateInfo evaluate(EntityInstance entityInstance, String propertyName){
+    public synchronized static EvaluateInfo evaluate(EntityInstance entityInstance, String propertyName){
         if(entityInstance.getProperty(propertyName) == null){
             throw new RuntimeException("Evaluate Exception! Cannot evaluate the property: " + propertyName + " from entity: " + entityInstance.getEntType());
         }
