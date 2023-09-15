@@ -6,13 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import newExecution.NewExecutionController;
 import newExecution.listener.ClearButtonClickedListener;
+import newExecution.listener.RerunButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeStringController implements StartButtonClickedListener, ClearButtonClickedListener {
+public class EnvTypeStringController implements StartButtonClickedListener, ClearButtonClickedListener, RerunButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -85,4 +86,8 @@ public class EnvTypeStringController implements StartButtonClickedListener, Clea
         nameLabel.setText(environmentDefinitionDTO.getName());
     }
 
+    @Override
+    public void onRerun(String startValue) {
+        userInput.setText(startValue);
+    }
 }

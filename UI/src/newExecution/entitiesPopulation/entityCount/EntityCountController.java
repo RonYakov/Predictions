@@ -9,11 +9,12 @@ import javafx.scene.control.SpinnerValueFactory;
 import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.listener.ClearButtonClickedListener;
+import newExecution.listener.RerunButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
 import option3.EntityPopulationDTO;
 
-public class EntityCountController implements PopulationCountListener, StartButtonClickedListener {
+public class EntityCountController implements PopulationCountListener, StartButtonClickedListener, RerunButtonClickedListener {
 
     @FXML
     private Spinner<Integer> count;
@@ -93,5 +94,11 @@ public class EntityCountController implements PopulationCountListener, StartButt
 
     public void setDataMembers(EntityDefinitionDTO entityDefinitionDTO) {
         name.setText(entityDefinitionDTO.getName());
+    }
+
+    @Override
+    public void onRerun(String startValue) {
+        spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, currMaxSize.intValue(), Integer.parseInt(startValue));
+        count.setValueFactory(spinnerValueFactory);
     }
 }

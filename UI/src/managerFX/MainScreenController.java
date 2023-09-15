@@ -123,4 +123,8 @@ public class MainScreenController {
         } catch (IOException e) {
         }
     }
+    public void rerunClicked(Integer id) {
+        newExecutionScreen();
+        newExecutionController.onRerun(id);
+    }
 }

@@ -119,8 +119,8 @@ public class Rule implements Serializable {
                 primary.add(entityInstance);
             }else {
                 if(grid.getEntity(entityInstance.getGridIndex()) == entityInstance) {
-                    EntityInstance newOne = entityInstance.replaceMe(entityInstanceManagerMap.get(context.getSecondaryEntityInstance().getEntType()));
-                    entityInstanceManagerMap.get(context.getSecondaryEntityName()).getEntityInstanceList().add(newOne);
+                    EntityInstance newOne = entityInstance.replaceMe(entityInstanceManagerMap.get(entityInstance.getWhoToReplace()));
+                    entityInstanceManagerMap.get(entityInstance.getWhoToReplace()).getEntityInstanceList().add(newOne);
                     grid.replaceEntities(newOne, entityInstance.getGridIndex());
                 }
             }

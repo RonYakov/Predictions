@@ -29,16 +29,12 @@ public abstract class AbstractNumericAction extends AbstractAction {
         if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityName() == null) {
-            throw new RuntimeException("Entity exception! The entity: " + getPrimaryEntityDefinition().getName() + " in numeric function is not valid.\n" +
-                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType());
-        } else if (context.getSecondaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
+        else if(context.getSecondaryEntityName().equals(getPrimaryEntityDefinition().getName())) {
             return context.getSecondaryEntityInstance();
-        } else if (context.getSecondaryEntityInstance() == null) {
-            return null;
-        } else {
-            throw new RuntimeException("Entity exception! The entity: " + getPrimaryEntityDefinition().getName() + " in numeric function is not valid.\n" +
-                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType() + " or: " + context.getSecondaryEntityInstance().getEntType());
+        }
+        else {
+            throw new RuntimeException("Entity exception! The entity: " + getPrimaryEntityDefinition().getName() + " is not valid.\n" +
+                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType() + (context.getSecondaryEntityInstance() == null ? "." : (" or: " + context.getSecondaryEntityInstance().getEntType())));
         }
     }
     protected EntityInstance getOtherEntity(EntityInstance entityInstance, ActionContext context) {

@@ -24,10 +24,20 @@ public class MultipleConditionDataController {
     private Label thisCount;
 
     public void SetData(MultipleConditionDTO multipleConditionDTO) {
-        elseCount.setText(Integer.toString(multipleConditionDTO.getElseActionAmount()));
+        if(multipleConditionDTO.getElseActionAmount() == null) {
+            elseCount.setText(" --- ");
+        }
+        else {
+            elseCount.setText(Integer.toString(multipleConditionDTO.getElseActionAmount()));
+        }
         logical.setText(multipleConditionDTO.getLogic());
         mainEntityName.setText(multipleConditionDTO.getMainEntityName());
-        thisCount.setText(Integer.toString(multipleConditionDTO.getThisActionAmount()));
+        if(multipleConditionDTO.getThisActionAmount() == null) {
+            thisCount.setText(" --- ");
+        }
+        else {
+            thisCount.setText(Integer.toString(multipleConditionDTO.getThisActionAmount()));
+        }
 
         if(multipleConditionDTO.getSecondaryEntityName() == null) {
             secondEntityName.setText("None");

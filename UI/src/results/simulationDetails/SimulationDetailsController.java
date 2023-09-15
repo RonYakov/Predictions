@@ -91,8 +91,10 @@ public class SimulationDetailsController {
                    stop = true;
                 }
             }
+            resumeButton.setDisable(true);
+            pauseButton.setDisable(true);
+            stopButton.setDisable(true);
         });
-
         thread.start();
     }
 
@@ -124,15 +126,12 @@ public class SimulationDetailsController {
     @FXML
     void OnStopClicked(ActionEvent event){
         stopSimulation = true;
-        resumeButton.setDisable(true);
-        pauseButton.setDisable(true);
-        stopButton.setDisable(true);
+        simulationStop();
     }
     @FXML
     void OnPauseClicked(ActionEvent event){
         predictionManager.pauseSimulation(new PauseAndResumeSimulationDTO(id));
-        pauseButton.setDisable(true);
-        resumeButton.setDisable(false);
+        simulationPause();
     }
     @FXML
     void OnResumeClicked(ActionEvent event){
@@ -140,4 +139,15 @@ public class SimulationDetailsController {
         pauseButton.setDisable(false);
         resumeButton.setDisable(true);
     }
+
+    public void simulationStop() {
+        resumeButton.setDisable(true);
+        pauseButton.setDisable(true);
+        stopButton.setDisable(true);
+    }
+    public void simulationPause() {
+        pauseButton.setDisable(true);
+        resumeButton.setDisable(false);
+    }
+
 }

@@ -29,10 +29,21 @@ public class SingleConditionDataController {
     private Label thisCount;
 
     public void SetData(SingleConditionDTO singleConditionDTO) {
-        elseCount.setText(Integer.toString(singleConditionDTO.getElseActionAmount()));
+        if(singleConditionDTO.getElseActionAmount() == null) {
+            elseCount.setText(" --- ");
+        }
+        else {
+            elseCount.setText(Integer.toString(singleConditionDTO.getElseActionAmount()));
+        }
         operator.setText(singleConditionDTO.getOperator());
         mainEntityName.setText(singleConditionDTO.getMainEntityName());
-        thisCount.setText(Integer.toString(singleConditionDTO.getThisActionAmount()));
+
+        if(singleConditionDTO.getThisActionAmount() == null) {
+            thisCount.setText(" --- ");
+        }
+        else {
+            thisCount.setText(Integer.toString(singleConditionDTO.getThisActionAmount()));
+        }
         property.setText(singleConditionDTO.getProperty());
         value.setText(singleConditionDTO.getValue());
 

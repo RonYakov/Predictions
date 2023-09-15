@@ -23,10 +23,16 @@ public abstract class AbstractCondition extends AbstractAction {
     }
 
     protected Integer thenAmount() {
+        if(Then == null) {
+            return null;
+        }
         return Then.size();
     }
 
     protected Integer elseAmount() {
+        if(Else == null) {
+            return null;
+        }
         return Else.size();
     }
 

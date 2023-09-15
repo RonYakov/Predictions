@@ -42,7 +42,6 @@ public class SimulationRunner implements Serializable, Runnable {
         Thread thread = Thread.currentThread();
         thread.setName(simulationExecutionDetails.getIdentifyNumber().toString());
         System.out.println("running thread: " + thread.getName());
-        simulationExecutionDetails.getPredictionManager().addOrRemoveTreadToMap(thread, thread.getName(), "add");
 
         long startTime = System.currentTimeMillis();
         long maxRuntimeMilliseconds;
@@ -58,7 +57,7 @@ public class SimulationRunner implements Serializable, Runnable {
                 maxRuntimeMilliseconds = seconds * 1000;
 
                 for (; currTick <= ticks; currTick++) {
-                    if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
+                    if (System.currentTimeMillis() - startTime - (pausingTime*1000) >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                         simulationExecutionDetails.setSimulationStopCause("Time");
                         //todo - stop cause
                         break;
@@ -77,7 +76,7 @@ public class SimulationRunner implements Serializable, Runnable {
                 maxRuntimeMilliseconds = seconds * 1000;
 
                 while (!timesUp) {
-                    if (System.currentTimeMillis() - startTime >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
+                    if (System.currentTimeMillis() - startTime - (pausingTime*1000) >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                         timesUp = true;
                         simulationExecutionDetails.setSimulationStopCause("Time");
                         break;
@@ -89,7 +88,18 @@ public class SimulationRunner implements Serializable, Runnable {
                     simulationExecutionDetails.setCurrTicks(currTick);
                     simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
                 }
-            } else {
+            }
+            else if(ticks == null && seconds == null) {
+                while(!simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
+                    simulationIteration(currTick);
+                    currTick++;
+                    updateTicks();
+                    moveEntities();
+                    simulationExecutionDetails.setCurrTicks(currTick);
+                    simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
+                }
+            }
+            else {
                 for (; currTick <= ticks && !(simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)); currTick++) {
                     simulationIteration(currTick);
                     if (currTick.equals(ticks)) {
@@ -107,7 +117,6 @@ public class SimulationRunner implements Serializable, Runnable {
             throw runtimeException;
         }
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
-        simulationExecutionDetails.getPredictionManager().addOrRemoveTreadToMap(thread, thread.getName(), "remove");
     }
 
     private void moveEntities() {
@@ -144,16 +153,16 @@ public class SimulationRunner implements Serializable, Runnable {
             }
         }
         synchronized (simulationExecutionDetails) {
-            long startTime = System.currentTimeMillis();
-            while (!simulationExecutionDetails.isRunning()) {
+            if(!simulationExecutionDetails.isRunning()) {
+                long startTime = System.currentTimeMillis();
                 try {
                     simulationExecutionDetails.wait();
                 } catch (Exception ignore) {
-
                 }
+                pausingTime = pausingTime + (int)((System.currentTimeMillis() - startTime) / 1000);
             }
-            pausingTime = pausingTime + (int)((System.currentTimeMillis() - startTime) / 1000);
         }
+
         if(currTick % 5000 == 0 || currTick == 1) {
             List<EntityInstanceManager> entityInstanceManagers = new ArrayList<>(simulationExecutionDetails.getEntityManager().values());
             for(EntityInstanceManager entityInstanceManager: entityInstanceManagers) {

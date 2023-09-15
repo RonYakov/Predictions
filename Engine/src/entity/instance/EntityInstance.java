@@ -17,6 +17,7 @@ public class EntityInstance implements Serializable {
     private EntityState state;
     private String replaceMode;
     private GridIndex gridIndex;
+    private String whoToReplace = null;
 
 
 
@@ -107,11 +108,18 @@ public class EntityInstance implements Serializable {
         List<AbstractPropertyInstance> toReplace = new LinkedList<>( properties.values());
 
         for (AbstractPropertyInstance property: toReplace) {
-            AbstractPropertyInstance change = target.get(property);
-            if(change != null){
+            AbstractPropertyInstance change = target.get(property.getName());
+            if(change != null && change.getType() == property.getType()){
                 change.setValue(property.getValue());
             }
         }
     }
 
+    public void setWhoToReplace(String entityName) {
+        whoToReplace = entityName;
+    }
+
+    public String getWhoToReplace() {
+        return whoToReplace;
+    }
 }

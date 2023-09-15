@@ -81,7 +81,7 @@ public abstract class FactoryDefinition {
                     break;
 
                 case "boolean":
-                        if(!value.getInit().equals("true") || !value.getInit().equals("false")) {
+                        if(!value.getInit().equals("true") && !value.getInit().equals("false")) {
                             throw new IllegalArgumentException( "IllegalArgumentException: When trying to create property '" + prdProperty.getPRDName() + "'" +
                                     ". Please enter 'true' / 'false' in init. Problem occurred in class FactoryDefinition");
                         }

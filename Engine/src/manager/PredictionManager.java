@@ -34,7 +34,6 @@ import static factory.instance.FactoryInstance.createSimulation;
 public class PredictionManager {
     private SimulationDefinition simulationDefinition;
     private Map<Integer, SimulationExecutionDetails> simulationExecutionDetailsMap;
-    private Map<String, Thread> runningSimThreads = new HashMap<>();
     private Integer numOfThreads;
     private XmlLoader xmlLoader;
     private ExecutorService executorService;
@@ -102,6 +101,9 @@ public class PredictionManager {
         }
 
         SimulationExecutionDetails simulationExecutionDetails = createSimulation(simulationDefinition, currIDNum);
+        simulationExecutionDetails.setEnvironmentInitListDTO(environmentInitListDTO);
+        simulationExecutionDetails.setEntityPopulationDTOList(entityPopulationDTOList);
+
         Map<String, AbstractPropertyInstance> environment = simulationExecutionDetails.getEnvironments();
 
         for (EnvironmentInitDTO environmentInitDTO: environmentInitListDTO){
@@ -113,7 +115,6 @@ public class PredictionManager {
         SimulationRunner simulationRunner = new SimulationRunner(simulationExecutionDetails);
 
         simulationExecutionDetails.setPredictionManager(this);
-        // Submit the task to the thread pool
         executorService.submit(simulationRunner);
 
         currIDNum++;
@@ -121,6 +122,12 @@ public class PredictionManager {
         return new SimulationFinishDTO(simulationExecutionDetails.getIdentifyNumber(), simulationExecutionDetails.getSimulationStopCause());
     }
 
+    public List<EnvironmentInitDTO> getEnvironmentRerun(SimulationIDDTO simulationIDDTO){
+        return simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getEnvironmentInitListDTO();
+    }
+    public List<EntityPopulationDTO> getEntityRerun(SimulationIDDTO simulationIDDTO){
+        return simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getEntityPopulationDTOList();
+    }
     public SimulationDefinitionDTO showCurrentSimulationData() {
         TerminationDTO terminationDTO = new TerminationDTO(simulationDefinition.getTermination().getTicks(), simulationDefinition.getTermination().getSeconds());
         List<RulesDTO> rulesDTOList = createRulesDTOList();
@@ -247,7 +254,7 @@ public class PredictionManager {
     }
 
     public HistogramSpecificPropDTO getHistogram(HistogramSinglePropDTO histogramSinglePropDTO, SimulationDesiredInfoDTO simulationDesiredInfoDTO ,HistogramSingleEntityDTO singleEntityDTO){
-        EntityInstanceManager entityInstanceManager = simulationExecutionDetailsMap.get(simulationDesiredInfoDTO.getIdNum() - 1).getEntityManager().get(singleEntityDTO.getName());
+        EntityInstanceManager entityInstanceManager = simulationExecutionDetailsMap.get(simulationDesiredInfoDTO.getIdNum()).getEntityManager().get(singleEntityDTO.getName());
 
 
         Map<String,Integer> histogram = new HashMap<>();
@@ -294,9 +301,7 @@ public class PredictionManager {
 
     public void pauseSimulation(PauseAndResumeSimulationDTO id){
         simulationExecutionDetailsMap.get(id.getId()).setRunning(false);
-        synchronized (simulationExecutionDetailsMap.get(id.getId())) {
-            simulationExecutionDetailsMap.get(id.getId()).notify();
-        }
+        simulationExecutionDetailsMap.get(id.getId()).setSimulationState(SimulationState.PAUSED);
     }
 
     public void resumeSimulation(PauseAndResumeSimulationDTO id){
@@ -304,17 +309,28 @@ public class PredictionManager {
         synchronized (simulationExecutionDetailsMap.get(id.getId())) {
             simulationExecutionDetailsMap.get(id.getId()).notify();
         }
-    }
-
-    public synchronized void addOrRemoveTreadToMap(Thread thread, String id, String action) {
-        if(action.equals("add"))
-        runningSimThreads.put(id, thread);
-        else{
-            runningSimThreads.remove(id, thread);
-        }
+        simulationExecutionDetailsMap.get(id.getId()).setSimulationState(SimulationState.RUNNING);
     }
 
     public SimulationStateDTO getSimulationState(SimulationIDDTO simulationIDDTO) {
         return new SimulationStateDTO(simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getSimulationState().toString());
+    }
+
+    public ConsistencyResDTO getConsistency(ConsistencyReqDTO consistencyReqDTO) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(consistencyReqDTO.getId());
+        EntityInstanceManager entityInstanceManager = simulationExecutionDetails.getEntityManager().get(consistencyReqDTO.getEntity());
+        return new ConsistencyResDTO(entityInstanceManager.avgPropertyNotChanged(consistencyReqDTO.getProperty()));
+    }
+
+    public ConsistencyResDTO getPropAvg(ConsistencyReqDTO consistencyReqDTO) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(consistencyReqDTO.getId());
+        EntityInstanceManager entityInstanceManager = simulationExecutionDetails.getEntityManager().get(consistencyReqDTO.getEntity());
+        return new ConsistencyResDTO(entityInstanceManager.avgPropertyValue(consistencyReqDTO.getProperty()));
+    }
+
+    public EntityCountResDTO getEntityCounters(EntityCountReqDTO entityCountReqDTO) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(entityCountReqDTO.getId());
+        EntityInstanceManager entityInstanceManager = simulationExecutionDetails.getEntityManager().get(entityCountReqDTO.getEntityName());
+        return new EntityCountResDTO(entityInstanceManager.getPopulationHistory());
     }
 }

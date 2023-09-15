@@ -3,6 +3,8 @@ package simulation.impl;
 import entity.instance.EntityInstanceManager;
 import grid.Grid;
 import manager.PredictionManager;
+import option3.EntityPopulationDTO;
+import option3.EnvironmentInitDTO;
 import property.instance.AbstractPropertyInstance;
 import rule.Rule;
 import termination.Termination;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class SimulationExecutionDetails {
+    private List<EnvironmentInitDTO> environmentInitListDTO;
+    private List<EntityPopulationDTO> entityPopulationDTOList;
     private Map<String, EntityInstanceManager> entityManager;
     private final Map<String, AbstractPropertyInstance> environments;
     private final List<Rule> rules;
@@ -39,10 +43,28 @@ public class SimulationExecutionDetails {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
         formattedDate = now.format(formatter);
+        environmentInitListDTO = null;
+        entityPopulationDTOList = null;
 
         for (Rule rule: rules) {
             rule.setSimulationExecutionDetails(this);
         }
+    }
+
+    public List<EnvironmentInitDTO> getEnvironmentInitListDTO() {
+        return environmentInitListDTO;
+    }
+
+    public List<EntityPopulationDTO> getEntityPopulationDTOList() {
+        return entityPopulationDTOList;
+    }
+
+    public void setEnvironmentInitListDTO(List<EnvironmentInitDTO> environmentInitListDTO) {
+        this.environmentInitListDTO = environmentInitListDTO;
+    }
+
+    public void setEntityPopulationDTOList(List<EntityPopulationDTO> entityPopulationDTOList) {
+        this.entityPopulationDTOList = entityPopulationDTOList;
     }
 
     public boolean isRunning() {

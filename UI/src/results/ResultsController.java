@@ -35,7 +35,6 @@ public class ResultsController implements ShowButtonListener {
     @FXML
     public void initialize() {
         simulationsListController.setResultsController(this);
-        simulationsListController.manageSimulationsState();
     }
 
     public void setMainScreenController(MainScreenController mainScreenController) {
@@ -45,6 +44,7 @@ public class ResultsController implements ShowButtonListener {
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
         this.simulationsListController.setPredictionManager(predictionManager);
+        simulationsListController.manageSimulationsState();
     }
     public void setSimulationsList() {
         List<PastSimulationInfoDTO> pastSimulationInfoDTOList = predictionManager.createPastSimulationInfoDTOList();
@@ -72,6 +72,11 @@ public class ResultsController implements ShowButtonListener {
             if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("STOPPED") ||
                     predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("FAILED")) {
                 showResult(id);
+                simulationDetailsController.simulationStop();
+            }
+
+            if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("PAUSED")) {
+                simulationDetailsController.simulationPause();
             }
 
             this.simulationDetailsController = simulationDetailsController;
@@ -93,6 +98,7 @@ public class ResultsController implements ShowButtonListener {
             Parent simulationData = loader.load();
             SimulationResultController simulationResultController = loader.getController();
 
+            simulationResultController.setMainScreenController(mainScreenController);
             simulationResult.getChildren().add(simulationData);
             simulationResultController.setId(id);
             simulationResultController.setPredictionManager(predictionManager);

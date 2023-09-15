@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+
+<LineChart fx:id="EntityCounterChart" prefHeight="265.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationResult.EntityCounter.EntityCounterController">
+  <xAxis>
+    <NumberAxis label="Ticks" side="BOTTOM" tickLength="0.0" />
+  </xAxis>
+  <yAxis>
+    <NumberAxis label="Entity counter" side="LEFT" upperBound="0.0" />
+  </yAxis>
+</LineChart>

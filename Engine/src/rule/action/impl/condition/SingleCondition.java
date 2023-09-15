@@ -68,17 +68,12 @@ public class SingleCondition extends AbstractCondition {
         if(context.getPrimaryEntityInstance().getEntType().equals(operatedEntityName)) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityInstance() == null) {
-            throw new RuntimeException("Entity exception! The entity: " + operatedEntityName + " in function SingleCondition is not valid.\n" +
-                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType());
-        } else if (context.getSecondaryEntityInstance().getEntType().equals(operatedEntityName)) {
+        else if(context.getSecondaryEntityName().equals(operatedEntityName)) {
             return context.getSecondaryEntityInstance();
-        }else if (context.getSecondaryEntityInstance() == null) {
-            return null;
         }
         else {
             throw new RuntimeException("Entity exception! The entity: " + operatedEntityName + " in function SingleCondition is not valid.\n" +
-                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType() + " or: " + context.getSecondaryEntityInstance().getEntType());
+                    "In this function the main entity must be: " + context.getPrimaryEntityInstance().getEntType() + (context.getSecondaryEntityInstance() == null ? "." : (" or: " + context.getSecondaryEntityInstance().getEntType())));
         }
     }
 

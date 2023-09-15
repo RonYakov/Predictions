@@ -13,8 +13,8 @@ public class TicksFunctionExpression extends AbstractFunctionExpression {
     String entityName;
     String propertyName;
 
-    public TicksFunctionExpression(String value, ExpressionType type, String entityName, String propertyName) {
-        super(value, type);
+    public TicksFunctionExpression(String value, String entityName, String propertyName) {
+        super(value, ExpressionType.INT);
         this.entityName = entityName;
         this.propertyName = propertyName;
     }

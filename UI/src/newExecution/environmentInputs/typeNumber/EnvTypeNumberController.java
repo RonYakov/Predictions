@@ -6,13 +6,14 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import newExecution.NewExecutionController;
 import newExecution.listener.ClearButtonClickedListener;
+import newExecution.listener.RerunButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeNumberController implements StartButtonClickedListener, ClearButtonClickedListener {
+public class EnvTypeNumberController implements StartButtonClickedListener, ClearButtonClickedListener, RerunButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -84,5 +85,10 @@ public class EnvTypeNumberController implements StartButtonClickedListener, Clea
         else {
             rangeLabel.setText(" --- ");
         }
+    }
+
+    @Override
+    public void onRerun(String startValue) {
+        userChoice.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(from, to, Double.parseDouble(startValue)));
     }
 }

@@ -57,6 +57,7 @@ public class EntityPopulationController {
                 entityCountController.setDataMembers(entityDefinitionDTO);
                 entityCountController.setEntityPopulationController(this);
                 populationCountListeners.add(entityCountController);
+                newExecutionController.addRerunEntityListener(entityCountController);
                 newExecutionController.addListenerToStartButton(entityCountController);
             } catch (IOException e) {
                 System.out.println(e.getMessage());

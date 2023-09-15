@@ -40,16 +40,18 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
         }
         else if(secondaryEntity != null){
             if(entityName.equals(secondaryEntity.getEntType())){
-               res = evaluate(secondaryEntity,propertyName);
+               res = evaluate(secondaryEntity, propertyName);
             }else {
-                throw new RuntimeException(); //todo
+                throw new RuntimeException();
+                //todo
             }
         }
         else if (isSeconderyShouldExist) {
             throw new SecondEntityIgnoreException();
         }
         else {
-            throw new RuntimeException();//todo
+            throw new RuntimeException();
+            //todo
         }
 
         this.setType(res.getType());

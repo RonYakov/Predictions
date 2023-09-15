@@ -5,13 +5,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import newExecution.NewExecutionController;
 import newExecution.listener.ClearButtonClickedListener;
+import newExecution.listener.RerunButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option3.EnvironmentDefinitionDTO;
 import option3.EnvironmentInitDTO;
 
 import java.util.Random;
 
-public class EnvTypeBooleanController implements StartButtonClickedListener, ClearButtonClickedListener {
+public class EnvTypeBooleanController implements StartButtonClickedListener, ClearButtonClickedListener, RerunButtonClickedListener {
 
     @FXML
     private Label nameLabel;
@@ -57,5 +58,10 @@ public class EnvTypeBooleanController implements StartButtonClickedListener, Cle
 
     public void setData(EnvironmentDefinitionDTO environmentDefinitionDTO) {
         nameLabel.setText(environmentDefinitionDTO.getName());
+    }
+
+    @Override
+    public void onRerun(String startValue) {
+        userChoice.setValue(startValue);
     }
 }

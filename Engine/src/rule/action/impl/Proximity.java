@@ -39,7 +39,7 @@ public class Proximity extends AbstractAction {
         Integer degree = null;
 
         try {
-            degree = Integer.parseInt(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), true));
+            degree = (int)Double.parseDouble(of.GetExplicitValue(context.getPrimaryEntityInstance(), context.getSecondaryEntityInstance(), context.getEnvironments(), true));
         } catch (SecondEntityIgnoreException secondEntityIgnoreException) {
 
         }

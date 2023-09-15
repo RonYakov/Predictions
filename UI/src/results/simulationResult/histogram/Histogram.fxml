@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<TableView fx:id="histogram" prefHeight="250.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationResult.histogram.HistogramController">
+  <columns>
+    <TableColumn fx:id="propertyVal" prefWidth="281.0" text="Property value" />
+    <TableColumn fx:id="Amount" minWidth="0.0" prefWidth="308.0" text="Amount" />
+  </columns>
+</TableView>

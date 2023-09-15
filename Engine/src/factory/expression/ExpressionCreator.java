@@ -79,9 +79,8 @@ public abstract class ExpressionCreator {
             isValidInput(helper, ticksInput);
             EntityDefinition entityDefinition = isAnEntity(helper[0]);
             isValidProperty(entityDefinition, helper[1]);
-            ExpressionType type = getPropertyExpressionType(entityDefinition.getProperty(helper[1]));
 
-            return new TicksFunctionExpression(input, type, entityDefinition.getName(), helper[1]);
+            return new TicksFunctionExpression(input, entityDefinition.getName(), helper[1]);
 
         }else if (input.startsWith("environment(") && input.endsWith(")")) {
             String environmentInput = input.substring(12, input.length() - 1);

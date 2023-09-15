@@ -55,6 +55,7 @@ public class EnvironmentInputsController {
             envTypeStringController.setData(currEnv);
 
             envTypeStringController.setNewExecutionController(newExecutionController);
+            newExecutionController.addRerunEnvironmentListener(envTypeStringController);
             environmetsVbox.getChildren().add(envStringContent);
 
         } catch (IOException e) {
@@ -69,6 +70,7 @@ public class EnvironmentInputsController {
             envTypeBooleanController.setData(currEnv);
 
             envTypeBooleanController.setNewExecutionController(newExecutionController);
+            newExecutionController.addRerunEnvironmentListener(envTypeBooleanController);
             environmetsVbox.getChildren().add(envBooleanContent);
 
         } catch (IOException e) {
@@ -83,6 +85,7 @@ public class EnvironmentInputsController {
             envTypeNumberController.setData(currEnv);
 
             envTypeNumberController.setNewExecutionController(newExecutionController);
+            newExecutionController.addRerunEnvironmentListener(envTypeNumberController);
             environmetsVbox.getChildren().add(envNumberContent);
 
         } catch (IOException e) {

@@ -53,13 +53,25 @@ public class SimulationsController {
                                     resultsController.tryToShowResult(id);
                                 });
                             }
-                            else {
+                            else if (stopCauseResDTO.getState().equals("FAILED")){
                                 Platform.runLater( () -> {
                                     finalSimulationIDControllerStopped.simulationFailed();
                                     resultsController.tryToShowResult(id);
                                 });
                             }
+                            else if (stopCauseResDTO.getState().equals("PAUSED")) {
+                                Platform.runLater( () -> {
+                                    finalSimulationIDControllerStopped.simulationPaused();
+                                });
+                            }
+                            else {
+                                Platform.runLater( () -> {
+                                    finalSimulationIDControllerStopped.simulationRunning();
+                                });
+                            }
                             simulationIDControllerStopped = simulationsListMethods(ListAction.SEARCH, null);
+
+                            Thread.sleep(200);
                         }
                     }
 
@@ -89,6 +101,9 @@ public class SimulationsController {
                     Integer searchID = simulationIDController1.getID();
                     if (predictionManager.simulationDetailsDTO(searchID).getSimulationState().equals("STOPPED") || predictionManager.simulationDetailsDTO(searchID).getSimulationState().equals("FAILED")) {
                         simulationIDControllerList.remove(simulationIDController1);
+                        return simulationIDController1;
+                    }
+                    else {
                         return simulationIDController1;
                     }
                 }

@@ -87,6 +87,10 @@ public class EntityInstanceManager implements Serializable {
         return entityInstanceList.size();
     }
 
+    public List<Integer> getPopulationHistory() {
+        return populationHistory;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

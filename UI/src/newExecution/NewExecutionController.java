@@ -1,5 +1,6 @@
 package newExecution;
 
+import ex2DTO.SimulationIDDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import managerFX.MainScreenController;
 import newExecution.entitiesPopulation.EntityPopulationController;
 import newExecution.environmentInputs.EnvironmentInputsController;
 import newExecution.listener.ClearButtonClickedListener;
+import newExecution.listener.RerunButtonClickedListener;
 import newExecution.listener.StartButtonClickedListener;
 import option2.EntityDefinitionDTO;
 import option3.EntityPopulationDTO;
@@ -41,9 +43,9 @@ public class NewExecutionController {
     private List<ClearButtonClickedListener> clearListener;
     private List<EnvironmentInitDTO> environmentInitDTOList= new ArrayList<>();
     private List<EntityPopulationDTO>entityPopulationDTOList = new ArrayList<>();
+    private List<RerunButtonClickedListener> rerunButtonClickedEntitiesListeners= new ArrayList<>();
+    private List<RerunButtonClickedListener> rerunButtonClickedEnvironmentsListeners = new ArrayList<>();
     private PredictionManager predictionManager;
-
-
 
     @FXML
     public void initialize() {
@@ -58,6 +60,13 @@ public class NewExecutionController {
 
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
+    }
+
+    public void addRerunEntityListener(RerunButtonClickedListener rerunButtonClickedListener) {
+        rerunButtonClickedEntitiesListeners.add(rerunButtonClickedListener);
+    }
+    public void addRerunEnvironmentListener(RerunButtonClickedListener rerunButtonClickedListener) {
+        rerunButtonClickedEnvironmentsListeners.add(rerunButtonClickedListener);
     }
 
     private void setDivider(){
@@ -120,6 +129,18 @@ public class NewExecutionController {
     }
 
     public void onRerun(Integer id) {
-        //todo - need to set the value to all components, need to add the components to here for that
+        List<EnvironmentInitDTO> environmentInitDTOListForRerun = predictionManager.getEnvironmentRerun(new SimulationIDDTO(id));
+        List<EntityPopulationDTO> entityPopulationDTOListForRerun = predictionManager.getEntityRerun(new SimulationIDDTO(id));
+        int i = 0;
+
+        for (EnvironmentInitDTO environmentInitDTO : environmentInitDTOListForRerun) {
+            rerunButtonClickedEnvironmentsListeners.get(i).onRerun(environmentInitDTO.getNewValue());
+            i++;
+        }
+        i = 0;
+        for (EntityPopulationDTO entityPopulationDTO : entityPopulationDTOListForRerun) {
+            rerunButtonClickedEntitiesListeners.get(i).onRerun(entityPopulationDTO.getCount().toString());
+            i++;
+        }
     }
 }
