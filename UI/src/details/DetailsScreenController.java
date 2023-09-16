@@ -21,7 +21,7 @@ public class DetailsScreenController {
     @FXML
     private SimulationBreakdownController simulationBreakdownController;
     @FXML
-    private SplitPane root;
+    private SplitPane rootDetails;
     private MainScreenController mainScreenController;
     private Double originalDividerPosition;
 
@@ -34,12 +34,12 @@ public class DetailsScreenController {
 
 
     private void setDivider(){
-        root.setDividerPositions(originalDividerPosition);
+        rootDetails.setDividerPositions(originalDividerPosition);
 
         // Add a listener to the divider position
-        root.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
+        rootDetails.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
             // Reset the position to the original value
-            root.setDividerPositions(originalDividerPosition);
+            rootDetails.setDividerPositions(originalDividerPosition);
         });
     }
 
@@ -52,7 +52,7 @@ public class DetailsScreenController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/entity/EntityDetails.fxml"));
             Parent entityContent = loader.load();
             EntityDetailsController entityDetailsController = loader.getController();
-            root.getItems().set(1, entityContent);
+            rootDetails.getItems().set(1, entityContent);
 
             entityDetailsController.setAllDataMembers(EntityData);
 
@@ -65,7 +65,7 @@ public class DetailsScreenController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/environment/EnvironmentDetails.fxml"));
             Parent entityContent = loader.load();
             EnvironmentDetailsController environmentDetailsController = loader.getController();
-            root.getItems().set(1, entityContent);
+            rootDetails.getItems().set(1, entityContent);
 
             environmentDetailsController.setData(EnvironmentData);
 
@@ -79,7 +79,7 @@ public class DetailsScreenController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/rule/RulesDetails.fxml"));
             Parent ruleContent = loader.load();
             RulesDetailsController rulesDetailsController = loader.getController();
-            root.getItems().set(1, ruleContent);
+            rootDetails.getItems().set(1, ruleContent);
 
             rulesDetailsController.setAllDataMembers(rulesDTO);
 
@@ -92,7 +92,7 @@ public class DetailsScreenController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/termination/TerminationDetails.fxml"));
             Parent terminationContent = loader.load();
             TerminationDetailsController terminationDetailsController = loader.getController();
-            root.getItems().set(1, terminationContent);
+            rootDetails.getItems().set(1, terminationContent);
 
             terminationDetailsController.setAllDataMembers(terminationDTO);
 
@@ -104,7 +104,7 @@ public class DetailsScreenController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/selectedComponent/grid/GridDetails.fxml"));
             Parent GridContent = loader.load();
             GridDetailsController gridDetailsController = loader.getController();
-            root.getItems().set(1, GridContent);
+            rootDetails.getItems().set(1, GridContent);
 
             gridDetailsController.setData(rows.toString(), cols.toString());
 

@@ -103,14 +103,14 @@ public abstract class ExpressionCreator {
     private static void isValidProperty(EntityDefinition entityDefinition, String property) {
         if(entityDefinition.getProperty(property) == null){
             throw  new EnvironmentInputException("InputException: the following input '" + property + "' is not a property in "+ entityDefinition.getName() + ".\n" +
-                    "       Note that the input must be: <entity>.<property> ! Problem occurred in class ExpressionCreator");
+                    "Note that the input must be: <entity>.<property> ! Problem occurred in class ExpressionCreator");
         }
     }
 
     private static void isValidInput(String[] helper, String WholeInput) {
         if(helper.length != 2) {
             throw  new EnvironmentInputException("InputException: the following input '" + WholeInput + "' is not valid.\n" +
-                    "       ! Problem occurred in class ExpressionCreator");
+                    "Problem occurred in class ExpressionCreator");
         }
     }
 
@@ -164,7 +164,7 @@ public abstract class ExpressionCreator {
             return convertStringToInt(randomInput);
         } catch (Exception exception) {
             throw new RandomInputException("RandomInputException: the following input " + randomInput + " is not a valid input .\n" +
-                    "       Note that you must enter a number! Problem occurred in class ExpressionCreator");
+                    "Note that you must enter a number! Problem occurred in class ExpressionCreator");
         }
     }
 
@@ -200,7 +200,7 @@ public abstract class ExpressionCreator {
 
         if(environmentDef == null) {
             throw  new EnvironmentInputException("EnvironmentInputException: the following input '" + environmentInput + "' is not a valid input to function environment.\n" +
-                    "       Note that environment has to get a single environment's name! Problem occurred in class ExpressionCreator");
+                    "Note that environment has to get a single environment's name! Problem occurred in class ExpressionCreator");
         }
     }
     private static EntityDefinition isAnEntity(String entityInput) {
@@ -208,7 +208,7 @@ public abstract class ExpressionCreator {
 
         if(environmentDef == null) {
             throw  new EnvironmentInputException("EntityInputException: the following input '" + entityInput + "' is not a entity.\n" +
-                    "       Note that evaluate has to get a <entity>.<property> ! Problem occurred in class ExpressionCreator");
+                    "Note that evaluate has to get a <entity>.<property> ! Problem occurred in class ExpressionCreator");
         }
         return environmentDef;
     }

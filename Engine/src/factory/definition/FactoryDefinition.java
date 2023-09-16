@@ -58,12 +58,12 @@ public abstract class FactoryDefinition {
                     try {
                         if(!isInRange(Integer.parseInt(value.getInit()), range)) {
                             throw new NumberNotInRangeException("NumberNotInRangeException: When trying to create property '" + prdProperty.getPRDName() + "'.\n" +
-                                    ".       Please enter decimal number between " + range.getFrom() + " - " + range.getTo() + ". Problem occurred in class FactoryDefinition");
+                                    "Please enter decimal number between " + range.getFrom() + " - " + range.getTo() + ". \nProblem occurred in class FactoryDefinition");
                         }
                     }
                     catch (NumberFormatException e) {
                         throw new NumberFormatException("NumberFormatException: When trying to create property '" + prdProperty.getPRDName() + "'" +
-                                ". Please enter decimal number in init. Problem occurred in class FactoryDefinition");
+                                "Please enter decimal number in init. Problem occurred in class FactoryDefinition");
                     }
                     break;
 
@@ -71,19 +71,19 @@ public abstract class FactoryDefinition {
                     try {
                         if(!isInRange(Float.parseFloat(value.getInit()), range)) {
                             throw new NumberNotInRangeException("NumberNotInRangeException: When trying to create property '" + prdProperty.getPRDName() + "'.\n" +
-                                    "       Please enter float number between " + range.getFrom() + " - " + range.getTo() + ". Problem occurred in class FactoryDefinition");
+                                    "Please enter float number between " + range.getFrom() + " - " + range.getTo() + ". \nProblem occurred in class FactoryDefinition");
                         }
                     }
                     catch (NumberFormatException e) {
                         throw new NumberFormatException( "NumberFormatException: When trying to create property '" + prdProperty.getPRDName() + "'" +
-                                ". Please enter float number in init. Problem occurred in class FactoryDefinition");
+                                "Please enter float number in init. Problem occurred in class FactoryDefinition");
                     }
                     break;
 
                 case "boolean":
                         if(!value.getInit().equals("true") && !value.getInit().equals("false")) {
                             throw new IllegalArgumentException( "IllegalArgumentException: When trying to create property '" + prdProperty.getPRDName() + "'" +
-                                    ". Please enter 'true' / 'false' in init. Problem occurred in class FactoryDefinition");
+                                    "Please enter 'true' / 'false' in init. Problem occurred in class FactoryDefinition");
                         }
                     break;
 
@@ -102,7 +102,7 @@ public abstract class FactoryDefinition {
 
         if(duplicateName != null) {
             throw new DuplicateNameException("DuplicateNameException: the property name '" + duplicateName + "' in entity '" + name + "' show more then once.\n" +
-                    "       Note that every property in a single entity must have a unique name! Problem occurred in class FactoryDefinition");
+                    "Note that every property in a single entity must have a unique name! \nProblem occurred in class FactoryDefinition");
         }
 
         PRDProperties.forEach(prdProperty -> properties.put(prdProperty.getPRDName(),createPropertyDefinition(prdProperty)));
@@ -117,7 +117,7 @@ public abstract class FactoryDefinition {
 
         if(duplicateName != null) {
             throw new DuplicateNameException("DuplicateNameException: the entity name '" + duplicateName + "' show more then once.\n" +
-                    "       Note that every entity must have a unique name! Problem occurred in class FactoryDefinition");
+                    "Note that every entity must have a unique name! Problem occurred in class FactoryDefinition");
         }
         prdEntityList.forEach(prdEntity -> res.put(prdEntity.getName(), createEntityDefinition(prdEntity)));
 
@@ -133,12 +133,14 @@ public abstract class FactoryDefinition {
 
         Range range = null;
         if(type.equals("decimal") || type.equals("float")) {
-            range = new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo());
+            if(prdEnvProperty.getPRDRange() != null) {
+                range = new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo());
+            }
         }
 
         if(!type.equals("decimal") && !type.equals("boolean") && !type.equals("float") && !type.equals("string")) {
             throw new PropertyTypeException("PropertyTypeException: " + name + " type is not valid!\n" +
-                    "       Note that environment type must be: 'decimal', 'boolean', 'float' or 'string'. Problem occurred in class FactoryDefinition");
+                    "Note that environment type must be: 'decimal', 'boolean', 'float' or 'string'. \nProblem occurred in class FactoryDefinition");
         }
 
         return new PropertyDefinition(name, type, null, range);
@@ -151,7 +153,7 @@ public abstract class FactoryDefinition {
 
         if(duplicateName != null) {
             throw new DuplicateNameException("DuplicateNameException: the environment name '" + duplicateName + "' show more then once.\n" +
-                    "       Note that every environment must have a unique name! Problem occurred in class FactoryDefinition");
+                    "Note that every environment must have a unique name! \nProblem occurred in class FactoryDefinition");
         }
         prdEnvironmentList.forEach(prdEnvProperty -> res.put(prdEnvProperty.getPRDName(),createEnvironmentPropDefinition(prdEnvProperty)));
 

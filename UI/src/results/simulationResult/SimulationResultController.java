@@ -1,9 +1,6 @@
 package results.simulationResult;
 
-import ex2DTO.ConsistencyReqDTO;
-import ex2DTO.EntityCountReqDTO;
-import ex2DTO.EntityCountResDTO;
-import ex2DTO.SimulationIDDTO;
+import ex2DTO.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,18 +9,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import manager.PredictionManager;
 import managerFX.MainScreenController;
 import option2.EntityDefinitionDTO;
 import option2.PropertyDefinitionDTO;
 import option4.InfoType;
+import option4.PastSimulationInfoDTO;
 import option4.SimulationDesiredInfoDTO;
 import option4.histogram.HistogramSingleEntityDTO;
 import option4.histogram.HistogramSinglePropDTO;
 import option4.histogram.HistogramSpecificPropDTO;
 import results.simulationResult.EntityCounter.EntityCounterController;
 import results.simulationResult.consistency.ConsistencyController;
+import results.simulationResult.failedCause.FailedCauseController;
 import results.simulationResult.histogram.HistogramController;
 import results.simulationResult.propAvg.PropAvgController;
 
@@ -42,7 +42,9 @@ public class SimulationResultController {
     @FXML
     private Button rerunButton;
     @FXML
-    private Button showButton;
+    private Label simulationDetails1;
+    @FXML
+    private Label simulationDetails2;
     @FXML
     private Pane showPane;
     private PredictionManager predictionManager;
@@ -62,6 +64,30 @@ public class SimulationResultController {
 
     public void setPredictionManager(PredictionManager predictionManager) {
         this.predictionManager = predictionManager;
+        simulationDetails1.setText("Simulation ID: " + id);
+        PastSimulationInfoDTO pastSimulationInfoDTO = predictionManager.getPastSimulationInfo(new SimulationIDDTO(id));
+        simulationDetails2.setText("Start time:    " + pastSimulationInfoDTO.getDate());
+
+        if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("FAILED")){
+            loadFailScreen();
+        }
+    }
+
+    private void loadFailScreen() {
+        analyseChoice.setVisible(false);
+        rerunButton.setDisable(true);
+        rerunButton.setVisible(false);
+        FailedCauseDTO failedCause = predictionManager.getFailedCauseDTO(new SimulationIDDTO(id));
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/results/simulationResult/failedCause/FailedCause.fxml"));
+            Parent failedCauseData = loader.load();
+            FailedCauseController failedCauseController = loader.getController();
+
+            failedCauseController.setSimulationStopCause(failedCause.getFailedCaues());
+            showPane.getChildren().add(failedCauseData);
+        } catch (IOException e) {
+        }
     }
 
     public void setId(Integer id) {

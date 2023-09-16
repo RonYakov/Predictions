@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="570.0" spacing="10.0" stylesheets="@FailedCauseStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationResult.failedCause.FailedCauseController">
+   <children>
+      <Label styleClass="stopCauseLabels" text="Simulation stop cause: " />
+      <Label id="exceptionMessage" fx:id="simulationStopCause" alignment="TOP_LEFT" prefHeight="176.0" prefWidth="454.0" styleClass="stopCauseLabels" text="Label">
+         <VBox.margin>
+            <Insets left="88.0" />
+         </VBox.margin></Label>
+   </children>
+   <padding>
+      <Insets left="10.0" top="10.0" />
+   </padding>
+</VBox>

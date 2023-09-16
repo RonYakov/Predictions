@@ -169,8 +169,8 @@ public class SingleCondition extends AbstractCondition {
             }
         }else{
             throw new PropertyTypeException("PropertyTypeException: can not try equaling '" + property.GetSimpleValue() + "' and '" + value.GetSimpleValue() + "'.\n" +
-                    "       Note that you can only equal number to number, string to string or boolean to boolean." +
-                    "       Exception thrown while trying to do equal in SingleCondition class");
+                    "Note that you can only equal number to number, string to string or boolean to boolean." +
+                    "Exception thrown while trying to do equal in SingleCondition class");
         }
     }
 
@@ -196,15 +196,15 @@ public class SingleCondition extends AbstractCondition {
     private void checkIfNumberProperty(ActionContext context) {
         if(!isANumberProp(context)) {
             throw new PropertyTypeException("PropertyTypeException: the property '" + property + "is not a numeric property!\n" +
-                    "       Note that lt/bt operators in single-condition action has to get numeric arguments.\n" +
-                    "       Problem occurred in class SingleCondition when trying to run single-condition action");
+                    "Note that lt/bt operators in single-condition action has to get numeric arguments.\n" +
+                    "Problem occurred in class SingleCondition when trying to run single-condition action");
         }
     }
     private void checkIfNumberExpression() {
         if(!isANumberExp()) {
             throw new ExpressionTypeException("ExpressionTypeException: the expression '" + value.GetSimpleValue() + "' is not a number!\n" +
-                    "       Note that lt/bt operators in single-condition action has to get numeric arguments.\n" +
-                    "       Problem occurred in class SingleCondition when trying to run single-condition action");
+                    "Note that lt/bt operators in single-condition action has to get numeric arguments.\n" +
+                    "Problem occurred in class SingleCondition when trying to run single-condition action");
         }
     }
 }

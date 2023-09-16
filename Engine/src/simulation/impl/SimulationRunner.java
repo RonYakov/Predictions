@@ -59,7 +59,6 @@ public class SimulationRunner implements Serializable, Runnable {
                 for (; currTick <= ticks; currTick++) {
                     if (System.currentTimeMillis() - startTime - (pausingTime*1000) >= maxRuntimeMilliseconds || simulationExecutionDetails.getSimulationState().equals(SimulationState.STOPPED)) {
                         simulationExecutionDetails.setSimulationStopCause("Time");
-                        //todo - stop cause
                         break;
                     }
                     simulationIteration(currTick);
@@ -110,13 +109,14 @@ public class SimulationRunner implements Serializable, Runnable {
                     simulationExecutionDetails.setCurrTicks(currTick);
                     simulationExecutionDetails.setSeconds((int) ((System.currentTimeMillis() - startTime) / 1000) - pausingTime);
                 }
-                //todo need to add another loop for null in both ticks and seconds
             }
         } catch (RuntimeException runtimeException) {
             simulationExecutionDetails.setSimulationState(SimulationState.FAILED);
-            throw runtimeException;
+            simulationExecutionDetails.setFailCause(runtimeException.getMessage());
+            simulationExecutionDetails.getPredictionManager().simDone();
         }
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
+        simulationExecutionDetails.getPredictionManager().simDone();
     }
 
     private void moveEntities() {

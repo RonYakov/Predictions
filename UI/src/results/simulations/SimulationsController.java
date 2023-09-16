@@ -46,6 +46,9 @@ public class SimulationsController {
                         while (simulationIDControllerStopped != null) {
                             SimulationIDController finalSimulationIDControllerStopped = simulationIDControllerStopped;
                             StopCauseResDTO stopCauseResDTO = predictionManager.stopCause(new StopCauseReqDTO(finalSimulationIDControllerStopped.getID()));
+                            if (stopCauseResDTO == null) {
+                                break;
+                            }
                             Integer id = simulationIDControllerStopped.getID();
                             if(stopCauseResDTO.getState().equals("STOPPED")) {
                                 Platform.runLater( () -> {

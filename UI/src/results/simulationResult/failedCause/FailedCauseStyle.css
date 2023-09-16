@@ -1,0 +1,7 @@
+.stopCauseLabels {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+#exceptionMessage{
+    -fx-text-fill: #9a0101;
+}

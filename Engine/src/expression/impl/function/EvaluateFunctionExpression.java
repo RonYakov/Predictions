@@ -38,20 +38,23 @@ public class EvaluateFunctionExpression extends AbstractFunctionExpression {
         if(entityName.equals(primaryEntity.getEntType())){
             res = evaluate(primaryEntity,propertyName);
         }
-        else if(secondaryEntity != null){
-            if(entityName.equals(secondaryEntity.getEntType())){
-               res = evaluate(secondaryEntity, propertyName);
-            }else {
-                throw new RuntimeException();
-                //todo
+        else if(isSeconderyShouldExist) {
+            if(secondaryEntity != null) {
+                if(entityName.equals(secondaryEntity.getEntType())){
+                    res = evaluate(secondaryEntity, propertyName);
+                }else {
+                    throw new RuntimeException("Entity exception! The entity: " + entityName + " in is not valid.\n" +
+                            "In this function the main entity must be: " + primaryEntity.getEntType() + " or: " + secondaryEntity.getEntType() + ".\n" +
+                            "Problem occurred in Evaluate expression.");
+                }
+            }
+            else {
+                throw new SecondEntityIgnoreException();
             }
         }
-        else if (isSeconderyShouldExist) {
-            throw new SecondEntityIgnoreException();
-        }
         else {
-            throw new RuntimeException();
-            //todo
+            throw new RuntimeException("Entity exception! The entity: " + entityName + " in is not valid.\n" +
+                    "In this function the main entity must be: " + primaryEntity.getEntType() + ". Problem occurred in Evaluate expression.");
         }
 
         this.setType(res.getType());

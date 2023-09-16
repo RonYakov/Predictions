@@ -30,6 +30,7 @@ public class SimulationExecutionDetails {
     private SimulationState simulationState;
     private volatile boolean isRunning = true;
     private PredictionManager predictionManager;
+    private String failCause;
 
     public SimulationExecutionDetails(Map<String, EntityInstanceManager> entityManager, Map<String, AbstractPropertyInstance> environments,Grid grid, List<Rule> rules, Termination termination, int identifyNumber) {
         this.entityManager = entityManager;
@@ -45,7 +46,7 @@ public class SimulationExecutionDetails {
         formattedDate = now.format(formatter);
         environmentInitListDTO = null;
         entityPopulationDTOList = null;
-
+        failCause = null;
         for (Rule rule: rules) {
             rule.setSimulationExecutionDetails(this);
         }
@@ -79,6 +80,14 @@ public class SimulationExecutionDetails {
         this.predictionManager = predictionManager;
     }
 
+    public String getFailCause() {
+        return failCause;
+    }
+
+    public void setFailCause(String failCause) {
+        this.failCause = failCause;
+    }
+
     public PredictionManager getPredictionManager() {
         return predictionManager;
     }
@@ -95,7 +104,7 @@ public class SimulationExecutionDetails {
         return simulationState;
     }
 
-    public void setSimulationState(SimulationState simulationState) {
+    public synchronized void setSimulationState(SimulationState simulationState) {
         this.simulationState = simulationState;
     }
 

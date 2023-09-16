@@ -42,7 +42,7 @@ public class XmlLoader {
     private void setFilePath(String filePath) {
         if(!filePath.endsWith(".xml")) {
             throw new XmlNameException("XmlNameException: the xml file path: '" + filePath + "' is not valid\n" +
-                    "       Note that xml file path has to ends with '.xml.! Error occurred in class LoadXml.");
+                    "Note that xml file path has to ends with '.xml.! Error occurred in class LoadXml.");
         }
         else {
             File file = new File(filePath);

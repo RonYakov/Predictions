@@ -10,12 +10,26 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox id="ResultMainHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="900.0" spacing="5.0" stylesheets="@../ResultsStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationResult.SimulationResultController">
+<HBox id="ResultMainHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="275.0" prefWidth="900.0" spacing="5.0" stylesheets="@SimulationResultStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="results.simulationResult.SimulationResultController">
    <children>
-      <VBox alignment="TOP_CENTER" prefHeight="275.0" prefWidth="204.0" spacing="5.0">
+      <VBox prefHeight="275.0" prefWidth="204.0" spacing="5.0">
          <children>
-            <Label fx:id="simulationDetails1" prefHeight="30.0" text="Label" />
-            <Label fx:id="simulationDetails2" prefHeight="30.0" text="Label" />
+            <VBox alignment="CENTER_LEFT" prefHeight="73.0" prefWidth="197.0">
+               <children>
+                  <Label fx:id="simulationDetails1" prefHeight="30.0" styleClass="simDetailsLabels" text="Label" />
+                  <Label fx:id="simulationDetails2" prefHeight="30.0" styleClass="simDetailsLabels" text="Label">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </VBox>
             <ComboBox fx:id="analyseChoice" onAction="#analyseClicked" prefHeight="31.0" prefWidth="190.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -34,6 +48,9 @@
          <HBox.margin>
             <Insets />
          </HBox.margin>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
       </VBox>
       <Pane fx:id="showPane" prefHeight="251.0" prefWidth="580.0" />
       <Pane prefHeight="275.0" prefWidth="113.0">

@@ -1,13 +1,18 @@
 package managerFX;
 
 import details.DetailsScreenController;
+import ex2DTO.IsNewSimLoadDTO;
+import ex2DTO.StopCauseReqDTO;
+import ex2DTO.StopCauseResDTO;
 import header.PredictionHeaderController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import manager.PredictionManager;
 import newExecution.NewExecutionController;
@@ -15,6 +20,8 @@ import option2.SimulationDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
 import results.ResultsController;
 import results.simulationDetails.SimulationDetailsController;
+import results.simulations.simulationID.ListAction;
+import results.simulations.simulationID.SimulationIDController;
 
 
 import java.io.IOException;
@@ -36,6 +43,7 @@ public class MainScreenController {
     private Boolean isNewExecutionPresent = false;
     private Boolean isResultsPresent = false;
     private SimulationDetailsController simulationDetailsController = null;
+    private Thread thread;
 
     @FXML
     public void initialize() {
@@ -47,7 +55,29 @@ public class MainScreenController {
         scrollPane.setContent(stackPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        simulationLoadManager();
+    }
+    private void simulationLoadManager(){
+        Pane emptyPane = new Pane();
+        thread = new Thread(() -> {
+            while (true) {
+                try {
+                    IsNewSimLoadDTO isNewSimLoadDTO = predictionManager.isNewSimLoad();
+                    if(isNewSimLoadDTO.getNewSimLoad()) {
+                        Platform.runLater(() ->{
+                            mainBorderPane.setCenter(emptyPane);
+                            isDetailsPresent = false;
+                            isResultsPresent = false;
+                            isNewExecutionPresent = false;
+                        });
+                    }
+                    Thread.sleep(200);
+                } catch (InterruptedException ignore) {
+                }
+            }
+        });
 
+        thread.start();
     }
 
     public void setSimulationDetailsController(SimulationDetailsController simulationDetailsController) {
@@ -58,8 +88,7 @@ public class MainScreenController {
         SimulationDefinitionDTO simulationDefinitionDTO = predictionManager.showCurrentSimulationData();
         try {
             if(!isDetailsPresent) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/detailsScreen.fxml"));
-                Parent detailsContent = loader.load();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/detailsScreen.fxml"));                Parent detailsContent = loader.load();
                 detailsController = loader.getController();
 
                 detailsController.setMainScreenController(this);

@@ -74,7 +74,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
                <children>
-                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#SelectActionClicked" prefHeight="39.0" prefWidth="88.0" text="Select Action" AnchorPane.rightAnchor="15.0" />
+                  <Button id="actionButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#SelectActionClicked" prefHeight="39.0" prefWidth="88.0" text="Select Action" AnchorPane.rightAnchor="15.0" />
                </children>
             </AnchorPane>
          </children>

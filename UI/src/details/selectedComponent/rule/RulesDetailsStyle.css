@@ -2,3 +2,13 @@
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
+
+#actionButton{
+    -fx-font-size: 14px;
+    -fx-pref-width: 100px;
+    -fx-background-color: #4CAF50; /* Green background color */
+    -fx-text-fill: white; /* White text color */
+}
+#actionButton:hover {
+    -fx-background-color: #158A19;
+}

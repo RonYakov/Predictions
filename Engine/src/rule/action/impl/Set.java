@@ -96,11 +96,11 @@ public class Set extends AbstractAction {
         }
         if(propertyType == PropertyType.DECIMAL && valueType == ExpressionType.FLOAT) {
             throw new TypeUnmatchedException("TypeUnmatchedException: can not set the property '" + property + "' with expression: " + value.GetSimpleValue() + ".\n" +
-                    "       Note that you can not set a decimal property with float expression. Problem occurred in class Set when trying to do set action");
+                    "Note that you can not set a decimal property with float expression. Problem occurred in class Set when trying to do set action");
         }
 
         throw new TypeUnmatchedException("TypeUnmatchedException: can not set the property '" + property + "' with expression: " + value.GetSimpleValue() + ".\n" +
-                "       Note that you need to match the property type and expression type to be able to set them. Problem occurred in class Set when trying to do set action");
+                "Note that you need to match the property type and expression type to be able to set them. Problem occurred in class Set when trying to do set action");
 
     }
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1100.0" stylesheets="@NewExecutionStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.NewExecutionController">
+<BorderPane fx:id="mainBorderPain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1100.0" stylesheets="@NewExecutionStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="newExecution.NewExecutionController">
    <center>
       <SplitPane fx:id="mainSplitPane" dividerPositions="0.4199" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>

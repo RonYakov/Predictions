@@ -26,8 +26,8 @@ import simulation.impl.SimulationState;
 import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static factory.instance.FactoryInstance.createSimulation;
 
@@ -36,8 +36,11 @@ public class PredictionManager {
     private Map<Integer, SimulationExecutionDetails> simulationExecutionDetailsMap;
     private Integer numOfThreads;
     private XmlLoader xmlLoader;
-    private ExecutorService executorService;
+    private ThreadPoolExecutor executorService;
     private int currIDNum;
+    private Integer simDoneCounter = 0;
+
+    private Boolean isNewSimLoaded = false;
 
 
     public PredictionManager() {
@@ -67,11 +70,19 @@ public class PredictionManager {
 
     public void loadXmlData(XmlFullPathDTO xmlFullPathDTO) throws JAXBException, IOException {
         SimulationDefinition newSimulationDefinition = xmlLoader.loadXmlData(xmlFullPathDTO.getFullPathXML());
+        setGetIsNewSimLoaded("true");
+        if(executorService != null) {
+            executorService.getQueue().clear();
+            stopAllSimulation();
+            executorService.shutdownNow();
+        }
+
         this.simulationDefinition = newSimulationDefinition;
         simulationExecutionDetailsMap.clear();
         currIDNum = 1;
         numOfThreads = simulationDefinition.getNumOfThreads();
-        executorService = Executors.newFixedThreadPool(numOfThreads);
+        executorService = (ThreadPoolExecutor)Executors.newFixedThreadPool(numOfThreads);
+        isDoneCounterChanger("reset");
     }
 
 
@@ -120,6 +131,28 @@ public class PredictionManager {
         currIDNum++;
 
         return new SimulationFinishDTO(simulationExecutionDetails.getIdentifyNumber(), simulationExecutionDetails.getSimulationStopCause());
+    }
+
+    public void simDone() {
+        isDoneCounterChanger("simDone");
+    }
+    private synchronized Boolean setGetIsNewSimLoaded(String isNewSimLoaded) {
+        if(isNewSimLoaded.equals("true")) {
+            this.isNewSimLoaded = true;
+        }
+        else if(isNewSimLoaded.equals("false")) {
+            this.isNewSimLoaded = false;
+        }
+        return this.isNewSimLoaded;
+    }
+
+    private synchronized void isDoneCounterChanger(String action) {
+        if(action.equals("simDone")) {
+            this.simDoneCounter++;
+        }
+        else {
+            this.simDoneCounter = 0;
+        }
     }
 
     public List<EnvironmentInitDTO> getEnvironmentRerun(SimulationIDDTO simulationIDDTO){
@@ -211,6 +244,11 @@ public class PredictionManager {
         return pastSimulationInfoDTOS;
     }
 
+    public PastSimulationInfoDTO getPastSimulationInfo(SimulationIDDTO simulationIDDTO) {
+        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(simulationIDDTO.getId());
+
+        return new PastSimulationInfoDTO(simulationExecutionDetails.getFormattedDate(), simulationExecutionDetails.getIdentifyNumber());
+    }
     public AmountDTO getAmountDTO(SimulationDesiredInfoDTO simulationDesiredInfoDTO){
         List<Integer> beginning =  new ArrayList<>();
         List<Integer> end =  new ArrayList<>();
@@ -285,9 +323,12 @@ public class PredictionManager {
     }
 
     public SimulationDetailsDTO simulationDetailsDTO(Integer id) {
-        SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(id);
-        TerminationDTO terminationDTO = new TerminationDTO(simulationExecutionDetails.getCurrTicks(),simulationExecutionDetails.getSeconds());
-        return new SimulationDetailsDTO(getEntitiesCountDTO(id), terminationDTO, simulationExecutionDetails.getSimulationState().toString());
+        if(simulationExecutionDetailsMap.get(id) != null) {
+            SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(id);
+            TerminationDTO terminationDTO = new TerminationDTO(simulationExecutionDetails.getCurrTicks(),simulationExecutionDetails.getSeconds());
+            return new SimulationDetailsDTO(getEntitiesCountDTO(id), terminationDTO, simulationExecutionDetails.getSimulationState().toString());
+        }
+        return null;
     }
 
     public void stopSimulation(StopDTO stopDTO) {
@@ -295,8 +336,19 @@ public class PredictionManager {
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
     }
 
+    private void stopAllSimulation() {
+        List<SimulationExecutionDetails> simulationExecutionDetailsList = new ArrayList<>(simulationExecutionDetailsMap.values());
+        for (SimulationExecutionDetails simulationExecutionDetails: simulationExecutionDetailsList) {
+            if(simulationExecutionDetails.getSimulationState() == SimulationState.RUNNING || simulationExecutionDetails.getSimulationState() == SimulationState.PAUSED ) {
+                simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
+            }
+        }
+    }
     public StopCauseResDTO stopCause(StopCauseReqDTO id) {
-        return new StopCauseResDTO(simulationExecutionDetailsMap.get(id.getId()).getSimulationState().toString());
+        if(simulationExecutionDetailsMap.get(id.getId()) != null) {
+            return new StopCauseResDTO(simulationExecutionDetailsMap.get(id.getId()).getSimulationState().toString());
+        }
+        return null;
     }
 
     public void pauseSimulation(PauseAndResumeSimulationDTO id){
@@ -315,6 +367,9 @@ public class PredictionManager {
     public SimulationStateDTO getSimulationState(SimulationIDDTO simulationIDDTO) {
         return new SimulationStateDTO(simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getSimulationState().toString());
     }
+    public FailedCauseDTO getFailedCauseDTO(SimulationIDDTO simulationIDDTO) {
+        return new FailedCauseDTO(simulationExecutionDetailsMap.get(simulationIDDTO.getId()).getFailCause());
+    }
 
     public ConsistencyResDTO getConsistency(ConsistencyReqDTO consistencyReqDTO) {
         SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(consistencyReqDTO.getId());
@@ -332,5 +387,16 @@ public class PredictionManager {
         SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(entityCountReqDTO.getId());
         EntityInstanceManager entityInstanceManager = simulationExecutionDetails.getEntityManager().get(entityCountReqDTO.getEntityName());
         return new EntityCountResDTO(entityInstanceManager.getPopulationHistory());
+    }
+    public QueueInfoDTO getQueueInfo() {
+
+        return new QueueInfoDTO(executorService.getActiveCount(), executorService.getQueue().size(), simDoneCounter);
+    }
+    public IsNewSimLoadDTO isNewSimLoad() {
+        IsNewSimLoadDTO res = new IsNewSimLoadDTO(setGetIsNewSimLoaded(""));
+        if(setGetIsNewSimLoaded("")) {
+            setGetIsNewSimLoaded("false");
+        }
+        return res;
     }
 }

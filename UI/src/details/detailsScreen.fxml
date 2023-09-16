@@ -3,7 +3,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane fx:id="root" dividerPositions="0.3832752613240418" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.DetailsScreenController">
+<SplitPane stylesheets="@DetailsScreenStyle.css" fx:id="rootDetails" dividerPositions="0.3832752613240418" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="details.DetailsScreenController">
 <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="403.0">
         <children>

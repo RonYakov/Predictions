@@ -70,6 +70,9 @@ public class SimulationDetailsController {
             while (!stop && !simulationState.equals("STOPPED") && !simulationState.equals("FAILED")) {
                 try {
                     SimulationDetailsDTO simulationDetailsDTO = predictionManager.simulationDetailsDTO(id);
+                    if(simulationDetailsDTO == null) {
+                        break;
+                    }
                     Platform.runLater( () -> {
                         int i = 0;
                         for(EntityDetailsController entityDetailsController: entityDetailsControllers){

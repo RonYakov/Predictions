@@ -1,5 +1,6 @@
 package header;
 
+import header.queueInfo.QueueInfoController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -8,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.PredictionManager;
@@ -20,21 +23,25 @@ public class PredictionHeaderController {
 
     @FXML
     private Label currentFileLabel;
-
     @FXML
     private Button detailsButton;
-
     @FXML
     private Label headLineLable;
-
     @FXML
     private Button loadFileButton;
-
     @FXML
     private Button newExecutionButton;
-
     @FXML
     private Button resultsButton;
+    @FXML
+    private Button OKButton;
+    @FXML
+    private VBox queueInfo;
+    @FXML
+    private QueueInfoController queueInfoController;
+    @FXML
+    private Label failedLoadCause;
+
 
     private MainScreenController mainScreenController;
 
@@ -47,6 +54,8 @@ public class PredictionHeaderController {
         detailsButton.disableProperty().bind(buttonsDisabledProperty());
         newExecutionButton.disableProperty().bind(buttonsDisabledProperty());
         resultsButton.disableProperty().bind(buttonsDisabledProperty());
+        failedLoadCause.setVisible(false);
+        OKButton.setVisible(false);
     }
 
     public void setPredictionManager(PredictionManager predictionManager) {
@@ -79,10 +88,19 @@ public class PredictionHeaderController {
 
         XmlFullPathDTO xmlFullPathDTO = new XmlFullPathDTO(selectedFile.getAbsolutePath());
         try {
+            failedLoadCause.setVisible(false);
             predictionManager.loadXmlData(xmlFullPathDTO);
             currentFileLabel.setText(selectedFile.getAbsolutePath());
+            queueInfoController.setPredictionManager(predictionManager);
             setButtonsDisabled(false);
-        }catch (Exception ignore) {
+        }catch (Exception exception) {
+            newExecutionButton.setVisible(false);
+            detailsButton.setVisible(false);
+            resultsButton.setVisible(false);
+            OKButton.setVisible(true);
+            failedLoadCause.setText(exception.getMessage());
+            failedLoadCause.setVisible(true);
+            loadFileButton.setVisible(false);
         }
     }
 
@@ -98,6 +116,15 @@ public class PredictionHeaderController {
     @FXML
     void resultsButtonClicked(ActionEvent event) {
         mainScreenController.resultsScreen();
+    }
+    @FXML
+    void OKButtonClicked(ActionEvent event) {
+        newExecutionButton.setVisible(true);
+        detailsButton.setVisible(true);
+        resultsButton.setVisible(true);
+        OKButton.setVisible(false);
+        failedLoadCause.setVisible(false);
+        loadFileButton.setVisible(true);
     }
 
 }

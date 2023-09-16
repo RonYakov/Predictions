@@ -6,7 +6,7 @@
 /* Apply styles to the Label with ID "headLineLabel" */
 #headLineLable {
     -fx-font-family: "fantasy";
-    -fx-font-size: 20px;
+    -fx-font-size: 28px;
     -fx-padding: 0 10px 0 0;
     -fx-text-fill: #4A70DB;
     -fx-font-weight: bold;
@@ -44,4 +44,7 @@
 }
 #loadFileButton:hover {
     -fx-background-color: #158A19;
+}
+#fileFailCauseLabel {
+    -fx-text-fill: red;
 }

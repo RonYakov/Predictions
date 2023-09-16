@@ -52,7 +52,7 @@ public abstract class ActionCreator {
                 return createProximity(prdAction);
             default:
                 throw new TypeUnmatchedException("TypeUnmatchedException: can not create action with type '" + type +"'.\n" +
-                        "       Please enter a real action type. Problem occurred in class ActionCreator.");
+                        "Please enter a real action type. Problem occurred in class ActionCreator.");
         }
     }
 
@@ -143,7 +143,7 @@ public abstract class ActionCreator {
                 return createMultipleCondition(prdAction, entityDef, prdCondition);
             default:
                 throw new NotRealSingularityException("NotRealSingularityException: the singularity '" + singularity + "is not valid!\n" +
-                        "       Note that singularity must be 'single' or 'multiple'. Problem occurred in class ActionCreator when trying to create condition action");
+                        "Note that singularity must be 'single' or 'multiple'. \nProblem occurred in class ActionCreator when trying to create condition action");
         }
     }
 
@@ -219,9 +219,9 @@ public abstract class ActionCreator {
 
     private static Action createProximity(PRDAction prdAction) {
         EntityDefinition source = entityDefinitionMap.get(prdAction.getPRDBetween().getSourceEntity());
-        checkIfEntityExist(source, "proximity", prdAction.getEntity());
+        checkIfEntityExist(source, "proximity", prdAction.getPRDBetween().getSourceEntity());
         EntityDefinition targetEntity = entityDefinitionMap.get(prdAction.getPRDBetween().getTargetEntity());
-        checkIfEntityExist(targetEntity, "proximity", prdAction.getEntity());
+        checkIfEntityExist(targetEntity, "proximity", prdAction.getPRDBetween().getTargetEntity());
 
         SecondaryEntity target = new SecondaryEntity(targetEntity.getName(), null, null);
 
@@ -233,9 +233,9 @@ public abstract class ActionCreator {
 
     private static Action createReplace(PRDAction prdAction) {
         EntityDefinition entityKill = entityDefinitionMap.get(prdAction.getKill());
-        checkIfEntityExist(entityKill, "replace", prdAction.getEntity());
+        checkIfEntityExist(entityKill, "replace", prdAction.getKill());
         EntityDefinition entityCreate = entityDefinitionMap.get(prdAction.getCreate());
-        checkIfEntityExist(entityCreate, "replace", prdAction.getEntity());
+        checkIfEntityExist(entityCreate, "replace", prdAction.getCreate());
 
         SecondaryEntity secondaryEntity = new SecondaryEntity(entityCreate.getName(), 1, null);
 
@@ -248,26 +248,26 @@ public abstract class ActionCreator {
     private static void checkIfEntityExist(EntityDefinition entityDef, String desireAction, String entityName) {
         if(entityDef == null) {
             throw new NotRealEntityException("NotRealEntityException: the entity name '" + entityName + "' does not exist.\n" +
-                    "       Note that every action need to get a real entity name! Problem occurred in class ActionCreator when trying to create " + desireAction + " action");
+                    "Note that every action need to get a real entity name! \nProblem occurred in class ActionCreator when trying to create " + desireAction + " action");
         }
     }
     private static void checkIfPropertyExist(String entityName, PropertyDefinition propertyDef, String desireAction, String propertyName) {
         if(propertyDef == null) {
             throw new PropertyNotFoundException("PropertyNotFoundException: the property name '" + propertyName + "' does not exist in entity '" + entityName + "'.\n" +
-                    "       Note that every action need to get a valid property name! Problem occurred in class ActionCreator when trying to create " + desireAction + " action");
+                    "Note that every action need to get a valid property name! \nProblem occurred in class ActionCreator when trying to create " + desireAction + " action");
         }
     }
     private static void checkIfNumberProperty(PropertyDefinition propertyDef, String desireAction) {
         if(propertyDef.getType() != PropertyType.DECIMAL && propertyDef.getType() != PropertyType.FLOAT) {
             throw new PropertyTypeException("PropertyTypeException: the property '" + propertyDef.getName() + "is not a numeric property!\n" +
-                    "       Note that " + desireAction + "  action has to get numeric arguments. Problem occurred in class ActionCreator when trying to create " + desireAction + "  action");
+                    "Note that " + desireAction + "  action has to get numeric arguments. \nProblem occurred in class ActionCreator when trying to create " + desireAction + "  action");
         }
     }
     private static void checkIfNumberExpression(Expression expression, String desireAction) {
         if(expression.getType() != ExpressionType.INT && expression.getType() != ExpressionType.FLOAT){
             throw new ExpressionTypeException("ExpressionTypeException: the expression '" + expression.GetSimpleValue() + "' is not a number!\n" +
-                    "       Note that " + desireAction + " action has to get numeric arguments.\n" +
-                    "       Problem occurred in class ActionCreator when trying to create " + desireAction + " action");
+                    "Note that " + desireAction + " action has to get numeric arguments.\n" +
+                    "Problem occurred in class ActionCreator when trying to create " + desireAction + " action");
         }
     }
     private static String checkIfMultiplyOrDivide(PRDAction prdAction) {
@@ -290,8 +290,8 @@ public abstract class ActionCreator {
                 return OperatorType.LT;
             default:
                 throw new OperatorTypeException("OperatorTypeException: the operator '"+ operator +"' is not valid.\n" +
-                        "       Note that operator for single-condition must be one of the following: '=', '!=', 'bt', 'lt'!\n" +
-                        "       Problem occurred in class ActionCreator when trying to create single-condition action");
+                        "Note that operator for single-condition must be one of the following: '=', '!=', 'bt', 'lt'!\n" +
+                        "Problem occurred in class ActionCreator when trying to create single-condition action");
         }
     }
     private static LogicType getLogicalFromString(String logical) {
@@ -302,7 +302,7 @@ public abstract class ActionCreator {
                 return LogicType.AND;
             default:
                 throw new LogicalTypeException("LogicalTypeException: the logical '"+ logical +"' is not valid.\n" +
-                        "       Note that logical for multiple-condition must be one of the following: 'or', 'and'! Problem occurred in class ActionCreator when trying to create multiple-condition action");
+                        "Note that logical for multiple-condition must be one of the following: 'or', 'and'! \nProblem occurred in class ActionCreator when trying to create multiple-condition action");
         }
     }
     private static List<Action> extractActionListFromPRD(List<PRDAction> prdActionList) {
