@@ -114,6 +114,7 @@ public class SimulationRunner implements Serializable, Runnable {
             simulationExecutionDetails.setSimulationState(SimulationState.FAILED);
             simulationExecutionDetails.setFailCause(runtimeException.getMessage());
             simulationExecutionDetails.getPredictionManager().simDone();
+            return;
         }
         simulationExecutionDetails.setSimulationState(SimulationState.STOPPED);
         simulationExecutionDetails.getPredictionManager().simDone();

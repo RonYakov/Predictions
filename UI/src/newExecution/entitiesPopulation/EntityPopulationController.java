@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import newExecution.NewExecutionController;
 import newExecution.entitiesPopulation.entityCount.EntityCountController;
@@ -25,6 +26,8 @@ public class EntityPopulationController {
 
     @FXML
     private Label maxCountLable;
+    @FXML
+    private ScrollPane EntityPopulationScrollPane;
 
     private NewExecutionController newExecutionController;
     private List<PopulationCountListener> populationCountListeners = new LinkedList<>();
@@ -75,6 +78,9 @@ public class EntityPopulationController {
             populationCountListener.onChange(oldCurrValue, temp);
         }
     }
-
+    public void setOnColorChange(String color) {
+        entitiesPopulation.setStyle("-fx-background-color: " + color + ";");
+        EntityPopulationScrollPane.setStyle("-fx-background-color: " + color + ";");
+    }
 
 }

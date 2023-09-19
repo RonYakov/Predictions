@@ -68,7 +68,7 @@ public class SingleCondition extends AbstractCondition {
         if(context.getPrimaryEntityInstance().getEntType().equals(operatedEntityName)) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityName().equals(operatedEntityName)) {
+        else if(operatedEntityName.equals(context.getSecondaryEntityName())) {
             return context.getSecondaryEntityInstance();
         }
         else {

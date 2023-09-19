@@ -3,6 +3,7 @@ package newExecution.environmentInputs;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import newExecution.NewExecutionController;
 import newExecution.environmentInputs.typeBoolean.EnvTypeBooleanController;
@@ -19,6 +20,8 @@ public class EnvironmentInputsController {
     private VBox environmetsVbox;
     private NewExecutionController newExecutionController;
     private EnvironmentDefinitionListDTO environmentData;
+    @FXML
+    private ScrollPane environmentsInputScrollPane;
 
     public void setEnvironmentData(EnvironmentDefinitionListDTO environmentDefinitionListDTO) {
         environmentData = environmentDefinitionListDTO;
@@ -90,5 +93,10 @@ public class EnvironmentInputsController {
 
         } catch (IOException e) {
         }
+    }
+    public void setOnColorChange(String color) {
+        environmetsVbox.setStyle("-fx-background-color: " + color + ";");
+        environmentsInputScrollPane.setStyle("-fx-background-color: " + color + ";");
+
     }
 }

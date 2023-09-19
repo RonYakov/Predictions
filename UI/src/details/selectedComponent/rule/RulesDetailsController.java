@@ -60,12 +60,17 @@ public class RulesDetailsController {
     @FXML
     private void SelectActionClicked(ActionEvent event) {
         TreeItem<String> selectedItem = actionTreeView.getSelectionModel().getSelectedItem();
+        Boolean stopped = false;
         int i = 0;
         for(TreeItem<String> treeItem : actionTreeView.getRoot().getChildren()) {
             if(treeItem.equals(selectedItem)) {
+                stopped = true;
                 break;
             }
             i++;
+        }
+        if(!stopped) {
+            return;
         }
         ActionDTO actionDTO = actionDTOList.get(i);
         setActionDetailsPain(actionDTO);

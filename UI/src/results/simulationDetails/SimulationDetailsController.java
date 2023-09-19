@@ -79,8 +79,12 @@ public class SimulationDetailsController {
                             entityDetailsController.setEntityCount(simulationDetailsDTO.getEntityCountDTOList().get(i).getCount().toString());
                             i++;
                         }
-                        terminationsDetailsController.setSecondsCount(simulationDetailsDTO.getTerminationDTO().getSeconds().toString());
-                        terminationsDetailsController.setTicksCount(simulationDetailsDTO.getTerminationDTO().getTicks().toString());
+                        if(simulationDetailsDTO.getTerminationDTO().getSeconds() != null) {
+                            terminationsDetailsController.setSecondsCount(simulationDetailsDTO.getTerminationDTO().getSeconds().toString());
+                        }
+                        if(simulationDetailsDTO.getTerminationDTO().getTicks() != null) {
+                            terminationsDetailsController.setTicksCount(simulationDetailsDTO.getTerminationDTO().getTicks().toString());
+                        }
                     });
                     simulationState = simulationDetailsDTO.getSimulationState();
 

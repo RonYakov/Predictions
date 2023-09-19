@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
+import javafx.scene.paint.Color;
 import managerFX.MainScreenController;
 import option2.*;
 
@@ -114,6 +115,12 @@ public class DetailsScreenController {
 
     public void initializeDetailsData(SimulationDefinitionDTO simulationDefinitionDTO) {
         simulationBreakdownController.initializeDetailsData(simulationDefinitionDTO);
+    }
+
+    public void setOnColorChange(String color) {
+        rootDetails.setStyle("-fx-background-color: " + color + ";");
+        simulationBreakdown.setStyle("-fx-background-color: " + color + ";");
+        simulationBreakdownController.setOnColorChange(color);
     }
 
 }

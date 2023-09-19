@@ -36,12 +36,12 @@
       </HBox>
    </bottom>
    <center>
-      <ScrollPane minHeight="10.0" minWidth="10.0" prefHeight="343.0" prefWidth="405.0" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="EntityPopulationScrollPane" minHeight="10.0" minWidth="10.0" prefHeight="343.0" prefWidth="405.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets left="45.0" right="50.0" top="10.0" />
          </BorderPane.margin>
          <content>
-            <VBox fx:id="entitiesPopulation" prefHeight="329.0" prefWidth="372.0" spacing="10.0">
+            <VBox fx:id="entitiesPopulation" prefHeight="331.0" prefWidth="373.0" spacing="10.0">
                <children>
                   <HBox prefHeight="43.0" prefWidth="356.0" spacing="150.0">
                      <children>

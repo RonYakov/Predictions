@@ -3,14 +3,15 @@ package header;
 import header.queueInfo.QueueInfoController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.PredictionManager;
@@ -41,6 +42,8 @@ public class PredictionHeaderController {
     private QueueInfoController queueInfoController;
     @FXML
     private Label failedLoadCause;
+    @FXML
+    private ComboBox<String> colorPicker;
 
 
     private MainScreenController mainScreenController;
@@ -56,6 +59,12 @@ public class PredictionHeaderController {
         resultsButton.disableProperty().bind(buttonsDisabledProperty());
         failedLoadCause.setVisible(false);
         OKButton.setVisible(false);
+
+        ObservableList<String> colors = FXCollections.observableArrayList();
+        colors.add("White");
+        colors.add("Light blue");
+        colors.add("Pink");
+        colorPicker.setItems(colors);
     }
 
     public void setPredictionManager(PredictionManager predictionManager) {
@@ -126,5 +135,17 @@ public class PredictionHeaderController {
         failedLoadCause.setVisible(false);
         loadFileButton.setVisible(true);
     }
-
+    @FXML
+    void onColorPicked(ActionEvent event) {
+        switch (colorPicker.getValue()) {
+            case "White":
+                mainScreenController.setOnColorChange("#EDF0F0");
+                break;
+            case "Light blue":
+                mainScreenController.setOnColorChange("#D4E6F1");
+                break;
+            default:
+                mainScreenController.setOnColorChange("#EBDEF0");
+        }
+    }
 }

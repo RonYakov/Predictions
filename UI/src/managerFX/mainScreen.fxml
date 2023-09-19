@@ -4,10 +4,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<ScrollPane fx:id="scrollPane" prefHeight="660.0" prefWidth="1310.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managerFX.MainScreenController">
+<ScrollPane fx:id="scrollPane" prefHeight="660.0" prefWidth="1310.0" stylesheets="@MainScreenStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managerFX.MainScreenController">
    <content>
-      <BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0">
+      <BorderPane id="mainBorderPain" fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0">
          <top>
             <fx:include fx:id="header" source="../header/PredictionHeader.fxml" BorderPane.alignment="CENTER" />
          </top>

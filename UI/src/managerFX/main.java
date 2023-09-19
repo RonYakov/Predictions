@@ -12,8 +12,11 @@ public class main extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("predictions test");
 
-        Parent load = FXMLLoader.load(getClass().getResource("/managerFX/mainScreen.fxml"));
-        Scene scene = new Scene(load, 1300, 700);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/managerFX/mainScreen.fxml"));
+        Parent root = loader.load();
+        MainScreenController mainScreenController = loader.getController();
+        Scene scene = new Scene(root, 1300, 700);
+        mainScreenController.setScene(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

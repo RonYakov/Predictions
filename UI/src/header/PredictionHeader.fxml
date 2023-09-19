@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -31,7 +32,7 @@
       <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label fx:id="headLineLable" alignment="CENTER" prefHeight="35.0" prefWidth="356.0" text="P r e d i c i o t n s" GridPane.columnIndex="4" GridPane.columnSpan="5" />
+      <Label fx:id="headLineLable" alignment="CENTER" prefHeight="35.0" prefWidth="356.0" text="P r e d i c t i o n s" GridPane.columnIndex="4" GridPane.columnSpan="5" />
       <Button fx:id="loadFileButton" mnemonicParsing="false" onAction="#loadFileButtonClicked" prefHeight="27.0" prefWidth="140.0" text="Load File" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font size="15.0" />
@@ -63,5 +64,6 @@
       </StackPane>
       <fx:include fx:id="queueInfo" source="queueInfo/QueueInfo.fxml" GridPane.columnIndex="10" GridPane.rowSpan="4" />
       <Label id="fileFailCauseLabel" fx:id="failedLoadCause" prefHeight="50.0" prefWidth="517.0" text="Label" GridPane.columnIndex="3" GridPane.columnSpan="5" GridPane.rowIndex="3" />
+      <ComboBox fx:id="colorPicker" onAction="#onColorPicked" prefWidth="150.0" promptText="Choose color" GridPane.columnIndex="1" GridPane.rowIndex="3" />
    </children>
 </GridPane>

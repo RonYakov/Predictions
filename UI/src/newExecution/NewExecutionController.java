@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import manager.PredictionManager;
 import managerFX.MainScreenController;
 import newExecution.entitiesPopulation.EntityPopulationController;
@@ -37,6 +38,8 @@ public class NewExecutionController {
     private SplitPane mainSplitPane;
     @FXML
     private Button startButton;
+    @FXML
+    private BorderPane mainBorderPain;
     private MainScreenController mainScreenController;
     private Double originalDividerPosition;
     private List<StartButtonClickedListener> startListener;
@@ -141,6 +144,36 @@ public class NewExecutionController {
         for (EntityPopulationDTO entityPopulationDTO : entityPopulationDTOListForRerun) {
             rerunButtonClickedEntitiesListeners.get(i).onRerun(entityPopulationDTO.getCount().toString());
             i++;
+        }
+    }
+
+    public void setOnColorChange(String color) {
+        mainBorderPain.setStyle("-fx-background-color: " + color + ";");
+        mainSplitPane.setStyle("-fx-background-color: " + color + ";");
+        entityPopulation.setStyle("-fx-background-color: " + color + ";");
+        environmentInputs.setStyle("-fx-background-color: " + color + ";");
+        entityPopulation.getCenter().setStyle("-fx-background-color: " + color + ";");
+        environmentInputs.getCenter().setStyle("-fx-background-color: " + color + ";");
+
+        entityPopulationController.setOnColorChange(color);
+        environmentInputsController.setOnColorChange(color);
+
+        String newBackgroundColor;
+        switch(color) {
+            case "#EDF0F0":
+                newBackgroundColor = "-fx-background-color: #4CAF50;";
+                clearButton.setStyle(newBackgroundColor);
+                startButton.setStyle(newBackgroundColor);
+                break;
+            case "#D4E6F1":
+                newBackgroundColor = "-fx-background-color: #F3B180;";
+                clearButton.setStyle(newBackgroundColor);
+                startButton.setStyle(newBackgroundColor);
+                break;
+            case "#EBDEF0":
+                newBackgroundColor = "-fx-background-color: #BB98F4;";
+                clearButton.setStyle(newBackgroundColor);
+                startButton.setStyle(newBackgroundColor);
         }
     }
 }

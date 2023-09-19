@@ -2,13 +2,14 @@ package managerFX;
 
 import details.DetailsScreenController;
 import ex2DTO.IsNewSimLoadDTO;
-import ex2DTO.StopCauseReqDTO;
-import ex2DTO.StopCauseResDTO;
 import header.PredictionHeaderController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -20,10 +21,6 @@ import option2.SimulationDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
 import results.ResultsController;
 import results.simulationDetails.SimulationDetailsController;
-import results.simulations.simulationID.ListAction;
-import results.simulations.simulationID.SimulationIDController;
-
-
 import java.io.IOException;
 
 public class MainScreenController {
@@ -44,27 +41,38 @@ public class MainScreenController {
     private Boolean isResultsPresent = false;
     private SimulationDetailsController simulationDetailsController = null;
     private Thread thread;
+    private String color = "#f4f4f4";
+    private Scene scene;
+    private StackPane rootStackPane;
+
 
     @FXML
     public void initialize() {
-       headerController.setMainScreenController(this);
-       headerController.setPredictionManager(predictionManager);
+        headerController.setMainScreenController(this);
+        headerController.setPredictionManager(predictionManager);
 
         StackPane stackPane = new StackPane(mainBorderPane);
+        rootStackPane = stackPane;
 
         scrollPane.setContent(stackPane);
         scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         simulationLoadManager();
     }
-    private void simulationLoadManager(){
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
+
+    private void simulationLoadManager() {
         Pane emptyPane = new Pane();
         thread = new Thread(() -> {
             while (true) {
                 try {
                     IsNewSimLoadDTO isNewSimLoadDTO = predictionManager.isNewSimLoad();
-                    if(isNewSimLoadDTO.getNewSimLoad()) {
-                        Platform.runLater(() ->{
+                    if (isNewSimLoadDTO.getNewSimLoad()) {
+                        Platform.runLater(() -> {
                             mainBorderPane.setCenter(emptyPane);
                             isDetailsPresent = false;
                             isResultsPresent = false;
@@ -87,15 +95,16 @@ public class MainScreenController {
     public void loadDetailsScreen() {
         SimulationDefinitionDTO simulationDefinitionDTO = predictionManager.showCurrentSimulationData();
         try {
-            if(!isDetailsPresent) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/detailsScreen.fxml"));                Parent detailsContent = loader.load();
+            if (!isDetailsPresent) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/details/detailsScreen.fxml"));
+                Parent detailsContent = loader.load();
                 detailsController = loader.getController();
 
                 detailsController.setMainScreenController(this);
                 detailsController.initializeDetailsData(simulationDefinitionDTO);
                 mainBorderPane.setCenter(detailsContent);
-
-                if(simulationDetailsController != null) {
+                detailsController.setOnColorChange(color);
+                if (simulationDetailsController != null) {
                     simulationDetailsController.stopThread();
                 }
                 isDetailsPresent = true;
@@ -122,21 +131,21 @@ public class MainScreenController {
 
                 EnvironmentDefinitionListDTO environmentDefinitionListDTO = predictionManager.runSimulationStep1();
                 newExecutionController.setEnvironmentData(environmentDefinitionListDTO);
-
-                if(simulationDetailsController != null) {
+                newExecutionController.setOnColorChange(color);
+                if (simulationDetailsController != null) {
                     simulationDetailsController.stopThread();
                 }
                 isNewExecutionPresent = true;
                 isDetailsPresent = false;
                 isResultsPresent = false;
             }
-        }catch(IOException e){
+        } catch (IOException e) {
         }
     }
 
     public void resultsScreen() {
         try {
-            if(!isResultsPresent) {
+            if (!isResultsPresent) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/results/Results.fxml"));
                 Parent resultsData = loader.load();
                 resultsController = loader.getController();
@@ -145,6 +154,7 @@ public class MainScreenController {
                 resultsController.setMainScreenController(this);
                 resultsController.setPredictionManager(predictionManager);
                 resultsController.setSimulationsList();
+                resultsController.setOnColorChange(color);
                 isResultsPresent = true;
                 isDetailsPresent = false;
                 isNewExecutionPresent = false;
@@ -152,8 +162,22 @@ public class MainScreenController {
         } catch (IOException e) {
         }
     }
+
     public void rerunClicked(Integer id) {
         newExecutionScreen();
         newExecutionController.onRerun(id);
+    }
+
+    public void setOnColorChange(String color) {
+        this.color = color;
+        mainBorderPane.setStyle("-fx-background-color: " + this.color + ";");
+        rootStackPane.setStyle("-fx-background-color: " + this.color + ";");
+        if (isResultsPresent) {
+            resultsController.setOnColorChange(this.color);
+        } else if (isDetailsPresent) {
+            detailsController.setOnColorChange(this.color);
+        } else if (isNewExecutionPresent) {
+            newExecutionController.setOnColorChange(this.color);
+        }
     }
 }

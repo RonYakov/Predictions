@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import manager.PredictionManager;
 import managerFX.MainScreenController;
 import option4.PastSimulationInfoDTO;
@@ -26,6 +28,8 @@ public class ResultsController implements ShowButtonListener {
     private Pane simulationResult;
     @FXML
     private ScrollPane simulationsList;
+    @FXML
+    private HBox resultsMainHbox;
     @FXML
     private SimulationsController simulationsListController;
     private MainScreenController mainScreenController;
@@ -105,5 +109,11 @@ public class ResultsController implements ShowButtonListener {
 
         } catch (IOException e) {
         }
+    }
+    public void setOnColorChange(String color) {
+        resultsMainHbox.setStyle("-fx-background-color: " + color + ";");
+//        simulationDetails.setStyle("-fx-background-color: " + color + ";");
+//        simulationResult.setStyle("-fx-background-color: " + color + ";");
+//        simulationsList.setStyle("-fx-background-color: " + color + ";");
     }
 }

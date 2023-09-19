@@ -3,6 +3,7 @@ package details.simulationBreakdown;
 import details.DetailsScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import option2.*;
 
@@ -115,6 +116,34 @@ public class SimulationBreakdownController {
     private void initializeEnvironments(List<PropertyDefinitionDTO> environmentDefenitionDTOList) {
         for(PropertyDefinitionDTO environmentDefinitionDTO : environmentDefenitionDTOList) {
             choiceBoxEnvironment.getItems().add(environmentDefinitionDTO.getName());
+        }
+    }
+    public void setOnColorChange(String color) {
+        String newBackgroundColor;
+        switch(color) {
+            case "#EDF0F0":
+                newBackgroundColor = "-fx-background-color: #4CAF50;";
+                showEntites.setStyle(newBackgroundColor);
+                showEnvironment.setStyle(newBackgroundColor);
+                showGrid.setStyle(newBackgroundColor);
+                showRules.setStyle(newBackgroundColor);
+                showTermination.setStyle(newBackgroundColor);
+                break;
+            case "#D4E6F1":
+                newBackgroundColor = "-fx-background-color: #F3B180;";
+                showEntites.setStyle(newBackgroundColor);
+                showEnvironment.setStyle(newBackgroundColor);
+                showGrid.setStyle(newBackgroundColor);
+                showRules.setStyle(newBackgroundColor);
+                showTermination.setStyle(newBackgroundColor);
+                break;
+            case "#EBDEF0":
+                newBackgroundColor = "-fx-background-color: #BB98F4;";
+                showEntites.setStyle(newBackgroundColor);
+                showEnvironment.setStyle(newBackgroundColor);
+                showGrid.setStyle(newBackgroundColor);
+                showRules.setStyle(newBackgroundColor);
+                showTermination.setStyle(newBackgroundColor);
         }
     }
 }

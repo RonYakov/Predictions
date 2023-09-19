@@ -29,7 +29,7 @@ public abstract class AbstractNumericAction extends AbstractAction {
         if(context.getPrimaryEntityInstance().getEntType().equals(getPrimaryEntityDefinition().getName())) {
             return context.getPrimaryEntityInstance();
         }
-        else if(context.getSecondaryEntityName().equals(getPrimaryEntityDefinition().getName())) {
+        else if(getPrimaryEntityDefinition().getName().equals(context.getSecondaryEntityName())) {
             return context.getSecondaryEntityInstance();
         }
         else {
