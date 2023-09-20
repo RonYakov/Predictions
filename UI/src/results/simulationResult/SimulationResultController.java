@@ -134,6 +134,8 @@ public class SimulationResultController {
     @FXML
     void entityClicked(ActionEvent event) {
         showPane.getChildren().clear();
+        propertyChoice.setVisible(false);
+        informationChoice.setVisible(false);
         propertyChoice.setValue(null);
         informationChoice.setValue(null);
         if(entityChoice.getValue() != null){
@@ -179,7 +181,7 @@ public class SimulationResultController {
             EntityCounterController entityCounterController = loader.getController();
 
             EntityCountResDTO entityCountResDTO = predictionManager.getEntityCounters(new EntityCountReqDTO(entityChoice.getValue(), id));
-                entityCounterController.addToChart(entityCountResDTO.getEntityCountSamples());
+                entityCounterController.addToChart(entityCountResDTO.getEntityCountSamples(), entityCountResDTO.getCurrTick());
 
             showPane.getChildren().add(EntityCounter);
         } catch (IOException e) {

@@ -56,6 +56,10 @@ public class SimulationDetailsController {
 
     public void setResultsController(ResultsController resultsController) {
         this.resultsController = resultsController;
+        if(predictionManager.getSimulationState(new SimulationIDDTO(id)).getState().equals("PAUSED")){
+            futureRunningButton.setDisable(false);
+            resultsController.showResult(id);
+        }
     }
 
     public Integer getId() {

@@ -139,7 +139,8 @@ public class SimulationRunner implements Serializable, Runnable {
                 for (AbstractPropertyInstance abstractPropertyInstance: propertyInstances) {
                     if(abstractPropertyInstance.isModified()){
                         abstractPropertyInstance.setModified(false);
-                    }else {
+                    }
+                    else {
                         abstractPropertyInstance.setTicks(abstractPropertyInstance.getTicks() + 1);
                     }
                 }

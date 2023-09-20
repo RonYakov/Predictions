@@ -16,6 +16,7 @@ import results.simulations.simulationID.SimulationIDController;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SimulationsController {
@@ -42,8 +43,8 @@ public class SimulationsController {
                 try {
                     if(simulationsListMethods(ListAction.EMPTY, null) != null) {
                         SimulationIDController simulationIDControllerStopped = simulationsListMethods(ListAction.SEARCH, null);
-
                         while (simulationIDControllerStopped != null) {
+                            Collections.shuffle(simulationIDControllerList);
                             SimulationIDController finalSimulationIDControllerStopped = simulationIDControllerStopped;
                             StopCauseResDTO stopCauseResDTO = predictionManager.stopCause(new StopCauseReqDTO(finalSimulationIDControllerStopped.getID()));
                             if (stopCauseResDTO == null) {

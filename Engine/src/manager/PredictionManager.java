@@ -399,10 +399,13 @@ public class PredictionManager {
     }
 
     public EntityCountResDTO getEntityCounters(EntityCountReqDTO entityCountReqDTO) {
+        List<Integer> res;
         SimulationExecutionDetails simulationExecutionDetails = simulationExecutionDetailsMap.get(entityCountReqDTO.getId());
-        simulationExecutionDetails.getEntityManager().get(entityCountReqDTO.getEntityName()).addPopulationToHistory();
+
         EntityInstanceManager entityInstanceManager = simulationExecutionDetails.getEntityManager().get(entityCountReqDTO.getEntityName());
-        return new EntityCountResDTO(entityInstanceManager.getPopulationHistory());
+        res = new ArrayList<>(entityInstanceManager.getPopulationHistory());
+        res.add(simulationExecutionDetails.getEntityManager().get(entityCountReqDTO.getEntityName()).getPopulation());
+        return new EntityCountResDTO(res, simulationExecutionDetails.getCurrTicks());
     }
     public QueueInfoDTO getQueueInfo() {
 
