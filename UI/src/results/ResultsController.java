@@ -66,6 +66,7 @@ public class ResultsController implements ShowButtonListener {
             SimulationDetailsController simulationDetailsController = loader.getController();
             simulationDetailsController.setId(id);
             simulationDetailsController.setPredictionManager(predictionManager);
+            simulationDetailsController.setResultsController(this);
             simulationDetailsController.setValues();
 
             if(this.simulationDetailsController != null) {

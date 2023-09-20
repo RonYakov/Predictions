@@ -153,6 +153,10 @@ public class SimulationRunner implements Serializable, Runnable {
                 rule.activate(simulationExecutionDetails.getEntityManager() , simulationExecutionDetails.getGrid());
             }
         }
+        if(simulationExecutionDetails.getSimulationState().equals(SimulationState.FUTURE_RUNNING)) {
+            simulationExecutionDetails.setSimulationState(SimulationState.PAUSED);
+            simulationExecutionDetails.setRunning(false);
+        }
         synchronized (simulationExecutionDetails) {
             if(!simulationExecutionDetails.isRunning()) {
                 long startTime = System.currentTimeMillis();

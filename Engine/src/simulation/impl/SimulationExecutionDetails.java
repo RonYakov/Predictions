@@ -40,7 +40,7 @@ public class SimulationExecutionDetails {
         this.termination = termination;
         this.identifyNumber = identifyNumber;
         this.simulationStopCause = null;
-        this.simulationState = null;
+        this.simulationState = SimulationState.RUNNING;
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss");
         formattedDate = now.format(formatter);

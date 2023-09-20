@@ -16,6 +16,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import manager.PredictionManager;
+import managerFX.animation.ColorChangeAnimation;
+import managerFX.animation.FadeAndSpinAnimation;
 import newExecution.NewExecutionController;
 import option2.SimulationDefinitionDTO;
 import option3.EnvironmentDefinitionListDTO;
@@ -44,7 +46,9 @@ public class MainScreenController {
     private String color = "#f4f4f4";
     private Scene scene;
     private StackPane rootStackPane;
-
+    private Boolean isAnimationOn = false;
+    private ColorChangeAnimation colorChangeAnimation;
+    private FadeAndSpinAnimation fadeAndSpinAnimation;
 
     @FXML
     public void initialize() {
@@ -59,6 +63,21 @@ public class MainScreenController {
         scrollPane.setFitToHeight(true);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         simulationLoadManager();
+        colorChangeAnimation = headerController.getColorAnimation();
+        fadeAndSpinAnimation = headerController.getSpinAndFadeAnimation();
+    }
+
+    public void setAnimationOn(Boolean animationOn) {
+        isAnimationOn = animationOn;
+
+        if(animationOn) {
+            colorChangeAnimation.start();
+            fadeAndSpinAnimation.start();
+        }
+        else {
+            colorChangeAnimation.stop();
+            fadeAndSpinAnimation.stop();
+        }
     }
 
     public void setScene(Scene scene) {
@@ -170,6 +189,19 @@ public class MainScreenController {
 
     public void setOnColorChange(String color) {
         this.color = color;
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add("managerFX/MainScreenStyle.css");
+        switch (color) {
+            case "#EDF0F0":
+                break;
+            case "#D4E6F1":
+                scene.getStylesheets().add("managerFX/lightBlueStyle.css");
+                break;
+            default:
+                scene.getStylesheets().add("managerFX/pinkStyle.css");
+                break;
+        }
+
         mainBorderPane.setStyle("-fx-background-color: " + this.color + ";");
         rootStackPane.setStyle("-fx-background-color: " + this.color + ";");
         if (isResultsPresent) {

@@ -9,7 +9,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label prefWidth="180.0" styleClass="queueInfoLabels" text="Sim in queue counter: " />
+            <Label fx:id="simInQueueCounter" prefWidth="180.0" styleClass="queueInfoLabels" text="Sim in queue counter: " />
             <Label fx:id="simInQueue" styleClass="queueInfoLabels" text="0" />
          </children>
          <padding>
@@ -18,7 +18,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label prefWidth="180.0" styleClass="queueInfoLabels" text="Sim running counter: " />
+            <Label fx:id="simRunningCounter" prefWidth="180.0" styleClass="queueInfoLabels" text="Sim running counter: " />
             <Label fx:id="simRunning" styleClass="queueInfoLabels" text="0" />
          </children>
          <padding>
@@ -27,7 +27,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label prefWidth="180.0" styleClass="queueInfoLabels" text="Sim done counter: " />
+            <Label fx:id="simDoneCounter" prefWidth="180.0" styleClass="queueInfoLabels" text="Sim done counter: " />
             <Label fx:id="simDone" styleClass="queueInfoLabels" text="0" />
          </children>
          <padding>

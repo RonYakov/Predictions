@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import manager.PredictionManager;
+import managerFX.animation.ColorChangeAnimation;
 
 
 public class QueueInfoController {
@@ -15,6 +16,12 @@ public class QueueInfoController {
     private Label simInQueue;
     @FXML
     private Label simRunning;
+    @FXML
+    private Label simDoneCounter;
+    @FXML
+    private Label simRunningCounter;
+    @FXML
+    private Label simInQueueCounter;
     private Thread thread;
     private PredictionManager predictionManager;
 
@@ -22,6 +29,10 @@ public class QueueInfoController {
         this.predictionManager = predictionManager;
 
         manageInfo();
+    }
+
+    public ColorChangeAnimation getColorAnimation() {
+        return new ColorChangeAnimation(simInQueueCounter, simInQueue, simRunningCounter, simRunning, simDoneCounter, simDone);
     }
 
     private void manageInfo(){
@@ -43,5 +54,29 @@ public class QueueInfoController {
         });
 
         thread.start();
+    }
+
+    public Label getSimDone() {
+        return simDone;
+    }
+
+    public Label getSimInQueue() {
+        return simInQueue;
+    }
+
+    public Label getSimRunning() {
+        return simRunning;
+    }
+
+    public Label getSimDoneCounter() {
+        return simDoneCounter;
+    }
+
+    public Label getSimRunningCounter() {
+        return simRunningCounter;
+    }
+
+    public Label getSimInQueueCounter() {
+        return simInQueueCounter;
     }
 }

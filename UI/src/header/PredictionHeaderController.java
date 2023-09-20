@@ -16,6 +16,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.PredictionManager;
 import managerFX.MainScreenController;
+import managerFX.animation.ColorChangeAnimation;
+import managerFX.animation.FadeAndSpinAnimation;
 import option1.XmlFullPathDTO;
 
 import java.io.File;
@@ -44,6 +46,8 @@ public class PredictionHeaderController {
     private Label failedLoadCause;
     @FXML
     private ComboBox<String> colorPicker;
+    @FXML
+    private CheckBox animationCheck;
 
 
     private MainScreenController mainScreenController;
@@ -65,6 +69,10 @@ public class PredictionHeaderController {
         colors.add("Light blue");
         colors.add("Pink");
         colorPicker.setItems(colors);
+    }
+
+    public QueueInfoController getQueueInfoController() {
+        return queueInfoController;
     }
 
     public void setPredictionManager(PredictionManager predictionManager) {
@@ -147,5 +155,15 @@ public class PredictionHeaderController {
             default:
                 mainScreenController.setOnColorChange("#EBDEF0");
         }
+    }
+    @FXML
+    void onAnimationChoose(ActionEvent event) {
+        mainScreenController.setAnimationOn(animationCheck.isSelected());
+    }
+    public ColorChangeAnimation getColorAnimation() {
+        return queueInfoController.getColorAnimation();
+    }
+    public FadeAndSpinAnimation getSpinAndFadeAnimation() {
+        return new FadeAndSpinAnimation(detailsButton, newExecutionButton, resultsButton, OKButton);
     }
 }

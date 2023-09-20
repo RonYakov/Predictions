@@ -24,9 +24,10 @@
       </ScrollPane>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="170.0" spacing="10.0" styleClass="component-container">
          <children>
-            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#OnStopClicked" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Stop" />
-            <Button fx:id="pauseButton" mnemonicParsing="false" onAction="#OnPauseClicked" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Pause" />
-            <Button fx:id="resumeButton" mnemonicParsing="false" onAction="#OnResumeClicked" prefHeight="60.0" prefWidth="150.0" styleClass="buttons" text="Resume" />
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#OnStopClicked" prefHeight="50.0" prefWidth="150.0" styleClass="buttons" text="Stop" />
+            <Button fx:id="pauseButton" mnemonicParsing="false" onAction="#OnPauseClicked" prefHeight="50.0" prefWidth="150.0" styleClass="buttons" text="Pause" />
+            <Button fx:id="resumeButton" mnemonicParsing="false" onAction="#OnResumeClicked" prefHeight="50.0" prefWidth="150.0" styleClass="buttons" text="Resume" />
+            <Button fx:id="futureRunningButton" disable="true" mnemonicParsing="false" onAction="#futureRunningButtonClicked" prefHeight="50.0" prefWidth="150.0" styleClass="buttons" text="Future running" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

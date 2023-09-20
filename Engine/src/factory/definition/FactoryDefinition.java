@@ -36,7 +36,13 @@ public abstract class FactoryDefinition {
     }
 
     private static Grid createGrid(PRDWorld.PRDGrid prdGrid) {
-        return new Grid(prdGrid.getRows(), prdGrid.getColumns());
+        if(prdGrid.getRows() >= 10 && prdGrid.getRows() <= 100) {
+            if(prdGrid.getColumns() >= 10 && prdGrid.getColumns() <= 100) {
+                return new Grid(prdGrid.getRows(), prdGrid.getColumns());
+            }
+            throw new RuntimeException("GridSizeException! Columns must be between 10 and 100.");
+        }
+        throw new RuntimeException("GridSizeException! Rows must be between 10 and 100.");
     }
 
     private static PropertyDefinition createPropertyDefinition(PRDProperty prdProperty) {

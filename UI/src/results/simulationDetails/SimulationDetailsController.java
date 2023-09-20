@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import manager.PredictionManager;
+import results.ResultsController;
 import results.simulationDetails.entityDetails.EntityDetailsController;
 import results.simulationDetails.terminationDetails.TerminationDetailsController;
 
@@ -30,9 +31,12 @@ public class SimulationDetailsController {
     @FXML
     private VBox terminationsDetails;
     @FXML
+    private Button  futureRunningButton;
+    @FXML
     private TerminationDetailsController terminationsDetailsController;
     private List<EntityDetailsController> entityDetailsControllers = new ArrayList<>();
     private PredictionManager predictionManager;
+    private ResultsController resultsController;
     private Integer id;
     private Thread thread;
     private Boolean stopSimulation;
@@ -48,6 +52,10 @@ public class SimulationDetailsController {
             pauseButton.setDisable(true);
             stopButton.setDisable(true);
         }
+    }
+
+    public void setResultsController(ResultsController resultsController) {
+        this.resultsController = resultsController;
     }
 
     public Integer getId() {
@@ -134,17 +142,21 @@ public class SimulationDetailsController {
     void OnStopClicked(ActionEvent event){
         stopSimulation = true;
         simulationStop();
+        futureRunningButton.setDisable(true);
     }
     @FXML
     void OnPauseClicked(ActionEvent event){
         predictionManager.pauseSimulation(new PauseAndResumeSimulationDTO(id));
         simulationPause();
+        futureRunningButton.setDisable(false);
+        resultsController.showResult(id);
     }
     @FXML
     void OnResumeClicked(ActionEvent event){
         predictionManager.resumeSimulation(new PauseAndResumeSimulationDTO(id));
         pauseButton.setDisable(false);
         resumeButton.setDisable(true);
+        futureRunningButton.setDisable(true);
     }
 
     public void simulationStop() {
@@ -155,6 +167,11 @@ public class SimulationDetailsController {
     public void simulationPause() {
         pauseButton.setDisable(true);
         resumeButton.setDisable(false);
+    }
+    @FXML
+    void futureRunningButtonClicked(ActionEvent event){
+        predictionManager.futureRunningSimulation(new PauseAndResumeSimulationDTO(id));
+        resultsController.showResult(id);
     }
 
 }
