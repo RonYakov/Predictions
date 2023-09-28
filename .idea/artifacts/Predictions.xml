@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Predictions">
+    <output-path>$PROJECT_DIR$/UI/out/artifacts/Predictions</output-path>
+    <root id="archive" name="Predictions.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="DTO" />
+          <element id="module-output" name="Engine" />
+          <element id="module-output" name="Server" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Server/web/Web" />
+    </root>
+  </artifact>
+</component>
