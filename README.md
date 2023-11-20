@@ -9,6 +9,5 @@ We also implemented multithreading in our project, allowing us to run multiple s
  
 First Exercise: We initiated the project as a console application, laying the foundation for the core functionality.
 Second Exercise: Building upon our initial work, we evolved the project into a desktop application using JavaFX. This transition introduced a more user-friendly and visually appealing interface to interact with the simulation.
-Third Exercise: In the final phase, we further enhanced the system by implementing a client-server architecture. This addition enabled multiple users to interact with and observe the simulations simultaneously, fostering collaborative exploration and analysis of different scenarios within our virtual "world."
  
 Overall, our "Predictions" project represented a comprehensive journey through the world of Java programming and simulation development, ultimately providing a versatile platform for conducting various simulations and experiments.
